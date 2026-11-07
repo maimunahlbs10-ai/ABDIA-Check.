@@ -1,6 +1,63 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ABDIA Check">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FAF8F3">
+<style id="no-nl">
+/* ซ่อนป้าย/แบนเนอร์ของ Netlify ที่ถูกแทรกเข้ามาจากภายนอก (ไม่ใช่โค้ดของแอพ) */
+body>a[href*="netlify.com" i],body>iframe[src*="netlify" i],html>iframe[src*="netlify" i],
+[id*="netlify" i]:not(script):not(style),[class*="netlify" i]:not(script):not(style),
+a[href*="netlify.com/?utm" i],a[href*="app.netlify.com" i],a[href*="netlify.com/referral" i],
+[data-netlify-badge],netlify-badge,netlify-drawer,#netlify-drawer-host{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;width:0!important;height:0!important}
+</style>
+<script>
+(function(){
+  var RX=/netlify/i;
+  function bad(el){
+    if(!el||el.nodeType!==1)return false;
+    var t=el.tagName;
+    if(t==='SCRIPT'||t==='STYLE'||t==='LINK'||t==='META'||t==='NOSCRIPT'||t==='TITLE')return false;
+    if(el.id==='modal'||el.id==='toast')return false;
+    try{
+      if(RX.test(el.id||'')||RX.test(typeof el.className==='string'?el.className:'')||RX.test(t))return true;
+      var src=(el.getAttribute('src')||'')+(el.getAttribute('href')||'');
+      if(RX.test(src))return true;
+      if(el.parentNode===document.body||el.parentNode===document.documentElement){
+        var cs=getComputedStyle(el);
+        if(cs.position==='fixed'){
+          var h=(el.outerHTML||'').slice(0,4000);
+          if(RX.test(h)&&!el.querySelector('#app,#welcome,.modalbox'))return true;
+        }
+      }
+    }catch(e){}
+    return false;
+  }
+  function sweep(root){
+    try{
+      var kids=(root||document.body||document.documentElement).children;
+      for(var i=kids.length-1;i>=0;i--){if(bad(kids[i]))kids[i].remove();}
+      document.querySelectorAll('[id*="netlify" i],[class*="netlify" i],iframe[src*="netlify" i]').forEach(function(n){if(n.tagName!=='SCRIPT'&&n.tagName!=='STYLE')n.remove();});
+    }catch(e){}
+  }
+  function start(){
+    sweep(document.body);sweep(document.documentElement);
+    try{new MutationObserver(function(m){
+      for(var i=0;i<m.length;i++){var a=m[i].addedNodes;for(var j=0;j<a.length;j++){if(bad(a[j])){a[j].remove();}}}
+    }).observe(document.documentElement,{childList:true,subtree:false});
+    new MutationObserver(function(m){
+      for(var i=0;i<m.length;i++){var a=m[i].addedNodes;for(var j=0;j<a.length;j++){if(bad(a[j])){a[j].remove();}}}
+    }).observe(document.body,{childList:true,subtree:false});}catch(e){}
+    var n=0,iv=setInterval(function(){sweep(document.body);sweep(document.documentElement);if(++n>40)clearInterval(iv);},500);
+    window.addEventListener('load',function(){sweep(document.body);setTimeout(function(){sweep(document.body);},1500);});
+  }
+  if(document.body)start();else document.addEventListener('DOMContentLoaded',start);
+})();
+</script>
+</head><body>
 <title>เช็คงาน ABDIA</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap">
@@ -64,6 +121,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .top .wrap { display: flex; align-items: center; gap: 10px; padding-block: 8px; }
 .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--sage-l); border: 2px solid #CFE3D8; padding: 2px; flex: none; }
 .avatar svg { width: 100%; height: 100%; display: block; }
+.avatar .emo { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 24px; line-height: 1; }
+.avatar.sm2 .emo { font-size: 21px; }
+.avpick2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
+.avpick2 button { min-height: 46px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); font-size: 24px; display: flex; align-items: center; justify-content: center; padding: 2px; }
+.avpick2 button[aria-pressed="true"] { border-color: var(--sage); background: var(--sage-l); }
+.avpick2 button svg { width: 34px; height: 34px; }
 .avatar.sm2 { width: 36px; height: 36px; border-width: 1px; background: var(--surface); }
 .hello { font-size: 12px; color: var(--ink2); line-height: 1.2; }
 .tname { font-family: var(--font-display); font-size: 18px; line-height: 1.2; }
@@ -157,6 +220,7 @@ label.lbl { display: block; font-size: 13px; font-weight: 600; color: var(--ink2
 .count span { font-size: 12px; font-weight: 600; }
 .count.p { background: var(--p-bg); color: var(--p); } .count.l { background: var(--l-bg); color: var(--l); }
 .count.v { background: var(--v-bg); color: var(--v); } .count.a { background: var(--a-bg); color: var(--a); }
+.count.n { background: var(--sand); color: var(--ink2); }
 
 /* student rows */
 .srow { background: var(--sand); border: 1px solid var(--line); border-radius: 18px; padding: 10px 12px; }
@@ -323,6 +387,166 @@ button.iconbtn { border: 0; }
 <div id="toast" class="toast" hidden role="status"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+/* ฝังค่า firebaseConfig ตรงนี้ เช่น var FIREBASE_CONFIG = { apiKey: "…", authDomain: "…", projectId: "…", appId: "…" }; */
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCblpBZgDIT-G8rKxbvbXh0ZMARICxvtt8",
+  authDomain: "abdia-check.firebaseapp.com",
+  projectId: "abdia-check",
+  storageBucket: "abdia-check.firebasestorage.app",
+  messagingSenderId: "840227540368",
+  appId: "1:840227540368:web:627856c56e94227c03f715"
+};
+</script>
+<script>
+/* ===== ตัวเชื่อม Firebase: สมัครสมาชิก + ฐานข้อมูลกลาง (ไม่ต้องใช้ Claude/GitHub) =====
+   members/{uid}: {name,email,role}  role = admin | teacher | viewer | pending
+   ผู้สมัครคนแรก (ยังไม่มี meta/setup) = admin  คนถัดไป = pending รอผู้ดูแลอนุมัติ */
+const FB = (() => {
+  let auth = null, fs = null, user = null, member = null, started = false;
+  const members = {}; let memSubs = [], memStarted = false, memReady = false;
+  const assetUrls = {}, inflight = {};
+  const FV = () => firebase.firestore.FieldValue;
+  function cfg() {
+    if (typeof FIREBASE_CONFIG !== 'undefined' && FIREBASE_CONFIG) return FIREBASE_CONFIG;
+    try { return JSON.parse(localStorage.getItem('abdia_fbcfg') || 'null'); } catch (e) { return null; }
+  }
+  const configured = () => { const c = cfg(); return !!(c && c.apiKey && c.projectId); };
+  function startMembers() {
+    if (memStarted) return; memStarted = true;
+    fs.collection('members').onSnapshot((s) => {
+      Object.keys(members).forEach((k) => delete members[k]);
+      s.docs.forEach((d) => { members[d.id] = Object.assign({ id: d.id }, d.data()); });
+      memReady = true; memSubs.forEach((f) => { try { f(); } catch (e) { console.warn(e); } });
+    }, (e) => console.warn('members', e));
+  }
+  const memberList = () => Object.keys(members).map((k) => members[k]).sort((a, b) => ((a.name || a.email || '').localeCompare(b.name || b.email || '', 'th')));
+  const conv = (o) => { const r = {}; for (const k in o) r[k] = o[k] === null ? FV().delete() : o[k]; return r; };
+  function docRef(col, id) {
+    if (col === 'teachers') return { set: () => Promise.resolve(), update: () => Promise.resolve(), delete: () => Promise.resolve() };
+    const ref = fs.collection(col).doc(id);
+    return {
+      set: (d) => ref.set(d),
+      update: (ch) => { const out = {}; for (const k in ch) out[k] = k === 'r' ? conv(ch.r) : (ch[k] === null ? FV().delete() : ch[k]); return ref.set(out, { merge: true }); },
+      delete: () => ref.delete(),
+    };
+  }
+  const DB = {
+    collection(col) {
+      return {
+        doc: (id) => docRef(col, id),
+        onSnapshot(ok, err) {
+          if (col === 'teachers') {
+            startMembers();
+            const fire = () => ok({ docs: memberList().filter((m) => m.role === 'admin' || m.role === 'teacher').map((m) => ({ id: m.id, data: () => ({ id: m.id, name: m.name || '' }) })) });
+            memSubs.push(fire); if (memReady) fire();
+            return () => { memSubs = memSubs.filter((f) => f !== fire); };
+          }
+          return fs.collection(col).onSnapshot(ok, err);
+        },
+      };
+    },
+    doc(path) { const p = path.split('/'); return docRef(p[0], p[1]); },
+  };
+  const isAdmin = () => !!member && member.role === 'admin';
+  const canWrite = () => !!member && (member.role === 'admin' || member.role === 'teacher');
+  const userApi = {
+    isOwner: () => isAdmin(), canEdit: async () => isAdmin(), can: async (n) => (n === 'data.write' ? canWrite() : null),
+    id: async () => user.uid, me: async () => ({ id: user.uid, name: (member && member.name) || user.displayName || (user.email || '').split('@')[0] }),
+    profiles: async (ids) => { const o = {}; ids.forEach((i) => { o[i] = { name: (members[i] && members[i].name) || '' }; }); return o; },
+  };
+  /* ไฟล์แนบเก็บเป็นเอกสารใน Firestore (ไม่เกิน ~650 KB) */
+  const b64 = (blob) => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result).split(',')[1] || ''); fr.onerror = rej; fr.readAsDataURL(blob); });
+  const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const assets = {
+    async upload(file, o) {
+      const id = rid(), type = file.type || (o && o.type) || 'application/octet-stream';
+      try { await fs.collection('files').doc(id).set({ name: file.name || 'file', type, size: file.size, data: await b64(file) }); }
+      catch (e) { throw { code: e && e.code === 'permission-denied' ? 'none' : 'fail', message: 'บัญชีนี้แนบไฟล์ไม่ได้ (ต้องเป็นผู้ดูแลหรือครูผู้สอน)' }; }
+      assetUrls[id] = URL.createObjectURL(file);
+      return { id, url: assetUrls[id], sizeBytes: file.size, contentType: type };
+    },
+    async delete(id) { try { await fs.collection('files').doc(id).delete(); } catch (e) { /* ignore */ } delete assetUrls[id]; },
+  };
+  function ensure(id) {
+    if (!id) return Promise.resolve('');
+    if (assetUrls[id]) return Promise.resolve(assetUrls[id]);
+    if (!inflight[id]) inflight[id] = fs.collection('files').doc(id).get().then((d) => {
+      delete inflight[id]; if (!d.exists) throw new Error('missing');
+      const x = d.data(), bin = atob(x.data), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      return (assetUrls[id] = URL.createObjectURL(new Blob([u], { type: x.type })));
+    }, (e) => { delete inflight[id]; throw e; });
+    return inflight[id];
+  }
+  const assetUrl = (id) => { if (!assetUrls[id]) { ensure(id).then(() => { if (typeof render === 'function' && typeof C !== 'undefined' && C.ready) render(); }).catch(() => {}); return ''; } return assetUrls[id]; };
+  const downloads = {
+    save({ filename, data }) {
+      return new Promise((res, rej) => {
+        try { const blob = data instanceof Blob ? data : new Blob([data]), u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); res(); } catch (e) { rej(e); }
+      });
+    },
+  };
+  function start(onUser) {
+    if (started) return; started = true;
+    const c = cfg();
+    if (!firebase.apps.length) firebase.initializeApp(c);
+    auth = firebase.auth(); fs = firebase.firestore();
+    /* เครือข่ายโรงเรียน/พร็อกซีบางแห่งบล็อกการเชื่อมต่อแบบสตรีม ให้ลองแบบ long-polling อัตโนมัติ */
+    try { if (fs.settings) fs.settings({ experimentalAutoDetectLongPolling: true, merge: true }); } catch (e) { /* ignore */ }
+    auth.onAuthStateChanged((u) => { user = u; onUser(u); });
+  }
+  /* หาสมาชิกของผู้ใช้นี้ ถ้ายังไม่มีให้สร้าง: คนแรก = admin คนอื่น = pending */
+  async function ensureMember(u, nameHint) {
+    const ref = fs.collection('members').doc(u.uid);
+    let s = await ref.get();
+    if (!s.exists) {
+      const base = { name: (nameHint || u.displayName || (u.email || '').split('@')[0] || '').trim(), email: u.email || '', createdAt: FV().serverTimestamp() };
+      const setup = await fs.collection('meta').doc('setup').get();
+      let done = false;
+      if (!setup.exists) {
+        try { const b = fs.batch(); b.set(fs.collection('meta').doc('setup'), { adminUid: u.uid, createdAt: FV().serverTimestamp() }); b.set(ref, Object.assign({ role: 'admin' }, base)); await b.commit(); done = true; } catch (e) { console.warn('first admin failed', e); }
+      }
+      if (!done) await ref.set(Object.assign({ role: 'pending' }, base));
+      s = await ref.get();
+    }
+    member = Object.assign({ id: u.uid }, s.data());
+    return member;
+  }
+  function watchSelf() {
+    fs.collection('members').doc(user.uid).onSnapshot((d) => { if (d.exists && d.data().role !== 'pending') location.reload(); });
+  }
+  const signUp = async (name, email, pw) => { const r = await auth.createUserWithEmailAndPassword(email, pw); try { await r.user.updateProfile({ displayName: name }); } catch (e) { /* ignore */ } return r; };
+  const signIn = (email, pw) => auth.signInWithEmailAndPassword(email, pw);
+  const google = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  const reset = (email) => auth.sendPasswordResetEmail(email);
+  const signOut = () => auth.signOut();
+  const setRole = (uid, role) => fs.collection('members').doc(uid).update({ role });
+  const setName = async (uid, name) => { await fs.collection('members').doc(uid).update({ name }); if (member && member.id === uid) member.name = name; };
+  const removeMember = (uid) => fs.collection('members').doc(uid).delete();
+  const onMembers = (f) => { startMembers(); memSubs.push(f); return () => { memSubs = memSubs.filter((x) => x !== f); }; };
+  const authErr = (e) => {
+    const c = (e && e.code) || '';
+    return ({
+      'auth/invalid-email': 'อีเมลไม่ถูกต้อง', 'auth/user-not-found': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'auth/wrong-password': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'auth/invalid-credential': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+      'auth/email-already-in-use': 'อีเมลนี้สมัครไว้แล้ว ให้กดเข้าสู่ระบบแทน', 'auth/weak-password': 'รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร', 'auth/missing-password': 'กรุณากรอกรหัสผ่าน',
+      'auth/network-request-failed': 'ต่ออินเทอร์เน็ตไม่ได้ ลองใหม่อีกครั้ง', 'auth/too-many-requests': 'ลองหลายครั้งเกินไป รอสักครู่แล้วลองใหม่',
+      'auth/popup-closed-by-user': 'ปิดหน้าต่าง Google ก่อนเสร็จ ลองอีกครั้ง', 'auth/popup-blocked': 'เบราว์เซอร์บล็อกหน้าต่าง Google ให้ใช้อีเมลแทน',
+      'auth/unauthorized-domain': 'โดเมนนี้ยังไม่ได้อนุญาตใน Firebase (Authentication → Settings → Authorized domains)',
+      'auth/operation-not-allowed': 'ยังไม่ได้เปิดวิธีเข้าสู่ระบบนี้ใน Firebase (Authentication → Sign-in method)',
+      'auth/api-key-not-valid.-please-pass-a-valid-api-key.': 'ค่า config ของ Firebase ไม่ถูกต้อง', 'permission-denied': 'ไม่มีสิทธิ์ ตรวจกฎ (Rules) ของ Firestore ว่าวางครบแล้ว',
+    })[c] || ((e && e.message) || 'ทำรายการไม่สำเร็จ');
+  };
+  return {
+    configured, cfg, start, ensureMember, watchSelf, signUp, signIn, google, reset, signOut, setRole, setName, removeMember, onMembers, memberList, authErr, ensure, assetUrl,
+    member: () => member, user: () => user, claude: { use: async (n) => ({ db: DB, user: userApi, assets, downloads }[n] || null) },
+  };
+})();
+window.claude = FB.claude;
+
+</script>
 <script>
 'use strict';
 /* ============ helpers ============ */
@@ -374,13 +598,16 @@ const ICONS = {
   lang: 'M4 5h8M8 3v2M6 5c1 4 3 7 6 9M10 5c-1 4-3 7-6 9M14 20l4-10 4 10M15.5 17h5',
   moon: 'M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z',
   star: 'M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.2-5.5-3-5.5 3 1-6.2L3 9.7l6.2-.9z',
-  warn: 'M12 3l10 18H2zM12 10v5M12 18h.01'
+  warn: 'M12 3l10 18H2zM12 10v5M12 18h.01',
+  print: 'M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z',
+  heart: 'M12 21s-7-4.4-9.3-9A5.2 5.2 0 0 1 12 6a5.2 5.2 0 0 1 9.3 6c-2.3 4.6-9.3 9-9.3 9z'
 };
 function ic(n, s) {
   s = s || 20;
   return '<svg class="ic" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + (ICONS[n] || ICONS.book) + '"/></svg>';
 }
 function avatarSVG(type) {
+  if (typeof type === 'string' && type.slice(0, 2) === 'e:') return '<span class="emo" aria-hidden="true">' + type.slice(2) + '</span>';
   if (type === 'boy') {
     return '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="45" fill="#FAF8F5"/><path d="M28 32Q50 18 72 32L74 46H26Z" fill="#3D405B"/><ellipse cx="50" cy="58" rx="20" ry="18" fill="#FFEAD2"/><path d="M30 46Q40 40 50 46Q60 40 70 46" fill="none" stroke="#2B2D42" stroke-width="3"/><circle cx="41" cy="56" r="2.5" fill="#3A3A3C"/><circle cx="59" cy="56" r="2.5" fill="#3A3A3C"/><ellipse cx="35" cy="61" rx="3.5" ry="2" fill="#FF8A8A" opacity=".5"/><ellipse cx="65" cy="61" rx="3.5" ry="2" fill="#FF8A8A" opacity=".5"/><path d="M45 63Q50 67 55 63" stroke="#3A3A3C" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>';
   }
@@ -405,7 +632,10 @@ function freshState() {
     asg: {},   // asg[assignmentId][studentId] = {d:0|1, p?:number}
     sc: {},    // sc[scoreItemId][studentId] = number
     att: {},   // att['YYYY-MM-DD'][studentId] = 'p'|'l'|'v'|'a'
-    settings: { school: '', logo: '', year: '', term: 1, scale: DEFAULT_SCALE.map((r) => r.slice()), sign: [{ t: 'ครูประจำชั้น', n: '', img: '' }, { t: 'ผู้อำนวยการ', n: '', img: '' }] }
+    incidents: {}, // incidents[sid] = [{id,d,t,k:'i'|'b'|'c',cat,sev,by,note}] รายงานประพฤติ/บัญชีดำ
+    trips: {}, // trips['YYYY-MM-DD'][id] = {sid,s,e} ไปห้องน้ำ (s/e = เวลาเริ่ม/กลับ ms, e=0 คือยังไม่กลับ)
+    conduct: {}, // conduct[studentId] = [{id,d,p,t,by,why}]  p เป็นบวก=เพิ่ม ลบ=หัก
+    settings: { conductW: 10, lateN: 3, bhN: 3, absentPts: 1, term2Start: '', school: '', logo: '', year: '', term: 1, scale: DEFAULT_SCALE.map((r) => r.slice()), sign: [{ t: 'ครูประจำชั้น', n: '', img: '' }, { t: 'ผู้อำนวยการ', n: '', img: '' }] }
   };
 }
 let S = freshState();
@@ -423,12 +653,15 @@ function loadUI() {
 function saveUI() {
   try { localStorage.setItem('abdia_ui', JSON.stringify({ roomId: V.roomId, subjectId: V.subjectId, term: V.term })); } catch (e) { /* ignore */ }
 }
-function commit() { CTX = {}; queueSync(); }
+function commit() { CTX = {}; queueSync(); if (typeof playPop === 'function') playPop(); }
 
 const NO_ROOM = { id: '', name: '-' };
 const NO_SUBJ = { id: '', name: '-', icon: 'book', color: 'green', credit: 1, collectW: 70, examW: 30 };
 const room = () => S.rooms.find((r) => r.id === V.roomId) || S.rooms[0] || NO_ROOM;
-const subj = () => S.subjects.find((x) => x.id === V.subjectId) || S.subjects[0] || NO_SUBJ;
+/* วิชาที่ชั้นเรียนนั้นเรียน (ถ้าครูยังไม่กำหนด = เรียนทุกวิชา) */
+const roomSubs = (rid) => { const r = S.rooms.find((x) => x.id === rid); return r && Array.isArray(r.subjects) ? S.subjects.filter((x) => r.subjects.indexOf(x.id) >= 0) : S.subjects; };
+const visSubjects = () => { const rs = roomSubs(room().id); return isAdmin() || !CAN_WRITE ? rs : rs.filter((x) => canTeach(x.id)); };
+const subj = () => { const v = visSubjects(); return v.find((x) => x.id === V.subjectId) || v[0] || NO_SUBJ; };
 const isAdmin = () => CAN_ADMIN;
 const canTeach = (sid) => !!sid && CAN_WRITE && (CAN_ADMIN || (S.subjectTeachers[sid] || []).indexOf(MEID) >= 0);
 const nm = (s) => (s.code ? s.code + ' ' : '') + s.name;
@@ -447,8 +680,8 @@ function guard(sid) {
 /* ============ cloud (ฐานข้อมูลของแอพ ใช้ร่วมกันทุกคนที่ได้รับสิทธิ์) ============ */
 let DB = null, UAPI = null, MEID = null, MENAME = '', CAN_ADMIN = false, CAN_WRITE = false;
 const NAMES = {};
-const COLS = ['cfg', 'students', 'assignments', 'items', 'asg', 'sc', 'att', 'teachers'];
-const R_COLS = ['asg', 'sc', 'att'];
+const COLS = ['cfg', 'students', 'assignments', 'items', 'asg', 'sc', 'att', 'conduct', 'teachers'];
+const R_COLS = ['asg', 'sc', 'att', 'conduct'];
 const C = { raw: {}, got: {}, snap: {}, state: 'local', ready: false, timer: null, busy: false, again: false, rb: null, deferred: false, unsubs: [] };
 
 function setSync(st) {
@@ -469,8 +702,8 @@ function showAuth(html) { const a = $('#auth'); a.innerHTML = `<div class="box">
 /* S -> เอกสารในฐานข้อมูล (คะแนนและเช็คชื่อเก็บเป็นเอกสารต่อรายการ/ต่อวัน แก้ทีละคนได้) */
 function toDocs() {
   const D = {}; COLS.forEach((c) => { D[c] = {}; });
-  D.cfg.main = { rooms: S.rooms, subjects: S.subjects, subjectTeachers: S.subjectTeachers, settings: S.settings };
-  S.students.forEach((s) => { D.students[s.id] = { id: s.id, roomId: s.roomId, code: s.code || '', name: s.name, avatar: s.avatar }; });
+  D.cfg.main = { rooms: S.rooms, subjects: S.subjects, subjectTeachers: S.subjectTeachers, settings: Object.assign({}, S.settings, { scale: S.settings.scale.map((r) => r[0] + ':' + r[1]) }) }; // Firestore ไม่รับอาร์เรย์ซ้อนอาร์เรย์
+  S.students.forEach((s) => { D.students[s.id] = { id: s.id, pid: s.pid || s.id, roomId: s.roomId, code: s.code || '', name: s.name, avatar: s.avatar, cm: s.cm || '' }; });
   const aSet = {}, xSet = {};
   S.assignments.forEach((a) => { aSet[a.id] = 1; D.assignments[a.id] = { id: a.id, roomId: a.roomId, subjectId: a.subjectId, term: a.term, title: a.title, max: a.max, due: a.due || '', link: a.link || '', file: a.file || null }; });
   S.scoreItems.forEach((x) => { xSet[x.id] = 1; D.items[x.id] = { id: x.id, roomId: x.roomId, subjectId: x.subjectId, term: x.term, kind: x.kind, title: x.title, max: x.max }; });
@@ -485,6 +718,14 @@ function toDocs() {
     D.sc[xid] = { r };
   }
   for (const d in S.att) D.att[d] = { r: Object.assign({}, S.att[d]) };
+  const stuIds = new Set(S.students.map((s) => s.id));
+  for (const sid in S.conduct) {
+    if (!stuIds.has(sid) || !S.conduct[sid].length) continue;
+    const r = {}; S.conduct[sid].forEach((x) => { r[x.id] = [x.d, x.p, x.t, x.by, encodeURIComponent(x.why || '')].join('|'); });
+    D.conduct[sid] = { r };
+  }
+  for (const sid in S.incidents) { if (!stuIds.has(sid) || !S.incidents[sid].length) continue; const r = {}; S.incidents[sid].forEach((x) => { r[x.id] = [x.d, x.t, x.k, encodeURIComponent(x.cat || ''), x.sev, x.by, encodeURIComponent(x.note || '')].join('|'); }); D.conduct['bh_' + sid] = { r }; }
+  for (const d in S.trips) { const r = {}; for (const id in S.trips[d]) { const t = S.trips[d][id]; if (stuIds.has(t.sid)) r[id] = [t.sid, t.s, t.e || 0].join('|'); } if (Object.keys(r).length) D.conduct['wc_' + d] = { r }; }
   return D;
 }
 function snapshot() {
@@ -512,8 +753,8 @@ function buildS() {
   n.rooms = cfg.rooms || [];
   n.subjects = (cfg.subjects || []).map((x) => Object.assign({ icon: 'book', color: 'green', credit: 1, collectW: 70, examW: 30 }, x));
   n.subjectTeachers = cfg.subjectTeachers || {};
-  if (cfg.settings) { const v = cfg.settings; n.settings = { school: v.school || '', logo: v.logo || '', year: v.year || '', term: v.term || 1, scale: Array.isArray(v.scale) && v.scale.length ? v.scale : n.settings.scale, sign: [0, 1].map((i) => { const z = (Array.isArray(v.sign) && v.sign[i]) || {}, d = n.settings.sign[i]; return { t: z.t != null ? z.t : d.t, n: z.n || '', img: z.img || '' }; }) }; }
-  n.students = vals('students').map((s) => ({ id: s.id, roomId: s.roomId, code: s.code || '', name: s.name, avatar: s.avatar || 'girl' }));
+  if (cfg.settings) { const v = cfg.settings; n.settings = { conductW: v.conductW != null ? v.conductW : 10, lateN: v.lateN != null ? v.lateN : 3, bhN: v.bhN != null ? v.bhN : 3, absentPts: v.absentPts != null ? v.absentPts : 1, term2Start: v.term2Start || '', school: v.school || '', logo: v.logo || '', year: v.year || '', term: v.term || 1, scale: Array.isArray(v.scale) && v.scale.length ? v.scale.map((r) => (Array.isArray(r) ? r : String(r).split(':').map(parseFloat))).filter((r) => r.length === 2 && isFinite(r[0]) && isFinite(r[1])) : n.settings.scale, sign: [0, 1].map((i) => { const z = (Array.isArray(v.sign) && v.sign[i]) || {}, d = n.settings.sign[i]; return { t: z.t != null ? z.t : d.t, n: z.n || '', img: z.img || '' }; }) }; }
+  n.students = vals('students').map((s) => ({ id: s.id, pid: s.pid || s.id, roomId: s.roomId, code: s.code || '', name: s.name, avatar: s.avatar || 'girl', cm: s.cm || '' }));
   const aSet = new Set(), xSet = new Set(), stuSet = new Set(n.students.map((s) => s.id));
   n.assignments = vals('assignments').map((r) => { aSet.add(r.id); const a = { id: r.id, roomId: r.roomId, subjectId: r.subjectId, term: r.term, title: r.title, max: r.max, due: r.due || '', link: r.link || '' }; if (r.file) a.file = r.file; return a; });
   n.scoreItems = vals('items').map((r) => { xSet.add(r.id); return { id: r.id, roomId: r.roomId, subjectId: r.subjectId, term: r.term, kind: r.kind, title: r.title, max: r.max }; });
@@ -528,6 +769,30 @@ function buildS() {
     const r = (R.sc[xid] && R.sc[xid].r) || {}, out = {};
     for (const sid in r) if (num(r[sid]) && stuSet.has(sid)) out[sid] = r[sid];
     n.sc[xid] = out;
+  }
+  for (const sid in (R.conduct || {})) {
+    if (sid.indexOf('bh_') === 0) {
+      const id0 = sid.slice(3), r = (R.conduct[sid] && R.conduct[sid].r) || {}, out = [];
+      if (!stuSet.has(id0)) continue;
+      for (const id in r) { if (r[id] == null) continue; const p = String(r[id]).split('|'), dec = (x) => { try { return decodeURIComponent(x || ''); } catch (e) { return x || ''; } }; out.push({ id, d: p[0], t: parseInt(p[1], 10) || 1, k: p[2] || 'i', cat: dec(p[3]), sev: parseInt(p[4], 10) || 1, by: p[5] || '', note: dec(p[6]) }); }
+      if (out.length) n.incidents[id0] = out;
+      continue;
+    }
+    if (sid.indexOf('wc_') === 0) {
+      const r = (R.conduct[sid] && R.conduct[sid].r) || {}, d = sid.slice(3), out = {};
+      for (const id in r) { if (r[id] == null) continue; const p = String(r[id]).split('|'), s = +p[1]; if (stuSet.has(p[0]) && isFinite(s) && s > 0) out[id] = { sid: p[0], s, e: +p[2] || 0 }; }
+      if (Object.keys(out).length) n.trips[d] = out;
+      continue;
+    }
+    if (!stuSet.has(sid)) continue;
+    const r = (R.conduct[sid] && R.conduct[sid].r) || {}, out = [];
+    for (const id in r) {
+      if (r[id] == null) continue;
+      const p = String(r[id]).split('|'), pts = parseFloat(p[1]); if (!isFinite(pts)) continue;
+      let why = ''; try { why = decodeURIComponent(p[4] || ''); } catch (e) { why = p[4] || ''; }
+      out.push({ id, d: p[0], p: pts, t: parseInt(p[2], 10) || 1, by: p[3] || '', why });
+    }
+    if (out.length) n.conduct[sid] = out;
   }
   for (const d in (R.att || {})) {
     const r = (R.att[d] && R.att[d].r) || {}, out = {};
@@ -609,10 +874,9 @@ function onCol(col, snap) {
 function firstLoad() {
   C.ready = true; buildS(); setSync('synced');
   if (!S.rooms.find((r) => r.id === V.roomId)) V.roomId = S.rooms[0] ? S.rooms[0].id : null;
-  if (!S.subjects.find((x) => x.id === V.subjectId)) { const mine = S.subjects.find((x) => canTeach(x.id)); V.subjectId = (mine || S.subjects[0] || {}).id || null; }
+  { const v = visSubjects(); if (!v.find((x) => x.id === V.subjectId)) V.subjectId = (v[0] || {}).id || null; }
   if (TERMS.indexOf(V.term) < 0 || !localStorage.getItem('abdia_ui')) V.term = S.settings.term || 1;
   saveUI(); enterApp();
-  if (CAN_WRITE && MEID && !(C.raw.teachers && C.raw.teachers[MEID])) DB.doc('teachers/' + MEID).set({ id: MEID }).catch(() => {});
 }
 function enterApp() {
   $('#auth').hidden = true; render(); window.scrollTo(0, 0);
@@ -625,7 +889,158 @@ async function manualRefresh() {
   if (C.state === 'synced') toast('บันทึกแล้ว ข้อมูลเป็นปัจจุบัน');
 }
 
+/* ============ สมัคร / เข้าสู่ระบบ (Firebase) ============ */
+let _booted = false, _signupName = '', _mode = 'in';
+const RULES_TEXT = "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    function signedIn() { return request.auth != null; }\n    function hasMember() { return signedIn() && exists(/databases/$(database)/documents/members/$(request.auth.uid)); }\n    function role() { return get(/databases/$(database)/documents/members/$(request.auth.uid)).data.role; }\n    function isAdmin() { return hasMember() && role() == 'admin'; }\n    function canWrite() { return hasMember() && role() in ['admin', 'teacher']; }\n    function canRead() { return hasMember() && role() in ['admin', 'teacher', 'viewer']; }\n\n    // ผู้ดูแลคนแรก: สร้างได้ครั้งเดียว\n    match /meta/setup {\n      allow read: if signedIn();\n      allow create: if signedIn() && request.resource.data.adminUid == request.auth.uid\n        && getAfter(/databases/$(database)/documents/members/$(request.auth.uid)).data.role == 'admin';\n      allow update, delete: if false;\n    }\n\n    // สมาชิกและสิทธิ์\n    match /members/{uid} {\n      allow read: if signedIn() && (request.auth.uid == uid || canRead());\n      allow create: if signedIn() && request.auth.uid == uid && (\n        request.resource.data.role == 'pending'\n        || (request.resource.data.role == 'admin'\n            && !exists(/databases/$(database)/documents/meta/setup)\n            && existsAfter(/databases/$(database)/documents/meta/setup)));\n      allow update: if signedIn() && (\n        (isAdmin() && request.auth.uid != uid)\n        || (request.auth.uid == uid && request.resource.data.role == resource.data.role));\n      allow delete: if isAdmin() && request.auth.uid != uid;\n    }\n\n    // ข้อมูลของแอพ\n    match /{col}/{docId} {\n      allow read: if col in ['cfg','students','assignments','items','asg','sc','att','conduct','files'] && canRead();\n      allow write: if col in ['cfg','students','assignments','items','asg','sc','att','conduct','files'] && canWrite();\n    }\n  }\n}\n";
+function copyText(t, okMsg) {
+  const done = () => toast(okMsg || 'คัดลอกแล้ว');
+  try { navigator.clipboard.writeText(t).then(done, () => toast('คัดลอกไม่ได้ ให้เลือกข้อความแล้วคัดลอกเอง')); } catch (e) { toast('คัดลอกไม่ได้ ให้เลือกข้อความแล้วคัดลอกเอง'); }
+}
+function showSetup(err) {
+  showAuth(`<div class="authform">
+    <h2 class="h3" style="margin:4px 0 6px">ตั้งค่า Firebase ครั้งแรก</h2>
+    <p class="sm muted">ทำครั้งเดียวโดยผู้ดูแล หลังจากนั้นครูแค่เปิดลิงก์และสมัครสมาชิก</p>
+    ${err ? `<p class="sm" style="color:var(--a);margin-top:8px" role="alert">${esc(err)}</p>` : ''}
+    <ol class="sm" style="margin:10px 0 0;padding-left:20px;display:grid;gap:8px">
+      <li>เข้า <b>console.firebase.google.com</b> กด Add project (ปิด Analytics ได้)</li>
+      <li>Build → <b>Authentication</b> → Get started → เปิด <b>Email/Password</b> (และ Google ถ้าต้องการ)</li>
+      <li>Build → <b>Firestore Database</b> → Create database → เลือก Production mode</li>
+      <li>แท็บ <b>Rules</b> วางกฎด้านล่างทับของเดิม แล้ว Publish
+        <div class="btnrow" style="margin-top:6px"><button class="btn s" onclick="copyText(RULES_TEXT,'คัดลอกกฎแล้ว')">คัดลอกกฎ (Rules)</button></div></li>
+      <li>Project settings (รูปเฟือง) → Your apps → เพิ่มแอพ Web (&lt;/&gt;) แล้วคัดลอกก้อน <b>firebaseConfig</b> มาวางด้านล่าง</li>
+    </ol>
+    <label class="sm" for="fb-cfg" style="display:block;margin-top:12px"><b>firebaseConfig</b></label>
+    <textarea id="fb-cfg" rows="6" placeholder='apiKey: "…", authDomain: "…", projectId: "…", appId: "…"' autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%"></textarea>
+    <div class="btnrow"><button class="btn primary" onclick="saveFbCfg()">บันทึกและเริ่มใช้งาน</button></div>
+    <p class="xs muted" style="margin-top:8px">ค่านี้เก็บในเครื่องนี้เท่านั้น ถ้าอยากให้ครูทุกคนเปิดลิงก์แล้วใช้ได้เลย ให้ฝังค่าไว้ในไฟล์แอพ (ส่ง config มาให้ผู้พัฒนาฝังให้ได้)</p>
+  </div>`);
+}
+function saveFbCfg() {
+  const t = $('#fb-cfg').value, c = {}; let m; const re = /["']?(\w+)["']?\s*:\s*["']([^"']*)["']/g;
+  while ((m = re.exec(t))) c[m[1]] = m[2];
+  if (!c.apiKey || !c.projectId) { showSetup('อ่านค่าไม่ครบ ต้องมี apiKey และ projectId ลองคัดลอกก้อน firebaseConfig ทั้งหมดอีกครั้ง'); return; }
+  try { localStorage.setItem('abdia_fbcfg', JSON.stringify(c)); } catch (e) { showSetup('เบราว์เซอร์นี้เก็บการตั้งค่าไม่ได้ ให้ฝังค่าไว้ในไฟล์แอพแทน'); return; }
+  location.reload();
+}
+function showLoginFB(mode, err, v) {
+  _mode = mode || 'in'; v = v || {};
+  const up = _mode === 'up';
+  showAuth(`<div class="authform">
+    <div class="row" style="gap:6px;margin-bottom:12px">
+      <button class="btn s ${up ? 'soft' : 'primary'}" onclick="showLoginFB('in')">เข้าสู่ระบบ</button>
+      <button class="btn s ${up ? 'primary' : 'soft'}" onclick="showLoginFB('up')">สมัครใช้งาน</button></div>
+    ${err ? `<p class="sm" style="color:var(--a);margin-bottom:8px" role="alert">${esc(err)}</p>` : ''}
+    <form onsubmit="fbSubmit();return false" class="stack">
+      ${up ? `<div class="field"><label class="lbl" for="fb-name">ชื่อที่แสดง</label><input type="text" id="fb-name" value="${esc(v.name || '')}" placeholder="เช่น ครูสมศรี" autocomplete="name" maxlength="60"></div>` : ''}
+      <div class="field"><label class="lbl" for="fb-email">อีเมล</label><input type="text" id="fb-email" inputmode="email" value="${esc(v.email || '')}" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+      <div class="field"><label class="lbl" for="fb-pw">รหัสผ่าน${up ? ' (6 ตัวขึ้นไป)' : ''}</label><input type="password" id="fb-pw" autocomplete="${up ? 'new-password' : 'current-password'}"></div>
+      <button class="btn primary" type="submit" id="fb-go" style="width:100%">${up ? 'สมัครใช้งาน' : 'เข้าสู่ระบบ'}</button>
+    </form>
+    <div class="btnrow"><button class="btn" onclick="fbGoogle()" style="width:100%">เข้าด้วย Google</button></div>
+    <p style="margin-top:12px"><button class="linkbtn" onclick="fbResetCfg()">ตั้งค่า Firebase ใหม่</button></p>
+    ${up ? '<p class="xs muted" style="margin-top:10px">คนแรกที่สมัครจะเป็นผู้ดูแลระบบ คนถัดไปต้องรอผู้ดูแลอนุมัติ</p>' : '<p style="margin-top:10px"><button class="linkbtn" onclick="fbReset()">ลืมรหัสผ่าน</button></p>'}
+  </div>`);
+}
+function fbVals() { return { name: ($('#fb-name') || {}).value || '', email: ($('#fb-email') || {}).value || '' }; }
+async function fbSubmit() {
+  const v = fbVals(), pw = $('#fb-pw').value, email = v.email.replace(/\s+/g, '');
+  if (!email || !pw) { showLoginFB(_mode, 'กรุณากรอกอีเมลและรหัสผ่าน', v); return; }
+  if (_mode === 'up' && !v.name.trim()) { showLoginFB(_mode, 'กรุณาใส่ชื่อที่แสดง', v); return; }
+  const b = $('#fb-go'); b.disabled = true; b.textContent = 'กำลังดำเนินการ…';
+  try { if (_mode === 'up') { _signupName = v.name.trim(); await FB.signUp(_signupName, email, pw); } else await FB.signIn(email, pw); }
+  catch (e) { showLoginFB(_mode, FB.authErr(e), v); }
+}
+async function fbGoogle() { try { await FB.google(); } catch (e) { showLoginFB(_mode, FB.authErr(e), fbVals()); } }
+async function fbReset() {
+  const v = fbVals(), email = v.email.replace(/\s+/g, '');
+  if (!email) { showLoginFB('in', 'ใส่อีเมลก่อน แล้วกด "ลืมรหัสผ่าน" อีกครั้ง', v); return; }
+  try { await FB.reset(email); showLoginFB('in', '', v); toast('ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว'); } catch (e) { showLoginFB('in', FB.authErr(e), v); }
+}
+function fbResetCfg() {
+  if (typeof FIREBASE_CONFIG !== 'undefined' && FIREBASE_CONFIG) { toast('ค่า Firebase ฝังอยู่ในไฟล์แอพ ต้องแก้ที่ไฟล์'); return; }
+  try { localStorage.removeItem('abdia_fbcfg'); } catch (e) { /* ignore */ }
+  location.reload();
+}
+function fbSignOut() { FB.signOut().then(() => location.reload(), () => location.reload()); }
+function showPending() {
+  const u = FB.user();
+  showAuth(`<div class="authform"><span class="pill l">รออนุมัติ</span>
+    <h2 class="h3" style="margin:8px 0 6px">สมัครแล้ว รอผู้ดูแลอนุมัติ</h2>
+    <p class="sm muted">บัญชี ${esc((u && u.email) || '')} สมัครเรียบร้อย ให้ผู้ดูแลระบบเปิดสิทธิ์ให้ในหน้า ตั้งค่า → สมาชิกและสิทธิ์ เมื่ออนุมัติแล้วหน้านี้จะเข้าแอพให้เอง</p>
+    <div class="btnrow"><button class="btn" onclick="fbSignOut()">ออกจากระบบ</button></div></div>`);
+}
+function fbClearLocal() {
+  try { ['firebaseLocalStorageDb', 'firebase-heartbeat-database', 'firebase-installations-database'].forEach((n) => indexedDB.deleteDatabase(n)); } catch (e) { /* ignore */ }
+  try { Object.keys(localStorage).filter((k) => /^firebase:/.test(k)).forEach((k) => localStorage.removeItem(k)); } catch (e) { /* ignore */ }
+  setTimeout(() => location.reload(), 400);
+}
 async function init() {
+  loadUI();
+  if (typeof firebase === 'undefined') { showAuth('<div class="authform"><span class="pill a">โหลด Firebase ไม่สำเร็จ</span><p class="sm muted" style="margin-top:8px">ตรวจอินเทอร์เน็ตแล้วรีเฟรชหน้านี้</p></div>'); return; }
+  if (!FB.configured()) { showSetup(); return; }
+  showAuth('<div class="authform"><p class="sm muted">กำลังเชื่อมต่อ…</p></div>');
+  let _conn = false;
+  setTimeout(() => { if (_conn) return; showAuth(`<div class="authform"><span class="pill l">เชื่อมต่อนานผิดปกติ</span><h2 class="h3" style="margin:8px 0 6px">ยังเชื่อมต่อไม่ได้</h2>
+    <p class="sm muted">มักเกิดจากอินเทอร์เน็ตหรือไวไฟของโรงเรียนบล็อกการเชื่อมต่อฐานข้อมูล หรือเบราว์เซอร์ค้างค่าเก่า ลองตามนี้ทีละข้อ: (1) กด "ลองใหม่" (2) สลับไปใช้ไวไฟหรืออินเทอร์เน็ตมือถืออื่น (3) กด "ล้างค่าที่จำไว้แล้วลองใหม่" (ต้องเข้าสู่ระบบอีกครั้ง ข้อมูลในฐานข้อมูลไม่หาย)</p>
+    <div class="btnrow"><button class="btn primary" onclick="location.reload()">ลองใหม่</button><button class="btn" onclick="fbClearLocal()">ล้างค่าที่จำไว้แล้วลองใหม่</button></div></div>`); }, 12000);
+  try {
+    FB.start(async (u) => {
+      _conn = true;
+      if (!u) { if (_booted) { location.reload(); return; } showLoginFB('in'); return; }
+      if (_booted) return;
+      try {
+        const m = await FB.ensureMember(u, _signupName);
+        if (m.role === 'pending') { showPending(); FB.watchSelf(); return; }
+        _booted = true; bootApp();
+      } catch (e) {
+        showAuth(`<div class="authform"><span class="pill a">เข้าแอพไม่สำเร็จ</span><p class="sm muted" style="margin-top:8px">${esc(FB.authErr(e))}</p><div class="btnrow"><button class="btn" onclick="fbSignOut()">ออกจากระบบ</button></div></div>`);
+      }
+    });
+  } catch (e) { showSetup('เริ่ม Firebase ไม่สำเร็จ: ' + ((e && e.message) || 'ค่า config ไม่ถูกต้อง')); }
+}
+
+/* ---- สมาชิกและสิทธิ์ (ผู้ดูแล) ---- */
+const ROLE_TXT = { admin: 'ผู้ดูแลระบบ', teacher: 'ครูผู้สอน', viewer: 'ดูอย่างเดียว', pending: 'รออนุมัติ' };
+let _memUnsub = null, _pendSeen = -1;
+function watchMembers() {
+  if (_memUnsub || !isAdmin()) return;
+  _memUnsub = FB.onMembers(() => {
+    const n = FB.memberList().filter((m) => m.role === 'pending').length;
+    if (notifCfg().regOn && ((_pendSeen >= 0 && n > _pendSeen) || (_pendSeen < 0 && n > 0))) pushNote('👩‍🏫 มีครูสมัครใหม่', 'รออนุมัติ ' + n + ' คน กดเพื่อไปหน้าตั้งค่า', 'reg', { tab: 'settings' });
+    _pendSeen = n;
+    if (V.tab === 'settings' && C.ready && safeToRender()) render();
+  });
+}
+function memberCardHTML() {
+  watchMembers();
+  const ms = FB.memberList(), pend = ms.filter((m) => m.role === 'pending').length;
+  const rows = ms.map((m) => {
+    const self = m.id === MEID, subs = S.subjects.filter((x) => (S.subjectTeachers[x.id] || []).indexOf(m.id) >= 0).map((x) => x.name).join(', ');
+    const pill = `<span class="pill ${m.role === 'pending' ? 'l' : m.role === 'admin' ? 'p' : m.role === 'teacher' ? 'v' : 'n'}">${ROLE_TXT[m.role] || esc(m.role)}</span>`;
+    return `<div class="srow"><div class="row between"><div class="grow" style="min-width:0"><div class="name trunc">${esc(m.name || 'ไม่ระบุชื่อ')}${self ? ' (ฉัน)' : ''}</div><div class="xs muted trunc">${esc(m.email || '')}</div></div>${self ? pill : ''}<button class="del" style="color:var(--ink2)" onclick="openName('${m.id}')" aria-label="แก้ชื่อ">${ic('edit', 16)}</button></div>
+      ${m.role === 'teacher' || m.role === 'admin' ? `<div class="xs muted" style="margin-top:2px">${m.role === 'admin' ? 'แก้ไขได้ทุกวิชา' : (subs ? 'สอน: ' + esc(subs) : 'ยังไม่ได้กำหนดวิชา (กำหนดที่รายวิชาด้านล่าง)')}</div>` : ''}
+      ${self ? '' : `<div class="row" style="margin-top:8px;gap:8px"><select id="role-${m.id}" aria-label="สิทธิ์ของ ${esc(m.name || m.email || '')}" onchange="setMemberRole('${m.id}', this.value)" style="flex:1;min-width:0">${['pending', 'teacher', 'viewer', 'admin'].map((r) => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${ROLE_TXT[r]}</option>`).join('')}</select>
+        <button class="del" onclick="askRemoveMember('${m.id}')" aria-label="ลบสมาชิก">${ic('trash', 16)}</button></div>`}</div>`;
+  }).join('');
+  return `<div class="card"><div class="row between"><h3 class="h3">สมาชิกและสิทธิ์</h3>${pend ? `<span class="pill l">รออนุมัติ ${pend}</span>` : ''}</div>
+    <p class="xs muted" style="margin:4px 0 8px">เชิญครู: ส่งลิงก์แอพนี้ให้ครู ครูสมัครด้วยอีเมลแล้วจะขึ้นเป็น "รออนุมัติ" ที่นี่ เลือกสิทธิ์ให้ได้เลย ครูผู้สอนแก้ไขได้เฉพาะวิชาที่กำหนด ผู้ดูแลระบบแก้ได้ทุกอย่าง</p>
+    <div class="btnrow" style="margin:0 0 10px"><button class="btn s" onclick="copyText(location.href.split('#')[0],'คัดลอกลิงก์เชิญแล้ว')">${ic('link', 16)} คัดลอกลิงก์เชิญ</button></div>
+    ${rows || '<div class="empty">กำลังโหลดรายชื่อ…</div>'}</div>`;
+}
+async function setMemberRole(uid, role) {
+  if (!isAdmin()) return;
+  try { await FB.setRole(uid, role); toast('เปลี่ยนสิทธิ์แล้ว'); } catch (e) { toast(FB.authErr(e)); }
+}
+function askRemoveMember(uid) {
+  const m = FB.memberList().find((x) => x.id === uid); if (!m) return;
+  askConfirm('ลบสมาชิก', (m.name || m.email) + ' จะเข้าแอพไม่ได้จนกว่าจะสมัครใหม่และได้รับอนุมัติ ข้อมูลที่เคยบันทึกไม่หาย', "removeMember('" + uid + "')");
+}
+async function removeMember(uid) {
+  if (!isAdmin()) return;
+  try { await FB.removeMember(uid); closeModal(); toast('ลบสมาชิกแล้ว'); } catch (e) { toast(FB.authErr(e)); }
+}
+
+async function bootApp() {
   loadUI();
   showAuth('<div class="authform"><p class="sm muted">กำลังโหลดข้อมูล…</p></div>');
   try {
@@ -703,7 +1118,7 @@ function setupCard() {
     <div class="stack" style="margin-top:12px">
       <div class="step"><span class="n">1</span><div class="grow"><b>สร้างห้องเรียน</b><div class="sm muted">${S.rooms.length ? 'มีแล้ว ' + S.rooms.length + ' ห้อง' : 'ครูทุกคนใช้ห้องเดียวกันนี้ร่วมกัน'}</div></div><button class="btn soft s" onclick="openAddRoom()">เพิ่มห้อง</button></div>
       <div class="step"><span class="n">2</span><div class="grow"><b>เพิ่มรายวิชา</b><div class="sm muted">${S.subjects.length ? 'มีแล้ว ' + S.subjects.length + ' วิชา' : 'กำหนดหน่วยกิตและสัดส่วนคะแนนได้ภายหลัง'}</div></div><button class="btn soft s" onclick="seedSubjects()">วิชามาตรฐาน</button></div>
-      <div class="step"><span class="n">3</span><div class="grow"><b>เชิญครูท่านอื่น</b><div class="sm muted">แชร์แอพให้ครูในระดับ Contributor ผ่านเมนู Share ครูเปิดแอพครั้งแรกแล้วชื่อจะขึ้นให้กำหนดวิชาที่สอน</div></div><button class="btn s" onclick="go('settings')">ตั้งค่า</button></div>
+      <div class="step"><span class="n">3</span><div class="grow"><b>เชิญครูท่านอื่น</b><div class="sm muted">ส่งลิงก์แอพให้ครู ครูสมัครแล้วผู้ดูแลอนุมัติที่หน้าตั้งค่า แล้วกำหนดวิชาที่สอน</div></div><button class="btn s" onclick="go('settings')">ตั้งค่า</button></div>
       <div class="step"><span class="n">4</span><div class="grow"><b>เพิ่มรายชื่อนักเรียน</b><div class="sm muted">วางรหัสและชื่อจาก Excel ได้เลย</div></div><button class="btn s" onclick="openAddStudents()">เพิ่มนักเรียน</button></div>
     </div></div>`;
 }
@@ -752,11 +1167,15 @@ function vHome() {
   }
   return `${banner}<div class="sect">${body}</div>
     <div class="sect tiles">
+      <button class="tile t-butter" onclick="go('roster')"><span class="tico">${ic('users', 22)}</span><b>ทะเบียนนักเรียน</b><span class="d">ทั้งโรงเรียน ดึงเข้าห้องได้</span></button>
       <button class="tile t-sky" onclick="go('students')"><span class="tico">${ic('users', 22)}</span><b>นักเรียน</b><span class="d">${st.length} คนในห้อง ${esc(room().name)}</span></button>
       <button class="tile t-mint" onclick="go('attendance')"><span class="tico">${ic('cal', 22)}</span><b>เช็คชื่อ</b><span class="d">บันทึกและดูประวัติ</span></button>
       <button class="tile t-rose" onclick="go('check')"><span class="tico">${ic('clip', 22)}</span><b>เช็คงาน</b><span class="d">ตรวจงานและใส่คะแนน</span></button>
       <button class="tile t-butter" onclick="go('scores')"><span class="tico">${ic('award', 22)}</span><b>คะแนนและสอบ</b><span class="d">คะแนนเก็บและสอบปลายภาค</span></button>
       <button class="tile t-sky" onclick="go('grades')"><span class="tico">${ic('star', 22)}</span><b>ใบเกรด</b><span class="d">ตัดเกรดอัตโนมัติ เทอม 1-2</span></button>
+      <button class="tile t-rose" onclick="go('conduct')"><span class="tico">${ic('heart', 22)}</span><b>จิตพิสัย</b><span class="d">เพิ่มและหักคะแนนความประพฤติ</span></button>
+      <button class="tile t-rose" onclick="go('bh')"><span class="tico" style="font-size:20px">🚩</span><b>สมุดพฤติกรรม</b><span class="d">บันทึก สถิติรายเทอม และบัญชีดำ</span></button>
+      <button class="tile t-sky" onclick="go('wc')"><span class="tico" style="font-size:20px">🚻</span><b>ไปห้องน้ำ</b><span class="d">จับเวลาและดูสถิติ</span></button>
       <button class="tile t-mint" onclick="go('stats')"><span class="tico">${ic('chart', 22)}</span><b>สถิติ</b><span class="d">ภาพรวมห้องเรียน</span></button>
     </div>
     <div class="card row between wrapx">
@@ -771,7 +1190,7 @@ function stuCard(s) {
   const a = attOf(s.id);
   return `<div class="srow">
     <div class="row">
-      <button class="avatar sm2" onclick="toggleAvatar('${s.id}')" aria-label="สลับรูปตัวละคร">${avatarSVG(s.avatar)}</button>
+      <button class="avatar sm2" onclick="openRename('${s.id}')" aria-label="เปลี่ยนรูปและชื่อ">${avatarSVG(s.avatar)}</button>
       <button class="grow" style="text-align:left" onclick="openRename('${s.id}')"><span class="name trunc" style="display:block">${esc(s.name)}</span><span class="xs muted">${s.code ? 'รหัส ' + esc(s.code) : '<b style="color:var(--l)">ยังไม่มีรหัส</b>'} · แตะเพื่อแก้ไข</span></button>
       ${isAdmin() ? `<button class="del" onclick="askDelStudent('${s.id}')" aria-label="ลบ ${esc(s.name)}">${ic('trash', 18)}</button>` : ''}
     </div>
@@ -790,9 +1209,627 @@ function vStudents() {
   const n = roomStudents().length;
   return `<div class="pagehead"><div><h2 class="h2">นักเรียน</h2><p class="sm muted">ห้อง ${esc(room().name)} · ทั้งหมด ${n} คน</p></div>
       <button class="btn primary" onclick="openAddStudents()">${ic('plus', 18)} เพิ่มนักเรียน</button></div>
+    <div class="btnrow" style="margin:0 0 12px"><button class="btn s" onclick="openPull()">${ic('users', 16)} ดึงจากทะเบียนโรงเรียน</button><button class="btn s" onclick="go('roster')">ทะเบียนทั้งโรงเรียน</button></div>
     <div class="search" style="margin-bottom:12px">${ic('search', 18)}<input type="text" id="q" value="${esc(V.q)}" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="V.q=this.value;renderStuList()" aria-label="ค้นหารหัสหรือชื่อนักเรียน"></div>
     <div id="stu-list">${stuListHTML()}</div>`;
 }
+
+/* ============ ไปห้องน้ำ: จับเวลา + สถิติแบบน่ารัก ============ */
+V.wcq = ''; V.wcMode = 'timer'; V.wcRange = '7';
+function wcOut(sid) { for (const d in S.trips) for (const id in S.trips[d]) { const t = S.trips[d][id]; if (t.sid === sid && !t.e) return { id, d, s: t.s }; } return null; }
+function wcTrips(sids, range) {
+  const set = new Set(sids), cut = range === 'all' ? '' : toDateStr(new Date(Date.now() - (range === '1' ? 0 : +range) * 864e5)), out = [];
+  for (const d in S.trips) { if (cut && d < cut) continue; for (const id in S.trips[d]) { const t = S.trips[d][id]; if (set.has(t.sid)) out.push({ id, d, sid: t.sid, s: t.s, e: t.e }); } }
+  return out;
+}
+function fmtDur(ms) {
+  const s = Math.max(0, Math.round(ms / 1000)), m = Math.floor(s / 60);
+  return m ? m + ' นาที' + (s % 60 ? ' ' + (s % 60) + ' วิ' : '') : s + ' วิ';
+}
+const fmtClock = (ms) => { const d = new Date(ms); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const clockMS = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+function wcStart(sid) {
+  if (!CAN_WRITE) { toast('บัญชีนี้ดูข้อมูลได้อย่างเดียว'); return; }
+  if (wcOut(sid)) return;
+  const d = today(); (S.trips[d] = S.trips[d] || {})[uid('w')] = { sid, s: Date.now(), e: 0 };
+  commit(); render(); toast('เดินทางปลอดภัยนะ 🚻 เริ่มจับเวลาแล้ว');
+}
+function wcBack(sid) {
+  const o = wcOut(sid); if (!o || !CAN_WRITE) return;
+  const t = S.trips[o.d][o.id]; t.e = Date.now(); const ms = t.e - t.s;
+  commit(); render();
+  toast((ms < 60000 ? 'เร็วจัง ⚡ ' : ms <= 300000 ? 'กลับมาแล้ว เก่งมาก 🌟 ' : ms <= 600000 ? 'ยินดีต้อนรับกลับ 🐣 ' : 'คิดถึงนะ 🐢 ') + fmtDur(ms));
+}
+function wcCancel(sid) { const o = wcOut(sid); if (!o || !CAN_WRITE) return; delete S.trips[o.d][o.id]; if (!Object.keys(S.trips[o.d]).length) delete S.trips[o.d]; commit(); render(); toast('ยกเลิกการจับเวลาแล้ว'); }
+function wcDelTrip(d, id, sid) { if (!CAN_WRITE || !S.trips[d]) return; delete S.trips[d][id]; if (!Object.keys(S.trips[d]).length) delete S.trips[d]; commit(); openWcStu(sid); render(); }
+setInterval(() => { document.querySelectorAll('[data-wc]').forEach((el) => { el.textContent = clockMS(Date.now() - +el.dataset.wc); }); }, 1000);
+function wcStatsFor(sid, range) {
+  const l = wcTrips([sid], range).filter((t) => t.e), tot = l.reduce((p, t) => p + (t.e - t.s), 0);
+  return { n: l.length, tot, avg: l.length ? tot / l.length : 0, max: l.reduce((p, t) => Math.max(p, t.e - t.s), 0), list: l };
+}
+function wcFace(n, max) { return n === 0 ? '🌵' : n === max && n >= 3 ? '💧' : n >= 4 ? '🌊' : '🫧'; }
+function renderWcList() { const l = $('#wc-list'); if (l) l.innerHTML = wcListHTML(roomStudents()); }
+function wcTimerHTML(st) {
+  const nOut = st.filter((s) => wcOut(s.id)).length;
+  return `<div class="card" style="margin-bottom:10px;text-align:center;background:var(--tint-sky)"><div style="font-size:30px">${nOut ? '🚶‍♀️💨' : '🏫✨'}</div><b>${nOut ? 'ตอนนี้ออกไป ' + nOut + ' คน' : 'ทุกคนอยู่ในห้องครบเลย'}</b><div class="xs muted">${nOut ? 'อย่าลืมกด "กลับมาแล้ว" ตอนเด็กกลับนะคะ' : 'กดปุ่ม "ไปห้องน้ำ" ข้างชื่อเพื่อเริ่มจับเวลา'}</div></div>
+    <div class="search" style="margin-bottom:10px">${ic('search', 18)}<input type="text" id="wc-q" value="${esc(V.wcq)}" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="V.wcq=this.value;renderWcList()" aria-label="ค้นหานักเรียน"></div>
+    <div id="wc-list">${wcListHTML(st)}</div>`;
+}
+function wcListHTML(st) {
+  const q = V.wcq.trim().toLowerCase();
+  const list = st.filter((s) => (s.name + ' ' + s.code).toLowerCase().indexOf(q) >= 0);
+  const sorted = list.filter((s) => wcOut(s.id)).concat(list.filter((s) => !wcOut(s.id)));
+  return `${sorted.map((s) => { const o = wcOut(s.id), n = wcTrips([s.id], '1').length;
+      return `<div class="srow"><div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div>
+        <div class="grow" style="min-width:0"><div class="name trunc">${esc(nm(s))}</div><div class="xs muted">${o ? 'ออกไปตั้งแต่ ' + fmtClock(o.s) : 'วันนี้ไป ' + n + ' ครั้ง'}</div></div>
+        ${o ? `<span class="pill a" style="font-size:16px;min-height:34px;font-variant-numeric:tabular-nums">⏱️ <span data-wc="${o.s}">${clockMS(Date.now() - o.s)}</span></span>` : ''}</div>
+        ${CAN_WRITE ? (o ? `<div class="btnrow" style="margin-top:8px"><button class="btn primary s" onclick="wcBack('${s.id}')">กลับมาแล้ว ✓</button><button class="btn s" onclick="wcCancel('${s.id}')">กดผิด ยกเลิก</button></div>`
+          : `<div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="wcStart('${s.id}')">🚻 ไปห้องน้ำ</button></div>`) : ''}</div>`; }).join('') || '<div class="empty">ไม่พบนักเรียน</div>'}`;
+}
+function wcStatsHTML(st) {
+  const rg = V.wcRange, rows = st.map((s) => Object.assign({ s }, wcStatsFor(s.id, rg))), mx = rows.reduce((p, r) => Math.max(p, r.n), 0);
+  const all = rows.reduce((p, r) => p + r.n, 0), tot = rows.reduce((p, r) => p + r.tot, 0);
+  const hours = {}; wcTrips(st.map((s) => s.id), rg).forEach((t) => { const h = new Date(t.s).getHours(); hours[h] = (hours[h] || 0) + 1; });
+  const hk = Object.keys(hours).sort((a, b) => hours[b] - hours[a])[0];
+  const never = rows.filter((r) => !r.n).map((r) => nm(r.s));
+  const chips = [['1', 'วันนี้'], ['7', '7 วัน'], ['30', '30 วัน'], ['all', 'ทั้งหมด']];
+  return `<div class="chips">${chips.map((c) => `<button class="chip" style="min-height:36px" aria-pressed="${rg === c[0]}" onclick="V.wcRange='${c[0]}';render()">${c[1]}</button>`).join('')}</div>
+    <div class="card" style="margin:6px 0 10px"><div class="row between wrapx" style="text-align:center;gap:8px">
+      <div class="grow"><div style="font-size:26px;font-weight:800">${all}</div><div class="xs muted">ครั้งรวม 🚻</div></div>
+      <div class="grow"><div style="font-size:26px;font-weight:800">${all ? fmtDur(tot / all) : '–'}</div><div class="xs muted">เฉลี่ยต่อครั้ง ⏱️</div></div>
+      <div class="grow"><div style="font-size:26px;font-weight:800">${hk != null ? String(hk).padStart(2, '0') + ':00' : '–'}</div><div class="xs muted">ช่วงที่ไปบ่อยสุด 🕒</div></div></div></div>
+    ${all ? rows.filter((r) => r.n).sort((a, b) => b.n - a.n || b.tot - a.tot).map((r) => `<button class="srow" style="width:100%;text-align:left" onclick="openWcStu('${r.s.id}')"><div class="row"><span style="font-size:22px;flex:none">${wcFace(r.n, mx)}</span>
+        <div class="grow" style="min-width:0"><div class="row between"><span class="name trunc">${esc(nm(r.s))}</span><b style="flex:none">${r.n} ครั้ง</b></div>
+        <div style="height:8px;border-radius:99px;background:var(--line);margin:6px 0 4px;overflow:hidden"><div style="height:100%;width:${Math.max(6, Math.round(r.n / mx * 100))}%;background:var(--sage);border-radius:99px"></div></div>
+        <div class="xs muted">เฉลี่ย ${fmtDur(r.avg)} · นานสุด ${fmtDur(r.max)}${r.n === mx && mx >= 3 ? ' · 💧 แชมป์ขาประจำ' : ''}</div></div></div></button>`).join('') : `<div class="card empty"><div style="font-size:34px">🫧</div><div>ยังไม่มีสถิติในช่วงนี้ ลองกดจับเวลาตอนนักเรียนไปห้องน้ำดูนะคะ</div></div>`}
+    ${all && never.length ? `<p class="xs muted" style="margin-top:10px">🌵 ยังไม่เคยไปเลยในช่วงนี้ (${never.length} คน): ${esc(never.slice(0, 12).join(', '))}${never.length > 12 ? ' …' : ''}</p>` : ''}`;
+}
+function openWcStu(sid) {
+  const s = stuById(sid); if (!s) return;
+  const a = wcStatsFor(sid, 'all'), l = a.list.slice().sort((x, y) => y.s - x.s).slice(0, 15);
+  modal(`<div class="mh"><h3 class="h3">🚻 ${esc(nm(s))}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <div class="row between" style="text-align:center;gap:8px;margin-bottom:10px"><div class="grow"><b style="font-size:22px">${a.n}</b><div class="xs muted">ครั้งทั้งหมด</div></div><div class="grow"><b style="font-size:22px">${a.n ? fmtDur(a.avg) : '–'}</b><div class="xs muted">เฉลี่ย</div></div><div class="grow"><b style="font-size:22px">${a.n ? fmtDur(a.max) : '–'}</b><div class="xs muted">นานสุด</div></div></div>
+    ${l.length ? l.map((t) => `<div class="srow row between"><span class="grow sm">${fmtDate(t.d)} · ${fmtClock(t.s)}<span class="muted"> · ${fmtDur(t.e - t.s)}</span></span>${CAN_WRITE ? `<button class="del" onclick="wcDelTrip('${t.d}','${t.id}','${sid}')" aria-label="ลบรายการ">${ic('trash', 16)}</button>` : ''}</div>`).join('') : '<div class="empty">ยังไม่มีประวัติ 🌵</div>'}
+    <div class="btnrow" style="margin-top:10px"><button class="btn primary" onclick="closeModal()">ปิด</button></div>`);
+}
+function vWc() {
+  const st = roomStudents();
+  return `<div class="pagehead"><div><h2 class="h2">ไปห้องน้ำ 🚻</h2><p class="sm muted">ห้อง ${esc(room().name)} · จับเวลาและดูสถิติว่าใครไปบ่อยแค่ไหน</p></div></div>
+    <div class="chips">${[['timer', '⏱️ จับเวลา'], ['stats', '📊 สถิติ']].map((c) => `<button class="chip" aria-pressed="${V.wcMode === c[0]}" onclick="V.wcMode='${c[0]}';render()">${c[1]}</button>`).join('')}</div>
+    ${!st.length ? `<div class="card empty">ยังไม่มีนักเรียนในห้องนี้</div>` : V.wcMode === 'timer' ? wcTimerHTML(st) : wcStatsHTML(st)}`;
+}
+/* ============ รายงานการประพฤติ + บัญชีดำ ============ */
+V.bhTab = 'rec'; V.bhR = '1';
+const BH_CATS = ['ไม่ส่งงาน/ไม่ทำงาน', 'พูดจาไม่สุภาพ', 'ทะเลาะวิวาท', 'หนีเรียน/โดดเรียน', 'แต่งกายไม่ถูกระเบียบ', 'ใช้โทรศัพท์ในห้องเรียน', 'รบกวนผู้อื่นในห้อง', 'ทำลายทรัพย์สิน', 'โกหก/หยิบของผู้อื่น'];
+const BH_SEV = { 1: 'เล็กน้อย', 2: 'ปานกลาง', 3: 'ร้ายแรง' };
+const bhN = () => { const n = parseInt(S.settings.bhN, 10); return n >= 1 ? n : 3; };
+const bhRecs = (sid) => (S.incidents[sid] || []).slice().sort((a, b) => a.id.localeCompare(b.id));
+/* สถานะบัญชีดำ: นับจากหลังการถอดออกครั้งล่าสุด — ใส่เอง หรือมีเหตุร้ายแรง หรือเหตุการณ์ครบเกณฑ์ */
+function bhState(sid) {
+  const rs = bhRecs(sid); let from = 0; rs.forEach((r, i) => { if (r.k === 'c') from = i + 1; });
+  const act = rs.slice(from), inc = act.filter((r) => r.k === 'i'), manual = act.filter((r) => r.k === 'b'), sev3 = inc.filter((r) => r.sev === 3);
+  const why = []; if (manual.length) why.push('ใส่เอง' + (manual[manual.length - 1].note ? ': ' + manual[manual.length - 1].note : '')); if (sev3.length) why.push('เหตุร้ายแรง ' + sev3.length + ' ครั้ง'); if (inc.length >= bhN()) why.push('เหตุการณ์สะสม ' + inc.length + ' ครั้ง');
+  return { black: why.length > 0, why, n: inc.length };
+}
+function bhCount(sid, r) { return bhRecs(sid).filter((x) => x.k === 'i' && (r === 'y' || x.t === +r)).length; }
+function bhTally(sids, r) {
+  const cat = {}, sev = { 1: 0, 2: 0, 3: 0 }, per = {}; let n = 0;
+  sids.forEach((sid) => bhRecs(sid).forEach((x) => { if (x.k !== 'i' || (r !== 'y' && x.t !== +r)) return; n++; cat[x.cat] = (cat[x.cat] || 0) + 1; sev[x.sev] = (sev[x.sev] || 0) + 1; per[sid] = (per[sid] || 0) + 1; }));
+  return { n, cat, sev, per };
+}
+function bhAdd(sid, o) { (S.incidents[sid] = S.incidents[sid] || []).push(Object.assign({ id: uid('h'), d: today(), t: 1, k: 'i', cat: '', sev: 1, by: MEID, note: '' }, o)); }
+function openBh(sid, kind) {
+  if (!CAN_WRITE) { toast('บัญชีนี้ดูข้อมูลได้อย่างเดียว'); return; }
+  const st = roomStudents(), manual = kind === 'b';
+  modal(`<div class="mh"><h3 class="h3">${manual ? '🚩 ใส่บัญชีดำ' : '📝 บันทึกพฤติกรรมไม่เหมาะสม'}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">ห้อง ${esc(room().name)}</p>
+    <input type="hidden" id="bh-kind" value="${manual ? 'b' : 'i'}">
+    <div class="field"><label class="lbl" for="bh-stu">นักเรียน</label>
+      <div class="search" style="margin-bottom:6px">${ic('search', 18)}<input type="text" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="bhStuFilter(this.value)" aria-label="ค้นหานักเรียน"></div>
+      <select id="bh-stu">${st.map((s) => `<option value="${s.id}" ${s.id === sid ? 'selected' : ''}>${esc(nm(s))}</option>`).join('')}</select></div>
+    ${manual ? '' : `<div class="field"><span class="lbl">เรื่องที่พบบ่อย</span><div class="chips" style="flex-wrap:wrap">${BH_CATS.map((c, i) => `<button type="button" class="chip" style="min-height:34px;font-size:13px" onclick="$('#bh-cat').value=BH_CATS[${i}]">${esc(c)}</button>`).join('')}</div></div>
+    <div class="field"><label class="lbl" for="bh-cat">เรื่อง</label><input type="text" id="bh-cat" maxlength="60" placeholder="เลือกด้านบน หรือพิมพ์เอง"></div>
+    <div class="field"><span class="lbl">ความรุนแรง</span><div class="chips" role="radiogroup">${[1, 2, 3].map((v) => `<label class="chip" style="cursor:pointer"><input type="radio" name="bh-sev" value="${v}" ${v === 1 ? 'checked' : ''}> ${BH_SEV[v]}</label>`).join('')}</div></div>`}
+    <div class="field"><label class="lbl" for="bh-note">${manual ? 'เหตุผลที่ใส่บัญชีดำ' : 'รายละเอียด (ถ้ามี)'}</label><input type="text" id="bh-note" maxlength="200"></div>
+    <div class="row wrapx" style="align-items:flex-start"><div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="bh-date">วันที่</label><input type="date" id="bh-date" value="${today()}"></div>
+      ${manual ? '' : `<div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="bh-pts">หักจิตพิสัยด้วย (คะแนน)</label><input type="number" id="bh-pts" value="0" min="0" step="0.5" inputmode="decimal"></div>`}</div>
+    <p class="err" id="bh-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveBh()">บันทึก</button></div>`, manual ? 'bh-note' : 'bh-cat');
+}
+function bhStuFilter(v) {
+  const q = v.trim().toLowerCase(), sel = $('#bh-stu'), cur = sel.value;
+  sel.innerHTML = roomStudents().filter((s) => !q || ckMatch(s, q) || s.id === cur).map((s) => `<option value="${s.id}" ${s.id === cur ? 'selected' : ''}>${esc(nm(s))}</option>`).join('');
+}
+function saveBh() {
+  if (!CAN_WRITE) return;
+  const k = $('#bh-kind').value, sid = $('#bh-stu').value, d = $('#bh-date').value || today(), note = $('#bh-note').value.trim();
+  if (!sid) { $('#bh-err').textContent = 'กรุณาเลือกนักเรียน'; return; }
+  if (k === 'b') {
+    if (!note) { $('#bh-err').textContent = 'กรุณาใส่เหตุผล'; return; }
+    bhAdd(sid, { k: 'b', d, t: attTerm(d), cat: 'ใส่บัญชีดำ', sev: 3, note });
+  } else {
+    const cat = $('#bh-cat').value.trim(); if (!cat) { $('#bh-err').textContent = 'กรุณาเลือกหรือพิมพ์เรื่อง'; return; }
+    const sev = +((document.querySelector('input[name=bh-sev]:checked') || {}).value) || 1, pts = parseFloat($('#bh-pts').value) || 0;
+    bhAdd(sid, { k: 'i', d, t: attTerm(d), cat, sev, note });
+    if (pts > 0) (S.conduct[sid] = S.conduct[sid] || []).push({ id: uid('c'), d, p: -pts, t: attTerm(d), by: MEID, why: 'พฤติกรรม: ' + cat });
+  }
+  commit(); closeModal(); render(); toast(k === 'b' ? 'ใส่บัญชีดำแล้ว' : 'บันทึกแล้ว');
+}
+function openBhHist(sid) {
+  const s = stuById(sid); if (!s) return; const rs = bhRecs(sid).slice().reverse(), st = bhState(sid);
+  modal(`<div class="mh"><h3 class="h3">${esc(nm(s))}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm" style="margin-bottom:10px">${st.black ? '<span class="pill a">🚩 อยู่ในบัญชีดำ</span> <span class="xs muted">' + esc(st.why.join(' · ')) + '</span>' : '<span class="pill p">ไม่อยู่ในบัญชีดำ</span>'}</p>
+    ${rs.length ? rs.map((r) => `<div class="srow"><div class="row between" style="gap:8px"><div class="grow" style="min-width:0"><div class="name">${r.k === 'c' ? '✅ ถอดออกจากบัญชีดำ' : r.k === 'b' ? '🚩 ใส่บัญชีดำ' : esc(r.cat)}${r.k === 'i' ? ` <span class="pill ${r.sev === 3 ? 'a' : r.sev === 2 ? 'l' : 'n'}">${BH_SEV[r.sev]}</span>` : ''}</div>
+      <div class="xs muted">${fmtDate(r.d)} · เทอม ${r.t} · โดย ${esc(profileName(r.by))}${r.note ? ' · ' + esc(r.note) : ''}</div></div>
+      ${CAN_WRITE ? `<button class="del" onclick="delBh('${sid}','${r.id}')" aria-label="ลบรายการ">${ic('trash', 16)}</button>` : ''}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการ 🎉</div>'}
+    <div class="btnrow" style="margin-top:10px"><button class="btn primary" onclick="closeModal()">ปิด</button></div>`);
+}
+function delBh(sid, id) { if (!CAN_WRITE) return; S.incidents[sid] = (S.incidents[sid] || []).filter((x) => x.id !== id); if (!S.incidents[sid].length) delete S.incidents[sid]; commit(); openBhHist(sid); render(); }
+function bhClear(sid) { if (!CAN_WRITE) return; bhAdd(sid, { k: 'c', t: attTerm(today()), cat: 'ถอดออก' }); commit(); render(); toast('ถอดออกจากบัญชีดำแล้ว'); }
+function bhLog() {
+  const rows = [];
+  roomStudents().forEach((s) => bhRecs(s.id).forEach((r) => rows.push({ 'วันที่': r.d, 'เทอม': r.t, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name, 'ประเภทรายการ': r.k === 'c' ? 'ถอดออกจากบัญชีดำ' : r.k === 'b' ? 'ใส่บัญชีดำ' : 'พฤติกรรม', 'เรื่อง': r.cat, 'ความรุนแรง': r.k === 'i' ? BH_SEV[r.sev] : '', 'รายละเอียด': r.note, 'ผู้บันทึก': profileName(r.by) })));
+  return rows.sort((a, b) => String(a['วันที่']).localeCompare(String(b['วันที่'])));
+}
+/* รายงานในใบเกรด: รวมทุกห้องที่นักเรียนคนนี้อยู่ */
+function bhReportHTML(stu) {
+  const recs = S.students.filter((s) => pidOf(s) === pidOf(stu)), ids = recs.map((s) => s.id);
+  const part = (t) => { const x = bhTally(ids, t); const l = Object.keys(x.cat).sort((a, b) => x.cat[b] - x.cat[a]).map((c) => esc(c) + ' ×' + x.cat[c]).join(', '); return `เทอม ${t}: ${x.n ? x.n + ' ครั้ง (' + l + ')' : 'ไม่มีรายการ'}`; };
+  const bl = ids.map(bhState).filter((s) => s.black);
+  return `<div class="att"><b>รายงานการประพฤติ</b> ${part(1)} · ${part(2)}</div>${bl.length ? `<div class="att" style="color:#b3261e"><b>สถานะ</b> อยู่ในบัญชีดำ (${esc(bl[0].why.join(' · '))})</div>` : ''}`;
+}
+function vBh() {
+  if (!S.rooms.length) return noSetup();
+  const st = roomStudents(), r = V.bhR, ids = st.map((s) => s.id);
+  const chips = (arr, key, val, fn) => `<div class="chips">${arr.map((a) => `<button class="chip" style="min-height:36px" aria-pressed="${val === a[0]}" onclick="${fn}('${a[0]}')">${a[1]}</button>`).join('')}</div>`;
+  const rng = chips([['1', 'เทอม 1'], ['2', 'เทอม 2'], ['y', 'ทั้งปี']], 'bhR', r, 'setBhR');
+  let body = '';
+  if (!st.length) body = `<div class="card empty">${ic('users', 28)}<div>ยังไม่มีนักเรียนในห้องนี้</div></div>`;
+  else if (V.bhTab === 'rec') {
+    body = `${rng}<div class="card">${stuSearchBox('bh')}<div data-sf="bh">${st.map((s) => ({ s, n: bhCount(s.id, r), b: bhState(s.id) })).sort((x, y) => y.n - x.n).map(({ s, n, b }) => `<div class="srow" data-q="${qOf(s)}"><div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div>
+        <div class="grow" style="min-width:0"><div class="name trunc">${esc(nm(s))}</div><div class="xs muted">${n ? 'พฤติกรรม ' + n + ' ครั้ง' : 'ไม่มีรายการ 🎉'}</div></div>${b.black ? '<span class="pill a" style="flex:none">🚩 บัญชีดำ</span>' : ''}</div>
+        <div class="seg" style="grid-template-columns:repeat(${CAN_WRITE ? 2 : 1},minmax(0,1fr))">${CAN_WRITE ? `<button style="color:var(--a)" onclick="openBh('${s.id}')">+ บันทึก</button>` : ''}<button onclick="openBhHist('${s.id}')">${ic('history', 15)} ประวัติ</button></div></div>`).join('')}</div></div>`;
+  } else if (V.bhTab === 'stat') {
+    const t = bhTally(ids, r), cats = Object.keys(t.cat).sort((a, b) => t.cat[b] - t.cat[a]), mx = cats.length ? t.cat[cats[0]] : 1;
+    const top = Object.keys(t.per).sort((a, b) => t.per[b] - t.per[a]).slice(0, 8);
+    body = `${rng}<div class="card" style="margin:6px 0 10px"><div class="row between wrapx" style="text-align:center;gap:8px">
+        <div class="grow"><div style="font-size:26px;font-weight:800">${t.n}</div><div class="xs muted">เหตุการณ์ทั้งหมด</div></div>
+        <div class="grow"><div style="font-size:26px;font-weight:800">${Object.keys(t.per).length}</div><div class="xs muted">นักเรียนที่เกี่ยวข้อง</div></div>
+        <div class="grow"><div style="font-size:26px;font-weight:800;color:var(--a)">${t.sev[3]}</div><div class="xs muted">ร้ายแรง</div></div></div>
+      <div class="row" style="gap:6px;margin-top:10px;flex-wrap:wrap">${[1, 2, 3].map((v) => `<span class="pill ${v === 3 ? 'a' : v === 2 ? 'l' : 'n'}">${BH_SEV[v]} ${t.sev[v]}</span>`).join('')}</div></div>
+      <div class="card"><h3 class="h3" style="margin-bottom:8px">แยกตามเรื่อง</h3>${cats.length ? cats.map((c) => `<div style="margin-bottom:10px"><div class="row between"><span class="sm">${esc(c)}</span><b>${t.cat[c]} ครั้ง</b></div><div style="height:8px;border-radius:99px;background:var(--line);margin-top:4px;overflow:hidden"><div style="height:100%;width:${Math.max(6, Math.round(t.cat[c] / mx * 100))}%;background:var(--a);border-radius:99px"></div></div></div>`).join('') : '<div class="empty">ยังไม่มีรายการในช่วงนี้ 🎉</div>'}</div>
+      ${top.length ? `<div class="card" style="margin-top:10px"><h3 class="h3" style="margin-bottom:8px">นักเรียนที่มีรายการมากสุด</h3>${top.map((id) => { const s = stuById(id); return `<button class="srow" style="width:100%;text-align:left" onclick="openBhHist('${id}')"><div class="row between"><span class="name trunc">${esc(nm(s))}</span><b>${t.per[id]} ครั้ง</b></div></button>`; }).join('')}</div>` : ''}`;
+  } else {
+    const bl = st.map((s) => ({ s, b: bhState(s.id) })).filter((x) => x.b.black);
+    body = `<p class="xs muted" style="margin:0 2px 8px">เข้าบัญชีดำอัตโนมัติเมื่อมีพฤติกรรมสะสม ${bhN()} ครั้งขึ้นไป หรือมีเหตุร้ายแรง 1 ครั้ง (ปรับเกณฑ์ได้ในหน้าตั้งค่า) หรือครูกดใส่เอง ถอดออกแล้วเริ่มนับใหม่</p>
+      ${CAN_WRITE ? `<div class="btnrow" style="margin:0 0 10px"><button class="btn s" onclick="openBh(null,'b')">🚩 ใส่บัญชีดำเอง</button></div>` : ''}
+      ${bl.length ? bl.map(({ s, b }) => `<div class="srow"><div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div><div class="grow" style="min-width:0"><div class="name trunc">${esc(nm(s))}</div><div class="xs muted">${esc(b.why.join(' · '))}</div></div><span class="pill a" style="flex:none">🚩</span></div>
+        <div class="seg" style="grid-template-columns:repeat(${CAN_WRITE ? 2 : 1},minmax(0,1fr))"><button onclick="openBhHist('${s.id}')">${ic('history', 15)} ประวัติ</button>${CAN_WRITE ? `<button style="color:var(--p)" onclick="bhClear('${s.id}')">✅ ถอดออก</button>` : ''}</div></div>`).join('') : `<div class="card empty"><div style="font-size:34px">🌈</div><div>ยังไม่มีใครในบัญชีดำ</div></div>`}`;
+  }
+  return `<div class="pagehead"><div><h2 class="h2">สมุดพฤติกรรม 📒</h2><p class="sm muted">ห้อง ${esc(room().name)} · บันทึกพฤติกรรม สถิติรายเทอม และบัญชีดำ</p></div>
+      ${CAN_WRITE && st.length ? `<button class="btn primary s" onclick="openBh(null)">${ic('plus', 16)} บันทึกเหตุการณ์</button>` : ''}</div>
+    <div class="chips">${[['rec', '📝 บันทึก'], ['stat', '📊 สถิติ'], ['black', '🚩 บัญชีดำ']].map((c) => `<button class="chip" aria-pressed="${V.bhTab === c[0]}" onclick="V.bhTab='${c[0]}';render()">${c[1]}</button>`).join('')}</div>
+    ${body}`;
+}
+function setBhR(v) { V.bhR = v; render(); }
+
+/* ============ การแจ้งเตือน (มีเสียง + แจ้งเตือนของเครื่อง) ============ */
+const NC_KEY = 'abdia_notif';
+function notifCfg() {
+  let c = {}; try { c = JSON.parse(localStorage.getItem(NC_KEY) || '{}'); } catch (e) { c = {}; }
+  return Object.assign({ on: false, sound: true, popOn: true, popSnd: 'pop', noteSnd: 'chime', vol: 1, loud: false, attSched: {}, attOn: true, attHour: 8, wcMin: 5, mwN: 3, wcOn: true, mwOn: true, regOn: true }, c);
+}
+function notifSave(c) { try { localStorage.setItem(NC_KEY, JSON.stringify(c)); } catch (e) { /* ignore */ } }
+/* ===== เสียง: สร้างไฟล์เสียง WAV เองแล้วเล่นผ่าน <audio> (ดังชัด และเล่นได้แม้ iPhone เปิดโหมดเงียบ) ===== */
+const SR = 22050;
+function synth(parts, dur) {
+  const n = Math.floor(SR * dur), b = new Float32Array(n);
+  parts.forEach((p) => {
+    const s0 = Math.floor((p.at || 0) * SR);
+    if (p.click) {
+      const len = Math.floor(SR * 0.035);
+      for (let i = 0; i < len && s0 + i < n; i++) { const t = i / SR, e = Math.pow(1 - i / len, 3); b[s0 + i] += (Math.random() * 2 - 1) * Math.sin(2 * Math.PI * p.f * t) * e * (p.vol || 1) * 1.6; }
+      return;
+    }
+    const len = Math.floor(SR * p.dur), atk = p.atk || 0.008; let ph = 0;
+    for (let i = 0; i < len && s0 + i < n; i++) {
+      const t = i / SR, f = p.f1 ? p.f0 * Math.pow(p.f1 / p.f0, Math.min(t / (p.glide || p.dur * 0.7), 1)) : p.f0;
+      ph += 2 * Math.PI * f / SR;
+      const w = p.type === 'triangle' ? (2 / Math.PI) * Math.asin(Math.sin(ph)) : Math.sin(ph);
+      const e = t < atk ? t / atk : Math.pow(0.001, (t - atk) / Math.max(p.dur - atk, 0.001));
+      b[s0 + i] += w * e * (p.vol || 0.3);
+    }
+  });
+  let mx = 0; for (let i = 0; i < n; i++) mx = Math.max(mx, Math.abs(b[i])); const g = mx > 0 ? 0.95 / mx : 1;
+  const out = new DataView(new ArrayBuffer(44 + n * 2)), w4 = (o, s) => { for (let i = 0; i < 4; i++) out.setUint8(o + i, s.charCodeAt(i)); };
+  w4(0, 'RIFF'); out.setUint32(4, 36 + n * 2, true); w4(8, 'WAVE'); w4(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 1, true);
+  out.setUint32(24, SR, true); out.setUint32(28, SR * 2, true); out.setUint16(32, 2, true); out.setUint16(34, 16, true); w4(36, 'data'); out.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) out.setInt16(44 + i * 2, Math.tanh(b[i] * g * 3) / Math.tanh(3) * 0.98 * 32767, true);
+  return out.buffer;
+}
+const POP_SOUNDS = {
+  pop: { n: 'ป๊อก 🫘', d: 0.3, p: [{ f0: 1300, f1: 560, dur: 0.26, glide: 0.14 }, { f0: 2600, f1: 1100, dur: 0.1, glide: 0.07, vol: 0.12 }] },
+  key: { n: 'แป้นพิมพ์ ⌨️', d: 0.12, p: [{ click: 1, f: 3200, vol: 1 }, { f0: 2200, f1: 1300, dur: 0.08, glide: 0.04, vol: 0.4, type: 'triangle' }] },
+  tap: { n: 'แตะเบาๆ 👆', d: 0.16, p: [{ click: 1, f: 2000, vol: 0.9 }, { f0: 800, f1: 480, dur: 0.12, vol: 0.5 }] },
+  wood: { n: 'ไม้เคาะ 🪵', d: 0.22, p: [{ f0: 1500, f1: 1250, dur: 0.18, vol: 0.5, type: 'triangle' }, { f0: 2900, dur: 0.09, vol: 0.2 }] },
+  bubble: { n: 'ฟองสบู่ 🫧', d: 0.28, p: [{ f0: 650, f1: 1700, dur: 0.24, glide: 0.15 }] },
+  ding: { n: 'กระดิ่งจิ๋ว 🔔', d: 0.6, p: [{ f0: 1760, dur: 0.55, vol: 0.4 }, { f0: 3520, dur: 0.3, vol: 0.14 }] },
+  boop: { n: 'บูป 🐣', d: 0.28, p: [{ f0: 720, dur: 0.13, vol: 0.45, type: 'triangle' }, { f0: 1080, dur: 0.17, vol: 0.45, type: 'triangle', at: 0.1 }] },
+  chime: { k: 'n', n: '✨ ปิ๊งๆ', d: 1.0, p: [{ f0: 1319, dur: 0.25, vol: 0.5, type: 'triangle' }, { f0: 1568, dur: 0.25, vol: 0.5, type: 'triangle', at: 0.12 }, { f0: 2093, dur: 0.3, vol: 0.5, type: 'triangle', at: 0.24 }, { f0: 2637, dur: 0.5, vol: 0.45, at: 0.38 }, { f0: 5274, dur: 0.2, vol: 0.06, at: 0.38 }] },
+  bell: { k: 'n', n: '🐱 กระดิ่งแมว', d: 1.0, p: [{ f0: 2093, dur: 0.5, vol: 0.5 }, { f0: 4186, dur: 0.22, vol: 0.12 }, { f0: 2349, dur: 0.5, vol: 0.5, at: 0.26 }, { f0: 4698, dur: 0.22, vol: 0.12, at: 0.26 }, { f0: 2637, dur: 0.6, vol: 0.5, at: 0.52 }] },
+  bird: { k: 'n', n: '🐥 นกน้อย', d: 0.85, p: [{ f0: 2400, f1: 3600, dur: 0.1, glide: 0.08, vol: 0.5 }, { f0: 2400, f1: 3600, dur: 0.1, glide: 0.08, vol: 0.5, at: 0.15 }, { f0: 2600, f1: 3900, dur: 0.1, glide: 0.08, vol: 0.5, at: 0.3 }, { f0: 3000, f1: 4300, dur: 0.2, glide: 0.14, vol: 0.5, at: 0.46 }] },
+};
+const _aud = {}, _wav = {}, _dec = {};
+const wavOf = (name) => { const sp = POP_SOUNDS[name] || POP_SOUNDS.pop; return _wav[name] || (_wav[name] = synth(sp.p, sp.d)); };
+/* โหมดปกติ: เล่นด้วย Web Audio (ไม่ขึ้นสัญลักษณ์เล่นเสียงบน Dynamic Island / หน้าจอล็อก แต่ iPhone ที่เปิดโหมดเงียบจะไม่มีเสียง)
+   โหมด "เล่นแม้โหมดเงียบ": ใช้ตัวเล่น <audio> ซึ่ง iPhone จะขึ้นสัญลักษณ์เสียง */
+let _actx = null;
+function actx() { try { if (!_actx) { const A = window.AudioContext || window.webkitAudioContext; if (A) _actx = new A(); } return _actx; } catch (e) { return null; } }
+function decoded(name) {
+  const c = actx(); if (!c) return Promise.reject(new Error('no ctx'));
+  if (!_dec[name]) _dec[name] = new Promise((res, rej) => { const ab = wavOf(name).slice(0); const r = c.decodeAudioData(ab, res, rej); if (r && r.then) r.then(res, rej); });
+  return _dec[name];
+}
+function audioEl(name) {
+  if (!_aud[name]) { const a = new Audio(URL.createObjectURL(new Blob([wavOf(name)], { type: 'audio/wav' }))); a.preload = 'auto'; a.setAttribute('playsinline', ''); _aud[name] = { a, ok: false, live: false }; }
+  return _aud[name];
+}
+function unlockAudio() {
+  const c = notifCfg();
+  if (!c.loud) {
+    const x = actx(); if (x && x.state !== 'running') { try { x.resume(); } catch (e) { /* ignore */ } }
+    ['pop', c.popSnd, c.noteSnd || 'chime'].forEach((n) => decoded(n).catch(() => {}));
+    return;
+  }
+  ['pop', 'chime', c.popSnd].forEach((n) => {
+    const x = audioEl(n); if (x.ok) return; x.ok = true;
+    try { x.a.muted = true; const pr = x.a.play(); const done = () => { try { if (!x.live) { x.a.pause(); x.a.currentTime = 0; } x.a.muted = false; } catch (e) { /* ignore */ } }; if (pr && pr.then) pr.then(done).catch(() => { x.ok = false; x.a.muted = false; }); else done(); } catch (e) { x.ok = false; }
+  });
+}
+['pointerdown', 'keydown', 'touchstart'].forEach((ev) => document.addEventListener(ev, unlockAudio, { passive: true }));
+let _lastGesture = 0, _lastPop = 0;
+['pointerdown', 'keydown', 'touchstart', 'change'].forEach((ev) => document.addEventListener(ev, () => { _lastGesture = Date.now(); }, { capture: true, passive: true }));
+function playViaAudio(name, preview) {
+  try {
+    const x = audioEl(name), a = x.a; x.live = true; a.muted = false; a.volume = Math.min(1, Math.max(0.1, notifCfg().vol || 1)); a.currentTime = 0;
+    if (preview) a.addEventListener('playing', () => toast('▶️ กำลังเล่นเสียง (ถ้าไม่ได้ยิน เพิ่มเสียงมีเดีย/ปิดโหมดเงียบ)'), { once: true });
+    const pr = a.play();
+    if (pr && pr.then) pr.then(() => { setTimeout(() => { x.live = false; }, 400); }).catch(() => { x.live = false; if (preview) toast('เบราว์เซอร์ยังไม่ให้เล่นเสียง ลองแตะหน้าจอ 1 ครั้งแล้วกดใหม่ และเช็คว่าเปิดเสียงมีเดียของเครื่องไว้'); });
+  } catch (e) { if (preview) toast('เล่นเสียงไม่ได้ในเบราว์เซอร์นี้'); }
+}
+function playSnd(name, preview) {
+  if (notifCfg().loud) { playViaAudio(name, preview); return; }
+  const c = actx(); if (!c) { playViaAudio(name, preview); return; }
+  const go2 = () => decoded(name).then((buf) => {
+    const s = c.createBufferSource(), g = c.createGain(); s.buffer = buf; g.gain.value = Math.min(1, Math.max(0.1, notifCfg().vol || 1)); s.connect(g); g.connect(c.destination); s.start(0);
+    if (preview) toast('▶️ กำลังเล่นเสียง (iPhone ที่เปิดโหมดเงียบจะไม่ได้ยิน ถ้าต้องการให้ดังแม้เงียบ ให้เปิดตัวเลือก "เล่นแม้โหมดเงียบ")');
+  }).catch(() => playViaAudio(name, preview));
+  if (c.state === 'running') go2(); else { let t; try { const r = c.resume(); if (r && r.then) r.then(() => { clearTimeout(t); go2(); }).catch(() => playViaAudio(name, preview)); t = setTimeout(() => { if (c.state !== 'running') playViaAudio(name, preview); }, 400); } catch (e) { playViaAudio(name, preview); } }
+}
+function pickSnd(name) { const c = notifCfg(); c.popSnd = name; notifSave(c); playSnd(name, true); render(); }
+function setVol(v) { const c = notifCfg(); c.vol = Math.min(1, Math.max(0.1, (parseInt(v, 10) || 100) / 100)); notifSave(c); }
+function playPop() {
+  const now = Date.now();
+  if (now - _lastGesture > 1500 || now - _lastPop < 70 || !notifCfg().popOn) return;
+  _lastPop = now; playSnd(notifCfg().popSnd);
+}
+function playChime() { playSnd(notifCfg().noteSnd || 'chime'); try { if (navigator.vibrate) navigator.vibrate([160, 80, 160]); } catch (e) { /* ignore */ } }
+function pickNote(name) { const c = notifCfg(); c.noteSnd = name; notifSave(c); playSnd(name, true); render(); }
+const BUILD = 'เวอร์ชันแจ้งเตือนเสถียร 7 พ.ย. (ง)';
+let _fired = 0;
+/* แสดงแจ้งเตือนของเครื่องผ่าน Service Worker (เสถียรกว่า และขึ้นได้แม้แอพอยู่เบื้องหลัง) */
+async function showSys(title, opt) {
+  try {
+    if ('serviceWorker' in navigator) {
+      const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((r) => setTimeout(() => r(null), 3000))]) || await navigator.serviceWorker.getRegistration();
+      if (reg && reg.showNotification) { await reg.showNotification(title, opt); return true; }
+    }
+  } catch (e) { /* ลองวิธีสำรอง */ }
+  try { new Notification(title, opt); return true; } catch (e) { return false; }
+}
+async function pushNote(title, body, tag, data) {
+  _fired++;
+  const c = notifCfg();
+  if (c.sound) playChime();
+  if (!document.hidden) toast(title + ' ' + body);
+  const granted = 'Notification' in window && Notification.permission === 'granted';
+  if (granted && !c.on) { c.on = true; notifSave(c); }
+  if (granted) {
+    const opt = { body, tag: tag || ('n' + Date.now()), icon: 'icon-192.png', badge: 'icon-192.png', vibrate: [200, 100, 200], renotify: true, silent: false, requireInteraction: false, data: data || {} };
+    let ok = await showSys(title, opt);
+    if (!ok) { await new Promise((r) => setTimeout(r, 1200)); await showSys(title, opt); }
+  }
+}
+/* ส่งข้อมูลให้ Service Worker เก็บไว้ เพื่อให้เตือนเช็คชื่อได้แม้ไม่ได้เปิดแอพ (Android/Chrome ที่ติดตั้งแอพแล้ว) */
+async function syncSnapshot() {
+  try {
+    if (!C.ready || !('serviceWorker' in navigator)) return;
+    const c = notifCfg(), t1 = today(), rooms = attRoomsForMe().map((r) => {
+      const day = S.att[t1], st = S.students.filter((s) => s.roomId === r.id);
+      return { id: r.id, name: r.name, sched: (c.attSched || {})[r.id] || null, done: !!(day && st.some((s) => day[s.id])) };
+    });
+    const reg = await navigator.serviceWorker.ready;
+    const snap = { t: Date.now(), date: t1, on: !!(c.attOn && CAN_WRITE), attHour: c.attHour, rooms };
+    if (reg.active) reg.active.postMessage({ abdiaSnap: snap });
+    pushRegister(reg, snap);
+    if (reg.periodicSync && Notification.permission === 'granted' && !syncSnapshot._ps) {
+      syncSnapshot._ps = 1;
+      try { await reg.periodicSync.register('abdia-att', { minInterval: 15 * 60 * 1000 }); } catch (e) { /* ไม่รองรับ */ }
+    }
+  } catch (e) { /* ignore */ }
+}
+/* ===== แจ้งเตือนจากเซิร์ฟเวอร์ (Web Push): ทำให้เตือนได้แม้ปิดแอพ ===== */
+const VAPID_PUBLIC_KEY = 'BOxzCG1zk5Al9I8CYCLbiiXJ3tpV-K0tBrJpLG7PMDApp9rHzAVFRFWksOzC15k-v4Gf04PAxAyVSjwi7DDMm6g';
+let _pushSent = { j: '', t: 0 };
+function b64u(k) { const p = '='.repeat((4 - k.length % 4) % 4), r = atob((k + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, (ch) => ch.charCodeAt(0)); }
+async function pushRegister(reg, snap) {
+  try {
+    if (!VAPID_PUBLIC_KEY || !reg.pushManager || !('Notification' in window) || Notification.permission !== 'granted') return;
+    const u = window.firebase && firebase.auth && firebase.auth().currentUser; if (!u) return;
+    const j = JSON.stringify({ o: snap.on, d: snap.date, h: snap.attHour, r: snap.rooms }), now = Date.now();
+    if (j === _pushSent.j && now - _pushSent.t < 120000) return;
+    _pushSent = { j, t: now };
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID_PUBLIC_KEY) });
+    const idToken = await u.getIdToken();
+    await fetch('/.netlify/functions/push-sync', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, sub: sub.toJSON(), snap }), keepalive: true });
+  } catch (e) { /* ไม่รองรับ/ออฟไลน์ ข้ามไป */ }
+}
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { /* ignore */ }
+if ('serviceWorker' in navigator) {
+  try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) { /* ignore */ }
+  navigator.serviceWorker.addEventListener('message', (e) => { const d = e.data && e.data.abdiaOpen; if (d && C.ready) { if (d.mode) V.ckMode = d.mode; if (d.roomId && S.rooms.some((r) => r.id === d.roomId)) V.roomId = d.roomId; go(d.tab || 'home'); } });
+}
+async function notifEnable() {
+  if (!('Notification' in window)) { toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน (บน iPhone ต้องเพิ่มแอพไว้หน้าจอโฮมก่อน)'); return; }
+  let p = Notification.permission; if (p !== 'granted') p = await Notification.requestPermission();
+  const c = notifCfg(); c.on = p === 'granted'; notifSave(c);
+  if (p !== 'granted') toast('ยังไม่ได้อนุญาตการแจ้งเตือน เปิดได้ที่การตั้งค่าของเบราว์เซอร์'); else { playChime(); pushNote('🔔 เปิดการแจ้งเตือนแล้ว', 'เช็คงาน ABDIA จะแจ้งเมื่อมีเหตุการณ์สำคัญ', 'test'); }
+  render();
+}
+function notifSet(k, v) { const c = notifCfg(); c[k] = v; notifSave(c); render(); }
+function notifNum(k, v, min) { const n = parseInt(v, 10); if (!(n >= min)) return; const c = notifCfg(); c[k] = n; notifSave(c); }
+function notifCardHTML() {
+  const c = notifCfg(), perm = 'Notification' in window ? Notification.permission : 'unsupported';
+  const tg = (k, label) => `<label class="row" style="min-height:40px;cursor:pointer"><input type="checkbox" ${c[k] ? 'checked' : ''} onchange="notifSet('${k}',this.checked)" style="width:20px;height:20px;flex:none"> <span class="grow">${label}</span></label>`;
+  return `<div class="card"><h3 class="h3" style="margin-bottom:4px">🔔 การแจ้งเตือน</h3>
+    <p class="xs muted" style="margin-bottom:8px">ตั้งค่านี้ใช้เฉพาะเครื่องนี้ แจ้งเตือนทุกครั้งที่เปิดแอพ และเมื่อแอพอยู่เบื้องหลัง · Android (Chrome ที่ติดตั้งแอพแล้ว) เตือนเช็คชื่อได้แม้ไม่ได้เปิดแอพ · iPhone ต้องกด "เพิ่มไปยังหน้าจอโฮม" ก่อน และต้องเปิดแอพค้างไว้เบื้องหลังจึงจะเตือน</p>
+    ${perm === 'granted' && c.on ? '<span class="pill p">เปิดการแจ้งเตือนของเครื่องแล้ว</span>' : `<button class="btn primary s" onclick="notifEnable()">เปิดการแจ้งเตือน</button>${perm === 'denied' ? '<p class="xs muted" style="margin-top:6px">เบราว์เซอร์บล็อกไว้ ต้องไปอนุญาตที่การตั้งค่าของเว็บไซต์</p>' : ''}`}
+    <div style="margin-top:8px">${tg('sound', 'เสียงแจ้งเตือนในแอพ 🔊')}<div class="row" style="gap:10px;min-height:44px"><span class="sm" style="flex:none">🔊 ความดัง</span><input type="range" min="20" max="100" step="10" value="${Math.round((c.vol || 1) * 100)}" onchange="setVol(this.value);playChime()" style="flex:1;min-width:0" aria-label="ความดังเสียง"></div><div class="sm" style="margin:4px 0 2px">เสียงแจ้งเตือน</div><div class="row wrapx" style="gap:6px;margin-bottom:6px">${Object.keys(POP_SOUNDS).filter((k) => POP_SOUNDS[k].k === 'n').map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${(c.noteSnd || 'chime') === k}" onclick="pickNote('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>${tg('loud', 'เล่นเสียงแม้เปิดโหมดเงียบ (iPhone จะขึ้นสัญลักษณ์เสียงที่ Dynamic Island)')}${tg('popOn', 'เสียงตอนกดบันทึก 🫘')}${c.popOn ? `<div class="row wrapx" style="gap:6px;margin:0 0 6px 28px">${Object.keys(POP_SOUNDS).filter((k) => !POP_SOUNDS[k].k).map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${c.popSnd === k}" onclick="pickSnd('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>` : ''}${tg('attOn', 'เตือนเมื่อวันนี้ยังไม่เช็คชื่อ')}${tg('wcOn', 'นักเรียนไปห้องน้ำนานเกินกำหนด')}${tg('mwOn', 'นักเรียนค้างงานหลายชิ้น')}${tg('regOn', 'มีครูสมัครใหม่รออนุมัติ (ผู้ดูแล)')}</div>
+    <div class="row wrapx" style="align-items:flex-start;margin-top:6px">
+      <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="nc-ah">เตือนเช็คชื่อตั้งแต่กี่โมง</label><input type="number" id="nc-ah" value="${c.attHour}" min="0" max="16" inputmode="numeric" onchange="notifNum('attHour',this.value,0)"></div>
+      <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="nc-wc">ห้องน้ำเกินกี่นาที</label><input type="number" id="nc-wc" value="${c.wcMin}" min="1" inputmode="numeric" onchange="notifNum('wcMin',this.value,1)"></div>
+      <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="nc-mw">ค้างงานตั้งแต่กี่ชิ้น</label><input type="number" id="nc-mw" value="${c.mwN}" min="1" inputmode="numeric" onchange="notifNum('mwN',this.value,1)"></div></div>
+    ${attSchedHTML()}
+    <p class="xs muted" style="margin-top:8px">${BUILD}</p>
+    <p class="xs muted" style="margin-top:8px">ถ้าไม่ได้ยินเสียง: iPhone ให้ปิดโหมดเงียบ (สวิตช์ข้างเครื่อง) และเพิ่มเสียงด้วยปุ่มข้างเครื่อง แล้วกด "ทดสอบเสียง" · ถ้าใช้ในโหมด Focus/ห้ามรบกวน เสียงแจ้งเตือนของเครื่องจะถูกปิด</p>
+    <div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="playSnd(notifCfg().noteSnd || 'chime',true)">🔊 ทดสอบเสียง</button><button class="btn s" onclick="pushNote('🔔 ทดสอบ','ถ้าได้ยินเสียงและเห็นแจ้งเตือนแปลว่าใช้งานได้','test')">ทดสอบเสียงและการแจ้งเตือน</button></div></div>`;
+}
+/* ===== เวลาเตือนเช็คชื่อรายห้อง (หลายเวลา/หลายวัน) ===== */
+const DAYN = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
+const hhmm = (t) => { const p = String(t || '08:00').split(':'); return (+p[0] || 0) * 60 + (+p[1] || 0); };
+function attRoomsForMe() { return S.rooms.filter((r) => S.students.some((s) => s.roomId === r.id) && (isAdmin() || roomSubs(r.id).some((x) => canTeach(x.id)))); }
+function attSchedHTML() {
+  const c = notifCfg(), rs = attRoomsForMe();
+  if (!rs.length) return '';
+  return `<div style="margin-top:10px"><b class="sm">⏰ เวลาเตือนเช็คชื่อรายห้อง</b><p class="xs muted" style="margin:2px 0 6px">ตั้งได้หลายวันหลายเวลาต่อห้อง ห้องที่ไม่ได้ตั้ง จะเตือนวันจันทร์–ศุกร์ตั้งแต่ ${c.attHour}:00</p>
+    ${rs.map((r) => { const l = (c.attSched || {})[r.id] || []; return `<div class="srow"><div class="row between wrapx" style="gap:6px"><b>ห้อง ${esc(r.name)}</b><button class="btn s" style="flex:none" onclick="openAttSched('${r.id}',-1)">${ic('plus', 14)} เพิ่มเวลา</button></div>
+      ${l.length ? `<div class="row wrapx" style="gap:6px;margin-top:6px">${l.map((e, i) => `<button class="chip" style="min-height:34px" onclick="openAttSched('${r.id}',${i})">${e.d.map((d) => DAYN[d]).join(' ')} · ${esc(e.t)}</button>`).join('')}</div>` : '<div class="xs muted" style="margin-top:4px">ยังไม่ได้ตั้งเวลา (ใช้เวลาเริ่มต้น)</div>'}</div>`; }).join('')}</div>`;
+}
+function openAttSched(rid, idx) {
+  const r = S.rooms.find((x) => x.id === rid); if (!r) return; const e = idx >= 0 ? ((notifCfg().attSched || {})[rid] || [])[idx] : null, days = new Set(e ? e.d : [1, 2, 3, 4, 5]);
+  modal(`<div class="mh"><h3 class="h3">เวลาเตือนเช็คชื่อ ห้อง ${esc(r.name)}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <div class="field"><span class="lbl">วัน</span><div class="row wrapx" style="gap:6px">${[1, 2, 3, 4, 5, 6, 0].map((d) => `<label class="chip" style="cursor:pointer;min-height:40px"><input type="checkbox" name="as-d" value="${d}" ${days.has(d) ? 'checked' : ''}> ${DAYN[d]}</label>`).join('')}</div></div>
+    <div class="field"><label class="lbl" for="as-t">เวลา</label><input type="time" id="as-t" value="${e ? esc(e.t) : '08:30'}"></div>
+    <p class="err" id="as-err"></p>
+    <div class="btnrow" style="margin-top:4px">${e ? `<button class="btn" style="color:var(--a)" onclick="delAttSched('${rid}',${idx})">ลบเวลานี้</button>` : '<button class="btn" onclick="closeModal()">ยกเลิก</button>'}<button class="btn primary" onclick="saveAttSched('${rid}',${idx})">บันทึก</button></div>`);
+}
+function saveAttSched(rid, idx) {
+  const d = Array.prototype.map.call(document.querySelectorAll('input[name=as-d]:checked'), (x) => +x.value), t = $('#as-t').value;
+  if (!d.length) { $('#as-err').textContent = 'เลือกอย่างน้อย 1 วัน'; return; } if (!t) { $('#as-err').textContent = 'ใส่เวลา'; return; }
+  const c = notifCfg(); c.attSched = c.attSched || {}; const l = c.attSched[rid] = c.attSched[rid] || [];
+  if (idx >= 0) l[idx] = { d, t }; else l.push({ d, t });
+  l.sort((a, b) => hhmm(a.t) - hhmm(b.t)); notifSave(c); closeModal(); render(); toast('ตั้งเวลาเตือนแล้ว');
+}
+function delAttSched(rid, idx) { const c = notifCfg(); ((c.attSched || {})[rid] || []).splice(idx, 1); notifSave(c); closeModal(); render(); }
+/* ตรวจทุก 15 วินาที: ห้องน้ำเกินเวลา + ค้างงานหลายชิ้น (แจ้งวันละครั้ง หรือเมื่อมีคนค้างเพิ่ม) */
+function wcSeen() { try { return JSON.parse(localStorage.getItem('abdia_wcn') || '[]'); } catch (e) { return []; } }
+let _nFresh = true, _mwLast = 0, _attLast = 0; const _attSeen = new Set();
+function notifTick() {
+  if (!C.ready) return;
+  const c = notifCfg(), fresh = _nFresh; _nFresh = false; const _f0 = _fired;
+  syncSnapshot();
+  if (isAdmin()) watchMembers();
+  if (fresh) { try { localStorage.removeItem('abdia_wcn'); } catch (e) { /* ignore */ } _mwLast = 0; }
+  if (fresh && c.regOn && isAdmin() && _pendSeen > 0) pushNote('👩‍🏫 มีครูสมัครใหม่', 'รออนุมัติ ' + _pendSeen + ' คน กดเพื่อไปหน้าตั้งค่า', 'reg', { tab: 'settings' });
+  if (c.wcOn) {
+    const seen = wcSeen(); let changed = false;
+    for (const d in S.trips) for (const id in S.trips[d]) {
+      const t = S.trips[d][id]; if (t.e || seen.indexOf(id) >= 0 || Date.now() - t.s < c.wcMin * 60000) continue;
+      const s = stuById(t.sid); if (!s) continue; seen.push(id); changed = true;
+      pushNote('🚻 ไปห้องน้ำนานแล้ว', nm(s) + ' (ห้อง ' + roomNameOf(s.roomId) + ') ออกไปเกิน ' + c.wcMin + ' นาที (' + fmtDur(Date.now() - t.s) + ')', 'wc-' + id, { tab: 'wc', roomId: s.roomId });
+    }
+    if (changed) { try { localStorage.setItem('abdia_wcn', JSON.stringify(seen.slice(-200))); } catch (e) { /* ignore */ } }
+  }
+  if (c.attOn && C.ready && CAN_WRITE) {
+    const dt = new Date(), wd = dt.getDay(), nowM = dt.getHours() * 60 + dt.getMinutes(), t1 = today(), repeat = Date.now() - _attLast > 3600000, newly = [], dueAll = [];
+    attRoomsForMe().forEach((r) => {
+      const day = S.att[t1], st = S.students.filter((s) => s.roomId === r.id);
+      if (day && st.some((s) => day[s.id])) return;
+      const sch = (c.attSched || {})[r.id]; let key = null;
+      if (sch && sch.length) { const en = sch.filter((e) => e.d.indexOf(wd) >= 0 && hhmm(e.t) <= nowM && nowM < 18 * 60); if (en.length) key = r.id + '|' + en[en.length - 1].t + '|' + t1; }
+      else if (wd >= 1 && wd <= 5 && dt.getHours() >= c.attHour && dt.getHours() < 17) key = r.id + '|d|' + t1;
+      if (!key) return;
+      dueAll.push(r); if (!_attSeen.has(key)) { _attSeen.add(key); newly.push(r); }
+    });
+    const list = fresh || repeat ? dueAll : newly;
+    if (list.length) { _attLast = Date.now(); pushNote('📝 วันนี้ยังไม่เช็คชื่อน้าา (:', 'ห้อง ' + list.map((r) => r.name).join(', ') + ' ยังไม่ได้เช็คชื่อ แตะเพื่อไปเช็คชื่อ', 'att', { tab: 'attendance', roomId: list[0].id }); }
+  }
+  if (c.mwOn) {
+    const t0 = today(), term = S.settings.term || 1, res = [];
+    S.students.filter((s) => roomNameOf(s.roomId)).forEach((s) => {
+      const n = S.assignments.filter((a) => a.roomId === s.roomId && a.term === term && a.due && a.due < t0 && canTeach(a.subjectId) && !(S.asg[a.id] && S.asg[a.id][s.id] && S.asg[a.id][s.id].d)).length;
+      if (n >= c.mwN) res.push({ s, n });
+    });
+    if (res.length && (fresh || res.length > _mwLast)) {
+      _mwLast = res.length;
+      res.sort((a, b) => b.n - a.n);
+      pushNote('📚 นักเรียนค้างงาน', res.length + ' คนค้างงานตั้งแต่ ' + c.mwN + ' ชิ้น (เลยกำหนดแล้ว): ' + res.slice(0, 3).map((x) => nm(x.s) + ' ' + x.n).join(', ') + (res.length > 3 ? ' …' : ''), 'mw', { tab: 'check', mode: 'summary', roomId: res[0].s.roomId });
+    }
+  }
+  /* เปิดแอพทุกครั้งต้องมีแจ้งเตือนเสมอ: ถ้าไม่มีเรื่องเร่งด่วน ให้ส่งข้อความทักทาย/สรุปแทน */
+  if (fresh && _fired === _f0) {
+    const hr = new Date().getHours();
+    pushNote('👋 เปิดเช็คงาน ABDIA แล้ว', (hr < 12 ? 'สวัสดีตอนเช้า' : hr < 17 ? 'สวัสดีตอนบ่าย' : 'สวัสดีตอนเย็น') + ' ตอนนี้ไม่มีเรื่องที่ต้องรีบทำ', 'open', { tab: 'home' });
+  }
+}
+setInterval(notifTick, 15000); setTimeout(notifTick, 2500);
+/* เช็คทันทีเมื่อกลับมาที่แอพ/กลับมาออนไลน์ (ตัวจับเวลาของเบราว์เซอร์ถูกชะลอเมื่ออยู่เบื้องหลัง) */
+window.addEventListener('online', () => setTimeout(notifTick, 800));
+window.addEventListener('focus', () => setTimeout(notifTick, 800));
+/* แจ้งซ้ำทุกครั้งที่เข้าแอพใหม่ (เปิดใหม่ หรือกลับมาจากพื้นหลังเกิน 1 นาที) */
+function notifFresh() { _nFresh = true; setTimeout(notifTick, 1200); }
+
+/* ============ ทะเบียนนักเรียนทั้งโรงเรียน (ยังไม่ผูกห้อง/วิชา) ============ */
+V.rq = ''; V.rf = 'all';
+const RSEL = new Set();
+const roomNameOf = (id) => { const r = S.rooms.find((x) => x.id === id); return r ? r.name : ''; };
+/* ช่องค้นหาชื่อ/รหัสนักเรียนแบบกรองรายการบนหน้า (ซ่อนแถวที่ไม่ตรง) */
+V.fq = {};
+const qOf = (s) => esc((s.name + ' ' + (s.code || '')).toLowerCase());
+function stuSearchBox(key, ph) { return `<div class="search" style="margin:0 0 10px">${ic('search', 18)}<input type="text" value="${esc(V.fq[key] || '')}" placeholder="${ph || 'ค้นหารหัสหรือชื่อนักเรียน'}" oninput="stuFilter('${key}',this.value)" aria-label="ค้นหารหัสหรือชื่อนักเรียน"></div>`; }
+function stuFilter(key, v) {
+  V.fq[key] = v; const q = v.trim().toLowerCase();
+  document.querySelectorAll('[data-sf="' + key + '"] [data-q]').forEach((el) => { el.style.display = !q || el.dataset.q.indexOf(q) >= 0 ? '' : 'none'; });
+}
+function applyStuFilters() { Object.keys(V.fq).forEach((k) => { if (V.fq[k]) stuFilter(k, V.fq[k]); }); }
+const pidOf = (s) => s.pid || s.id;
+/* นักเรียน 1 คน (pid เดียวกัน) อยู่ได้หลายห้อง: แต่ละห้องมีระเบียนของตัวเอง เช็คชื่อ/งาน/คะแนน/จิตพิสัยจึงแยกกันตามห้อง */
+function personsAll() {
+  const m = new Map();
+  S.students.forEach((s) => { const k = pidOf(s); if (!m.has(k)) m.set(k, { pid: k, recs: [] }); m.get(k).recs.push(s); });
+  return [...m.values()];
+}
+const personRooms = (p) => p.recs.filter((s) => roomNameOf(s.roomId)).map((s) => s.roomId);
+const sortPeople = (list) => list.sort((a, b) => (a.recs[0].code || '￿').localeCompare(b.recs[0].code || '￿', 'th', { numeric: true }) || a.recs[0].name.localeCompare(b.recs[0].name, 'th'));
+function enrollPerson(pid, rid) {
+  const recs = S.students.filter((s) => pidOf(s) === pid);
+  if (!recs.length || recs.some((s) => s.roomId === rid)) return false;
+  const free = recs.find((s) => !roomNameOf(s.roomId));
+  if (free) free.roomId = rid;
+  else S.students.push({ id: uid('u'), pid, roomId: rid, code: recs[0].code, name: recs[0].name, avatar: recs[0].avatar });
+  return true;
+}
+function rosterFiltered() {
+  const q = V.rq.trim().toLowerCase();
+  return sortPeople(personsAll().filter((p) => { const s = p.recs[0], rs = personRooms(p);
+    return (V.rf === 'all' || (V.rf === 'none' ? !rs.length : rs.indexOf(V.rf) >= 0)) && (s.name + ' ' + s.code).toLowerCase().indexOf(q) >= 0; }));
+}
+function rosterRowHTML(p) {
+  const s = p.recs[0], rs = personRooms(p);
+  return `<div class="srow"><div class="row">
+    ${CAN_WRITE ? `<input type="checkbox" ${RSEL.has(p.pid) ? 'checked' : ''} onchange="rosterTick('${p.pid}',this.checked)" aria-label="เลือก ${esc(s.name)}" style="width:22px;height:22px;flex:none">` : ''}
+    <div class="avatar sm2">${avatarSVG(s.avatar)}</div>
+    <button class="grow" style="text-align:left;min-width:0" ${CAN_WRITE ? `onclick="openRename('${s.id}')"` : ''}><span class="name trunc" style="display:block">${esc(s.name)}</span><span class="xs muted">${s.code ? 'รหัส ' + esc(s.code) : 'ยังไม่มีรหัส'}</span></button>
+    <span class="row wrapx" style="flex:none;gap:4px;justify-content:flex-end;max-width:45%">${rs.length ? rs.map((r) => `<span class="pill v">ห้อง ${esc(roomNameOf(r))}</span>`).join('') : '<span class="pill n">ยังไม่มีห้อง</span>'}</span>
+    ${isAdmin() ? `<button class="del" onclick="askDelPerson('${p.pid}')" aria-label="ลบ ${esc(s.name)}">${ic('trash', 18)}</button>` : ''}
+  </div></div>`;
+}
+function rosterBarHTML() {
+  if (!CAN_WRITE) return '';
+  const n = personsAll().filter((p) => RSEL.has(p.pid)).length;
+  return `<div class="card" style="margin-bottom:10px;padding:10px 12px"><div class="row between wrapx">
+    <span class="sm">เลือกแล้ว <b>${n}</b> คน</span>
+    <div class="row wrapx" style="gap:6px"><button class="btn s" onclick="rosterAll(true)">เลือกทั้งหมดที่แสดง</button><button class="btn s" onclick="rosterAll(false)">ล้าง</button></div></div>
+    <div class="btnrow" style="margin-top:8px"><button class="btn primary s" ${n ? '' : 'disabled'} onclick="openAssign()">${ic('users', 16)} ใส่เข้าห้อง…</button>
+      <button class="btn s" ${n ? '' : 'disabled'} onclick="unassignSel()">${V.rf !== 'all' && V.rf !== 'none' ? 'เอาออกจากห้องนี้' : 'เอาออกจากทุกห้อง'}</button></div></div>`;
+}
+function renderRoster() {
+  const l = $('#ro-list'), b = $('#ro-bar'); if (!l) return;
+  const list = rosterFiltered();
+  l.innerHTML = list.length ? list.map(rosterRowHTML).join('') : `<div class="empty">${ic('users', 28)}<div>${V.rq || V.rf !== 'all' ? 'ไม่พบนักเรียนที่ตรงกับตัวกรอง' : 'ยังไม่มีนักเรียนในทะเบียน'}</div></div>`;
+  if (b) b.innerHTML = rosterBarHTML();
+}
+function rosterTick(id, on) { if (on) RSEL.add(id); else RSEL.delete(id); const b = $('#ro-bar'); if (b) b.innerHTML = rosterBarHTML(); }
+function rosterAll(on) { rosterFiltered().forEach((p) => { if (on) RSEL.add(p.pid); else RSEL.delete(p.pid); }); renderRoster(); }
+function vRoster() {
+  const ppl = personsAll(), total = ppl.length, none = ppl.filter((p) => !personRooms(p).length).length;
+  return `<div class="pagehead"><div><h2 class="h2">ทะเบียนนักเรียน</h2><p class="sm muted">ทั้งโรงเรียน ${total} คน · ยังไม่มีห้อง ${none} คน</p></div>
+      ${CAN_WRITE ? `<button class="btn primary" onclick="openAddStudents(true)">${ic('plus', 18)} เพิ่มนักเรียน</button>` : ''}</div>
+    <p class="xs muted" style="margin:-4px 2px 10px">รายชื่อกลางของโรงเรียน ไม่ผูกกับห้องหรือวิชา เลือกคนแล้วกด "ใส่เข้าห้อง" ได้ นักเรียน 1 คนอยู่ได้หลายห้อง และเช็คชื่อ/คะแนนแยกกันตามห้อง</p>
+    <div class="search" style="margin-bottom:10px">${ic('search', 18)}<input type="text" id="rq" value="${esc(V.rq)}" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="V.rq=this.value;renderRoster()" aria-label="ค้นหานักเรียน"></div>
+    <div class="field" style="margin:0 0 10px"><label class="lbl" for="rf">แสดง</label><select id="rf" onchange="V.rf=this.value;renderRoster()">
+      <option value="all" ${V.rf === 'all' ? 'selected' : ''}>ทุกคน</option><option value="none" ${V.rf === 'none' ? 'selected' : ''}>ยังไม่มีห้อง</option>
+      ${S.rooms.map((r) => `<option value="${r.id}" ${V.rf === r.id ? 'selected' : ''}>ห้อง ${esc(r.name)} (${S.students.filter((s) => s.roomId === r.id).length})</option>`).join('')}</select></div>
+    <div id="ro-bar">${rosterBarHTML()}</div>
+    <div id="ro-list">${total ? rosterFiltered().map(rosterRowHTML).join('') || `<div class="empty">${ic('users', 28)}<div>ไม่พบนักเรียนที่ตรงกับตัวกรอง</div></div>` : `<div class="card empty">${ic('users', 28)}<div>ยังไม่มีนักเรียนในทะเบียน กด "เพิ่มนักเรียน" แล้ววางรายชื่อจาก Excel</div></div>`}</div>`;
+}
+function openAssign() {
+  if (!CAN_WRITE) return;
+  const ids = personsAll().filter((p) => RSEL.has(p.pid));
+  if (!ids.length) { toast('เลือกนักเรียนก่อน'); return; }
+  if (!S.rooms.length) { toast('ต้องสร้างห้องเรียนก่อน (ผู้ดูแลทำได้ในหน้าตั้งค่า)'); return; }
+  modal(`<div class="mh"><h3 class="h3">ใส่เข้าห้อง</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">นักเรียน ${ids.length} คน</p>
+    <div class="field"><label class="lbl" for="as-room">ห้อง</label><select id="as-room">${S.rooms.map((r) => `<option value="${r.id}" ${r.id === room().id ? 'selected' : ''}>ห้อง ${esc(r.name)}</option>`).join('')}</select></div>
+    <p class="xs muted">ถ้านักเรียนอยู่ห้องอื่นอยู่ จะอยู่ทั้งสองห้อง (เช็คชื่อ งาน คะแนน แยกกันตามห้อง)</p>
+    <div class="btnrow" style="margin-top:8px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="doAssign()">ยืนยัน</button></div>`, 'as-room');
+}
+function doAssign() {
+  if (!CAN_WRITE) return;
+  const rid = $('#as-room').value; let n = 0;
+  [...RSEL].forEach((pid) => { if (enrollPerson(pid, rid)) n++; });
+  RSEL.clear(); commit(); closeModal(); render(); toast('ใส่ ' + n + ' คนเข้าห้อง ' + roomNameOf(rid) + ' แล้ว');
+}
+function unassignSel() {
+  if (!CAN_WRITE) return; let n = 0;
+  const one = V.rf !== 'all' && V.rf !== 'none' ? V.rf : null;
+  S.students.forEach((s) => { if (RSEL.has(pidOf(s)) && s.roomId && (!one || s.roomId === one)) { s.roomId = ''; n++; } });
+  RSEL.clear(); commit(); render(); toast('เอา ' + n + ' คนออกจากห้องแล้ว ข้อมูลของนักเรียนยังอยู่ในทะเบียน');
+}
+/* ดึงนักเรียนจากทะเบียนโรงเรียนเข้าห้องปัจจุบัน (จากหน้านักเรียน) */
+let _pull = { q: '', sel: new Set() };
+function pullList() { const q = _pull.q.trim().toLowerCase(); return sortPeople(personsAll().filter((p) => !p.recs.some((s) => s.roomId === room().id) && (p.recs[0].name + ' ' + p.recs[0].code).toLowerCase().indexOf(q) >= 0)); }
+function pullDraw() {
+  const l = $('#pl-list'); if (!l) return; const list = pullList();
+  l.innerHTML = list.length ? list.map((p) => { const s = p.recs[0], rs = personRooms(p); return `<label class="row" style="min-height:44px;cursor:pointer"><input type="checkbox" ${_pull.sel.has(p.pid) ? 'checked' : ''} onchange="pullTick('${p.pid}',this.checked)" style="width:20px;height:20px;flex:none"> <span class="grow trunc">${esc(nm(s))}</span><span class="xs muted" style="flex:none">${rs.length ? 'ห้อง ' + rs.map((r) => esc(roomNameOf(r))).join(', ') : 'ยังไม่มีห้อง'}</span></label>`; }).join('') : '<div class="empty">ไม่พบนักเรียนในทะเบียน</div>';
+  const c = $('#pl-n'); if (c) c.textContent = _pull.sel.size;
+}
+function pullTick(id, on) { if (on) _pull.sel.add(id); else _pull.sel.delete(id); pullDraw(); }
+function openPull() {
+  if (!CAN_WRITE) { toast('บัญชีนี้ดูข้อมูลได้อย่างเดียว'); return; }
+  if (!S.rooms.length) { toast('ต้องสร้างห้องเรียนก่อน'); return; }
+  _pull = { q: '', sel: new Set() };
+  modal(`<div class="mh"><h3 class="h3">ดึงนักเรียนเข้าห้อง ${esc(room().name)}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <div class="search" style="margin-bottom:8px">${ic('search', 18)}<input type="text" id="pl-q" placeholder="ค้นหารหัสหรือชื่อ" oninput="_pull.q=this.value;pullDraw()" aria-label="ค้นหา"></div>
+    <div id="pl-list" style="max-height:44vh;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:4px 10px"></div>
+    <p class="xs muted" style="margin-top:6px">คนที่อยู่ห้องอื่นอยู่จะอยู่ทั้งสองห้อง เช็คชื่อและคะแนนแยกกันตามห้อง</p>
+    <div class="btnrow" style="margin-top:8px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="doPull()">ดึงเข้าห้อง (<span id="pl-n">0</span>)</button></div>`, 'pl-q');
+  pullDraw();
+}
+function doPull() {
+  if (!CAN_WRITE) return; let n = 0; const rid = room().id;
+  [..._pull.sel].forEach((pid) => { if (enrollPerson(pid, rid)) n++; });
+  if (!n) { toast('เลือกนักเรียนก่อน'); return; }
+  commit(); closeModal(); render(); toast('ดึง ' + n + ' คนเข้าห้อง ' + room().name + ' แล้ว');
+}
+/* ---- แก้ไขชื่อครู (เปลี่ยนแค่ชื่อที่แสดง ไม่เปลี่ยนบัญชี) ---- */
+function openName(uid) {
+  const m = uid === MEID ? { name: MENAME || (S.me && S.me.name) || '' } : FB.memberList().find((x) => x.id === uid);
+  if (!m || (uid !== MEID && !isAdmin())) return;
+  modal(`<div class="mh"><h3 class="h3">แก้ไขชื่อที่แสดง</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">เปลี่ยนเฉพาะชื่อที่แสดงในแอพ ไม่ได้เปลี่ยนอีเมลหรือบัญชีเข้าสู่ระบบ</p>
+    <div class="field"><label class="lbl" for="nm-name">ชื่อ</label><input type="text" id="nm-name" value="${esc(m.name || '')}" maxlength="60"></div><p class="err" id="nm-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveName('${uid}')">บันทึก</button></div>`, 'nm-name');
+}
+async function saveName(uid) {
+  const n = $('#nm-name').value.trim().slice(0, 60);
+  if (!n) { $('#nm-err').textContent = 'กรุณาใส่ชื่อ'; return; }
+  try { await FB.setName(uid, n); } catch (e) { $('#nm-err').textContent = FB.authErr(e); return; }
+  if (uid === MEID) { MENAME = n; NAMES[MEID] = n; if (S.me) S.me.name = n; }
+  closeModal(); render(); toast('เปลี่ยนชื่อแล้ว');
+}
+
 function parseStudentLine(raw) {
   let cols = raw.split('\t').map((c) => c.trim()).filter(Boolean);
   if (!cols.length) return null;
@@ -802,11 +1839,13 @@ function parseStudentLine(raw) {
   const m = /^(?=\S*\d)([A-Za-z0-9][A-Za-z0-9\-\/]*)\s+(.+)$/.exec(l);
   return m ? { code: m[1], name: m[2].trim() } : { code: '', name: l };
 }
-function openAddStudents() {
+let _addPool = false;
+function openAddStudents(pool) {
+  _addPool = pool === true;
   if (!CAN_WRITE) { toast('บัญชีนี้ดูข้อมูลได้อย่างเดียว'); return; }
-  if (!S.rooms.length) { toast('ต้องสร้างห้องเรียนก่อน (ผู้ดูแลทำได้ในหน้าตั้งค่า)'); return; }
+  if (!_addPool && !S.rooms.length) { toast('ต้องสร้างห้องเรียนก่อน (ผู้ดูแลทำได้ในหน้าตั้งค่า)'); return; }
   modal(`<div class="mh"><h3 class="h3">เพิ่มนักเรียน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
-    <p class="sm muted" style="margin-bottom:10px">ห้อง ${esc(room().name)} · พิมพ์ รหัส แล้วเว้นวรรค ตามด้วยชื่อ บรรทัดละ 1 คน หรือวางจาก Excel (คอลัมน์ รหัส, ชื่อ) ได้เลย</p>
+    <p class="sm muted" style="margin-bottom:10px">${_addPool ? 'เข้าทะเบียนโรงเรียน (ยังไม่เข้าห้อง ดึงเข้าห้องได้ภายหลัง)' : 'ห้อง ' + esc(room().name)} · พิมพ์ รหัส แล้วเว้นวรรค ตามด้วยชื่อ บรรทัดละ 1 คน หรือวางจาก Excel (คอลัมน์ รหัส, ชื่อ) ได้เลย</p>
     <div class="field"><label class="lbl" for="as-names">รายชื่อ</label><textarea id="as-names" placeholder="10001 เด็กหญิงฟาติมะห์ ใจดี&#10;10002 เด็กชายอับดุลเลาะห์ รักเรียน"></textarea></div>
     <div class="field"><span class="lbl">รูปตัวละคร</span><div class="avpick">
       <label><input type="radio" name="as-av" value="girl" checked><span class="av2">${avatarSVG('girl')}</span></label>
@@ -820,51 +1859,71 @@ function saveStudents() {
   if (!items.length) { $('#as-err').textContent = 'กรุณาพิมพ์ชื่ออย่างน้อย 1 คน'; return; }
   const chk = document.querySelector('input[name=as-av]:checked'), av = chk ? chk.value : 'girl';
   const used = new Set(S.students.filter((s) => s.code).map((s) => s.code));
-  let add = 0, dup = 0;
+  let add = 0, dup = 0, enr = 0;
   items.forEach((it) => {
-    if (it.code && used.has(it.code)) { dup++; return; }
+    if (it.code && used.has(it.code)) {
+      const ex = S.students.find((s) => s.code === it.code);
+      if (!_addPool && ex && enrollPerson(pidOf(ex), room().id)) enr++; else dup++;
+      return;
+    }
     if (it.code) used.add(it.code);
-    S.students.push({ id: uid('u'), name: it.name.slice(0, 80), code: it.code.slice(0, 20), roomId: room().id, avatar: av }); add++;
+    S.students.push({ id: uid('u'), name: it.name.slice(0, 80), code: it.code.slice(0, 20), roomId: _addPool ? '' : room().id, avatar: av }); add++;
   });
   commit(); closeModal(); render();
-  toast('เพิ่มนักเรียน ' + add + ' คนแล้ว' + (dup ? ' (ข้าม ' + dup + ' คนที่รหัสซ้ำ)' : ''));
+  toast('เพิ่มนักเรียน ' + add + ' คนแล้ว' + (enr ? ' · ดึงคนที่มีรหัสอยู่แล้วเข้าห้องนี้ ' + enr + ' คน' : '') + (dup ? ' (ข้าม ' + dup + ' คนที่รหัสซ้ำ)' : ''));
 }
 function toggleAvatar(id) { const s = stuById(id); if (!s || !CAN_WRITE) return; s.avatar = s.avatar === 'boy' ? 'girl' : 'boy'; commit(); renderStuList(); }
 function openRename(id) {
   const s = stuById(id); if (!s || !CAN_WRITE) return;
   modal(`<div class="mh"><h3 class="h3">แก้ไขข้อมูลนักเรียน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
     <div class="field"><label class="lbl" for="rn-code">รหัสนักเรียน</label><input type="text" id="rn-code" value="${esc(s.code)}" maxlength="20"></div>
-    <div class="field"><label class="lbl" for="rn-name">ชื่อ-นามสกุล</label><input type="text" id="rn-name" value="${esc(s.name)}" maxlength="80"></div><p class="err" id="rn-err"></p>
+    <div class="field"><label class="lbl" for="rn-name">ชื่อ-นามสกุล</label><input type="text" id="rn-name" value="${esc(s.name)}" maxlength="80"></div>
+    <div class="field"><span class="lbl">รูป / อิโมจิ</span><input type="hidden" id="rn-av" value="${esc(s.avatar || 'girl')}"><div class="avpick2" id="rn-avs">${['girl', 'boy'].concat(AV_EMO).map((a) => `<button type="button" aria-pressed="${(s.avatar || 'girl') === (a === 'girl' || a === 'boy' ? a : 'e:' + a)}" data-av="${a}" onclick="pickRnAv(this)">${avatarSVG(a === 'girl' || a === 'boy' ? a : 'e:' + a)}</button>`).join('')}</div></div><p class="err" id="rn-err"></p>
     <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveRename('${id}')">บันทึก</button></div>`, 'rn-name');
+}
+const AV_EMO = ['👦','👧','🐱','🐶','🐰','🐻','🐼','🦊','🐯','🐸','🐥','🦄','🐢','🐬','🌟','🌈','🍓','⚽','🚀','🎨'];
+function pickRnAv(b) {
+  const a = b.dataset.av; $('#rn-av').value = a === 'girl' || a === 'boy' ? a : 'e:' + a;
+  document.querySelectorAll('#rn-avs button').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
 }
 function saveRename(id) {
   const n = $('#rn-name').value.trim(), code = $('#rn-code').value.trim();
   if (!n) { $('#rn-err').textContent = 'กรุณาใส่ชื่อ'; return; }
-  if (code && S.students.some((s) => s.id !== id && s.code === code)) { $('#rn-err').textContent = 'รหัสนี้มีนักเรียนคนอื่นใช้แล้ว'; return; }
-  const s = stuById(id); if (s) { s.name = n; s.code = code; }
+  const cur = stuById(id), cp = cur ? pidOf(cur) : id;
+  if (code && S.students.some((s) => pidOf(s) !== cp && s.code === code)) { $('#rn-err').textContent = 'รหัสนี้มีนักเรียนคนอื่นใช้แล้ว'; return; }
+  const av = ($('#rn-av') || {}).value || (cur && cur.avatar) || 'girl';
+  S.students.forEach((s) => { if (pidOf(s) === cp) { s.name = n; s.code = code; s.avatar = av; } });
   commit(); closeModal(); render();
 }
 function askDelStudent(id) {
   const s = stuById(id);
-  askConfirm('ลบ ' + (s ? s.name : 'นักเรียน'), 'ข้อมูลเช็คชื่อ การส่งงาน และคะแนนทุกวิชาของนักเรียนคนนี้จะถูกลบด้วย', "delStudent('" + id + "')");
+  askConfirm('ลบ ' + (s ? s.name : 'นักเรียน'), (S.students.filter((x) => s && pidOf(x) === pidOf(s)).length > 1 ? 'ลบเฉพาะในห้องนี้ (ห้องอื่นของนักเรียนคนนี้ยังอยู่) ' : '') + 'ข้อมูลเช็คชื่อ การส่งงาน และคะแนนในห้องนี้จะถูกลบด้วย', "delStudent('" + id + "')");
 }
+function askDelPerson(pid) {
+  const r = S.students.filter((s) => pidOf(s) === pid), s = r[0];
+  askConfirm('ลบ ' + (s ? s.name : 'นักเรียน'), 'ลบออกจากทะเบียนทุกห้อง ข้อมูลเช็คชื่อ การส่งงาน และคะแนนทุกวิชาของนักเรียนคนนี้จะถูกลบด้วย', "delPerson('" + pid + "')");
+}
+function delPerson(pid) { S.students.filter((s) => pidOf(s) === pid).forEach((s) => purgeStudent(s.id)); RSEL.delete(pid); commit(); closeModal(); render(); }
 function purgeStudent(id) {
   S.students = S.students.filter((s) => s.id !== id);
   for (const d in S.att) { delete S.att[d][id]; if (!Object.keys(S.att[d]).length) delete S.att[d]; }
   for (const a in S.asg) delete S.asg[a][id];
   for (const x in S.sc) delete S.sc[x][id];
+  delete S.conduct[id]; delete S.incidents[id];
+  for (const d in S.trips) { for (const k in S.trips[d]) if (S.trips[d][k].sid === id) delete S.trips[d][k]; if (!Object.keys(S.trips[d]).length) delete S.trips[d]; }
 }
 function delStudent(id) { purgeStudent(id); commit(); closeModal(); render(); }
 
 /* ============ chips ============ */
 function subjectChips() {
-  return `<div class="chips" role="group" aria-label="เลือกวิชา">${S.subjects.map((x) => `<button class="chip" aria-pressed="${subj().id === x.id}" onclick="pickSubject('${x.id}')"><span class="sico c-${x.color}">${ic(x.icon, 14)}</span>${esc(x.name)}${canTeach(x.id) ? '' : ' <span class="xs" style="opacity:.7">(ดูอย่างเดียว)</span>'}</button>`).join('')}</div>`;
+  return `<div class="chips" role="group" aria-label="เลือกวิชา">${visSubjects().map((x) => `<button class="chip" aria-pressed="${subj().id === x.id}" onclick="pickSubject('${x.id}')"><span class="sico c-${x.color}">${ic(x.icon, 14)}</span>${esc(x.name)}${canTeach(x.id) ? '' : ' <span class="xs" style="opacity:.7">(ดูอย่างเดียว)</span>'}</button>`).join('')}</div>`;
 }
 function termChips() {
   return `<div class="chips" role="group" aria-label="เลือกเทอม">${TERMS.map((t) => `<button class="chip" style="min-height:36px" aria-pressed="${V.term === t}" onclick="V.term=${t};V.asgId=null;V.scId=null;saveUI();render()">เทอม ${t}</button>`).join('')}</div>`;
 }
 function pickSubject(id) { V.subjectId = id; V.asgId = null; V.scId = null; saveUI(); render(); }
 function roBanner() { return `<div class="ro">${ic('lock', 14)} วิชานี้ไม่ได้อยู่ในความรับผิดชอบของคุณ ดูได้อย่างเดียว ผู้ดูแลกำหนดครูผู้สอนได้ในหน้าตั้งค่า</div>`; }
+function noMine() { return `<div class="card empty">${ic('lock', 28)}<div>ยังไม่ได้รับมอบหมายวิชา<br>ให้ผู้ดูแลระบบกำหนดวิชาที่สอนให้ที่หน้าตั้งค่า ส่วนคะแนนทุกวิชาดูได้ที่หน้าใบเกรด</div></div>`; }
 function noSetup() { return `<div class="card empty">${ic('warn', 28)}<div>ยังไม่มีห้องเรียนหรือรายวิชา<br>ผู้ดูแลระบบตั้งค่าได้ที่หน้าหลัก</div></div>`; }
 
 /* ============ view: check assignments ============ */
@@ -878,13 +1937,115 @@ function asgRowHTML(s, a, ro) {
   const done = !!(r && r.d), dis = ro ? 'disabled' : '';
   return `<div class="srow" id="ar-${s.id}"><div class="row">
     <div class="avatar sm2">${avatarSVG(s.avatar)}</div>
-    <div class="grow"><div class="name trunc">${esc(s.name)}</div><div class="xs muted">${esc(s.code)}</div></div>
+    <button class="grow" style="text-align:left;min-width:0" onclick="openStuMissing('${s.id}')" aria-label="ดูงานที่ค้างของ ${esc(s.name)}"><span class="name trunc" style="display:block">${esc(s.name)}</span><span class="xs muted">${esc(s.code)} · แตะดูงานที่ค้าง</span></button>
     <button class="tog ${done ? 'on' : ''}" id="ab-${s.id}" aria-pressed="${done}" ${dis} onclick="toggleSub('${a.id}','${s.id}')">${done ? ic('check', 16) + ' ส่งแล้ว' : ic('clock', 16) + ' ยังไม่ส่ง'}</button>
     <span class="scorebox"><input type="number" inputmode="decimal" min="0" max="${a.max}" step="0.5" ${dis} value="${r && num(r.p) ? r.p : ''}" placeholder="–" aria-label="คะแนนของ ${esc(s.name)}" onchange="setAsgScore('${a.id}','${s.id}',this.value,${a.max})"><span class="xs muted">/ ${a.max}</span></span>
   </div></div>`;
 }
+/* ============ ค้นหา/ติ๊กส่งงานเร็ว + สรุปงานที่ค้างรายคน ============ */
+V.ckq = ''; V.ckMode = 'check'; V.skq = ''; V.skOpen = null;
+const ckMatch = (s, q) => (s.name + ' ' + (s.code || '')).toLowerCase().indexOf(q.trim().toLowerCase()) >= 0;
+function ckModeChips() {
+  return `<div class="chips" role="group" aria-label="โหมด" style="margin-bottom:6px">${[['check', 'ตรวจงาน'], ['summary', 'สรุปงานที่ค้างรายคน']].map((m) => `<button class="chip" aria-pressed="${V.ckMode === m[0]}" onclick="V.ckMode='${m[0]}';render()">${m[1]}</button>`).join('')}</div>`;
+}
+function ckListHTML(cur, ro) {
+  const st = roomStudents(), q = V.ckq;
+  if (!st.length) return '<div class="empty">ยังไม่มีนักเรียนในห้องนี้</div>';
+  const rows = st.filter((s) => { const d = !!(S.asg[cur.id] && S.asg[cur.id][s.id] && S.asg[cur.id][s.id].d); return (V.filter === 'all' || (V.filter === 'done' ? d : !d)) && (!q.trim() || ckMatch(s, q)); });
+  return rows.length ? rows.map((s) => asgRowHTML(s, cur, ro)).join('') : `<div class="empty">${q.trim() ? 'ไม่พบรหัสหรือชื่อที่ค้นหา' : 'ไม่มีรายชื่อในหมวดนี้'}</div>`;
+}
+function renderCkList() {
+  const cur = S.assignments.find((a) => a.id === V.asgId), l = $('#ck-list'); if (!cur || !l) return;
+  l.innerHTML = ckListHTML(cur, !canTeach(cur.subjectId));
+}
+function ckEnter() {
+  const cur = S.assignments.find((a) => a.id === V.asgId); if (!cur || !guard(cur.subjectId)) return;
+  const q = V.ckq.trim().toLowerCase(); if (!q) return;
+  let m = roomStudents().filter((s) => ckMatch(s, q));
+  const exact = m.filter((s) => (s.code || '').toLowerCase() === q); if (exact.length === 1) m = exact;
+  if (m.length !== 1) { toast(m.length ? 'พบ ' + m.length + ' คน พิมพ์ให้เจาะจงขึ้น หรือแตะเลือกจากรายการ' : 'ไม่พบรหัสหรือชื่อนี้'); return; }
+  const s = m[0], map = S.asg[cur.id] || (S.asg[cur.id] = {}), r = map[s.id] || (map[s.id] = { d: 0 });
+  if (r.d) toast(nm(s) + ' ส่งแล้ว'); else { r.d = 1; commit(); toast('ติ๊กส่งงานแล้ว: ' + nm(s)); }
+  V.ckq = ''; const inp = $('#ck-q'); if (inp) { inp.value = ''; inp.focus(); }
+  renderCkList(); paintAsg(cur.id, s.id);
+}
+/* ---- สรุปงานที่ค้าง ---- */
+function missingFor(sid) {
+  const rid = room().id, vis = new Set(visSubjects().map((x) => x.id));
+  return S.assignments.filter((a) => a.roomId === rid && a.term === V.term && vis.has(a.subjectId) && !(S.asg[a.id] && S.asg[a.id][sid] && S.asg[a.id][sid].d))
+    .sort((a, b) => (a.due || '9').localeCompare(b.due || '9') || a.title.localeCompare(b.title, 'th'));
+}
+const subjName = (id) => (S.subjects.find((x) => x.id === id) || {}).name || '';
+/* ---- จัดกลุ่มงานค้างตามวิชา (ไม่รวมกัน) ---- */
+function groupBySubj(ms) {
+  const order = S.subjects.map((x) => x.id), g = {};
+  ms.forEach((a) => { (g[a.subjectId] = g[a.subjectId] || []).push(a); });
+  return Object.keys(g).sort((a, b) => order.indexOf(a) - order.indexOf(b)).map((id) => ({ id, name: subjName(id), list: g[id] }));
+}
+function missGroupsHTML(ms, sid, clickable) {
+  const t = today();
+  return groupBySubj(ms).map((gr) => `<div style="margin:10px 0 4px"><div class="row between"><b>📘 ${esc(gr.name)}</b><span class="pill a">ค้าง ${gr.list.length} ชิ้น</span></div></div>
+    ${gr.list.map((a) => { const late = a.due && a.due < t ? '<span class="pill a" style="flex:none">เลยกำหนด</span>' : '', head = `<div class="grow" style="min-width:0"><div class="name">${esc(a.title)}</div><div class="xs muted">${a.due ? 'กำหนดส่ง ' + fmtDate(a.due) : 'ไม่มีกำหนดส่ง'}</div></div>${late}`;
+      return clickable ? `<div class="srow"><div class="row" style="gap:8px">${head}</div>
+        <div class="row" style="gap:8px;margin-top:8px"><span class="scorebox grow" style="display:flex;align-items:center;gap:6px"><input type="number" id="mm-${a.id}" inputmode="decimal" min="0" max="${a.max}" step="0.5" placeholder="คะแนน (ไม่ใส่ก็ได้)" aria-label="คะแนน ${esc(a.title)}" style="flex:1;min-width:0"><span class="xs muted" style="flex:none">/ ${a.max}</span></span>
+        <button class="tog" style="flex:none" onclick="markMissing('${a.id}','${sid}')">${ic('check', 16)} ส่งแล้ว</button></div></div>` : `<div style="padding:6px 0;border-top:1px dashed #D9D3C3"><div class="row between" style="gap:8px">${head}</div></div>`; }).join('')}`).join('');
+}
+function missingText(s, ms) {
+  return nm(s) + ' ค้างส่งงาน ' + ms.length + ' ชิ้น (เทอม ' + V.term + ')\n' + groupBySubj(ms).map((gr) => '\n【' + gr.name + '】 ' + gr.list.length + ' ชิ้น\n' + gr.list.map((a, i) => (i + 1) + '. ' + a.title + (a.due ? ' (กำหนดส่ง ' + fmtDate(a.due) + ')' : '')).join('\n')).join('\n');
+}
+function skRows() {
+  const q = V.skq.trim();
+  return roomStudents().map((s) => ({ s, ms: missingFor(s.id) })).filter((x) => !q || ckMatch(x.s, q))
+    .sort((a, b) => b.ms.length - a.ms.length || (a.s.code || '￿').localeCompare(b.s.code || '￿', 'th', { numeric: true }));
+}
+function skListHTML() {
+  const rows = skRows(), t = today();
+  if (!rows.length) return `<div class="empty">${V.skq.trim() ? 'ไม่พบรหัสหรือชื่อที่ค้นหา' : 'ยังไม่มีนักเรียนในห้องนี้'}</div>`;
+  return rows.map(({ s, ms }) => {
+    const open = V.skOpen === s.id || (V.skq.trim() && rows.length === 1), late = ms.filter((a) => a.due && a.due < t).length;
+    return `<div class="srow"><button class="row" style="width:100%;text-align:left" onclick="V.skOpen=${open ? 'null' : "'" + s.id + "'"};renderMissing()" aria-expanded="${open}">
+        <div class="avatar sm2">${avatarSVG(s.avatar)}</div>
+        <div class="grow" style="min-width:0"><div class="name trunc">${esc(s.name)}</div><div class="xs muted">${s.code ? 'รหัส ' + esc(s.code) : 'ยังไม่มีรหัส'}${late ? ` · <b style="color:var(--a)">เลยกำหนด ${late}</b>` : ''}</div></div>
+        <span class="pill ${ms.length ? 'a' : 'p'}" style="flex:none">${ms.length ? 'ค้าง ' + ms.length + ' ชิ้น' : ms.length === 0 && ckTotal() ? 'ครบ' : '–'}</span></button>
+      ${open ? (ms.length ? `<div style="margin-top:8px">${missGroupsHTML(ms, s.id, false)}
+        <div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="copyText(missingText(stuById('${s.id}'),missingFor('${s.id}')),'คัดลอกสรุปแล้ว')">คัดลอกเป็นข้อความ</button></div></div>` : '<p style="margin-top:6px;color:var(--p);font-weight:700">ส่งครบแล้วนะคะ(:</p>') : ''}</div>`;
+  }).join('');
+}
+const ckTotal = () => { const rid = room().id, vis = new Set(visSubjects().map((x) => x.id)); return S.assignments.filter((a) => a.roomId === rid && a.term === V.term && vis.has(a.subjectId)).length; };
+function renderMissing() { const l = $('#sk-list'); if (l) l.innerHTML = skListHTML(); }
+function markMissing(aid, sid) {
+  const a = S.assignments.find((x) => x.id === aid); if (!a || !guard(a.subjectId)) return;
+  const m = S.asg[aid] || (S.asg[aid] = {}), r = m[sid] || (m[sid] = { d: 0 }), el = document.getElementById('mm-' + aid), raw = el ? el.value.trim() : '';
+  r.d = 1;
+  if (raw !== '') { let v = parseFloat(raw); if (isNaN(v) || v < 0) v = 0; if (v > a.max) v = a.max; r.p = round2(v); }
+  commit(); openStuMissing(sid); render(); toast('ส่งแล้ว: ' + a.title + (r.p != null && raw !== '' ? ' · ' + r.p + '/' + a.max : ''));
+}
+function openStuMissing(sid) {
+  const s = stuById(sid); if (!s) return;
+  const ms = missingFor(sid), total = ckTotal();
+  const body = !total ? `<div class="empty">${ic('clip', 28)}<div>ยังไม่มีใบงานในเทอมนี้</div></div>`
+    : !ms.length ? `<div style="text-align:center;padding:14px 4px"><div style="color:var(--p);margin-bottom:8px">${ic('check', 44)}</div><div class="h3" style="color:var(--p)">ส่งครบแล้วนะคะ(:</div><p class="xs muted" style="margin-top:6px">ส่งแล้ว ${total}/${total} ชิ้น (เทอม ${V.term})</p></div>`
+    : `<p class="sm" style="margin-bottom:4px">ค้างส่ง <b style="color:var(--a)">${ms.length}</b> จาก ${total} ชิ้น (เทอม ${V.term})</p><p class="xs muted">แยกตามวิชา · ใส่คะแนน (ถ้ามี) แล้วกด "ส่งแล้ว"</p>${missGroupsHTML(ms, sid, true)}
+      <div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="copyText(missingText(stuById('${sid}'),missingFor('${sid}')),'คัดลอกสรุปแล้ว')">คัดลอกเป็นข้อความ</button></div>`;
+  modal(`<div class="mh"><h3 class="h3">${esc(nm(s))}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>${body}
+    <div class="btnrow" style="margin-top:10px"><button class="btn primary" onclick="closeModal()">ปิด</button></div>`);
+}
+function vMissing() {
+  const all = roomStudents().map((s) => missingFor(s.id)), withMiss = all.filter((m) => m.length).length, total = ckTotal();
+  const sn = visSubjects().map((x) => x.name).join(', ');
+  return `${ckModeChips()}${termChips()}
+    <div class="card sect"><h2 class="h3">สรุปงานที่ค้างรายคน</h2>
+      <p class="xs muted">ห้อง ${esc(room().name)} · เทอม ${V.term} · ${V.ckMode === 'summary' && !isAdmin() && CAN_WRITE ? 'เฉพาะวิชาที่ฉันสอน: ' : 'วิชา: '}${esc(sn)}</p>
+      ${total ? `<div class="counts" style="margin-top:10px;grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="count a"><b>${withMiss}</b><span>คนมีงานค้าง</span></div><div class="count p"><b>${all.length - withMiss}</b><span>คนส่งครบ</span></div><div class="count n"><b>${total}</b><span>ใบงานทั้งหมด</span></div></div>` : ''}</div>
+    ${total ? `<div class="search" style="margin-bottom:10px">${ic('search', 18)}<input type="text" id="sk-q" value="${esc(V.skq)}" placeholder="พิมพ์รหัสหรือชื่อนักเรียน" oninput="V.skq=this.value;renderMissing()" aria-label="ค้นหานักเรียน" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+      <div id="sk-list">${skListHTML()}</div>` : `<div class="card empty">${ic('clip', 28)}<div>ยังไม่มีใบงานในเทอมนี้</div></div>`}`;
+}
+
 function vCheck() {
   if (!S.rooms.length || !S.subjects.length) return noSetup();
+  if (!visSubjects().length) return noMine();
+  if (V.ckMode === 'summary') return vMissing();
   const sj = subj(), t = today(), rid = room().id, ro = !canTeach(sj.id);
   const list = S.assignments.filter((a) => a.roomId === rid && a.subjectId === sj.id && a.term === V.term).slice().reverse();
   if (!list.find((a) => a.id === V.asgId)) V.asgId = list[0] ? list[0].id : null;
@@ -902,10 +2063,11 @@ function vCheck() {
       <div class="chips" style="margin:10px 0 6px" role="group" aria-label="กรองรายชื่อ">
         ${[['all', 'ทั้งหมด ' + pr.total], ['pending', 'ยังไม่ส่ง ' + (pr.total - pr.done)], ['done', 'ส่งแล้ว ' + pr.done]].map((f) => `<button class="chip" style="min-height:36px" aria-pressed="${V.filter === f[0]}" onclick="V.filter='${f[0]}';render()">${f[1]}</button>`).join('')}
       </div>
-      ${st.length ? (rows.length ? rows.map((s) => asgRowHTML(s, cur, ro)).join('') : `<div class="empty">ไม่มีรายชื่อในหมวดนี้</div>`) : `<div class="empty">ยังไม่มีนักเรียนในห้องนี้</div>`}
+      ${st.length ? `<div class="search" style="margin:4px 0 10px">${ic('search', 18)}<input type="text" id="ck-q" value="${esc(V.ckq)}" placeholder="พิมพ์รหัสหรือชื่อ แล้วกด Enter เพื่อติ๊กส่งงาน" oninput="V.ckq=this.value;renderCkList()" onkeydown="if(event.key==='Enter'){ckEnter();return false}" enterkeyhint="done" aria-label="ค้นหานักเรียน" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></div>` : ''}
+      <div id="ck-list">${ckListHTML(cur, ro)}</div>
     </div>`;
   }
-  return `${subjectChips()}${termChips()}
+  return `${ckModeChips()}${subjectChips()}${termChips()}
     <div class="card sect">
       <div class="row between wrapx"><div><h2 class="h3">ใบงานวิชา ${esc(sj.name)} เทอม ${V.term}</h2><p class="xs muted">ห้อง ${esc(room().name)} · แตะใบงานเพื่อตรวจ · นับเป็นคะแนนเก็บ</p></div>
         ${ro ? '' : `<button class="btn soft s" onclick="openAddAsg()">${ic('plus', 16)} เพิ่มใบงาน</button>`}</div>
@@ -915,7 +2077,7 @@ function vCheck() {
         return `<button class="item" aria-pressed="${a.id === V.asgId}" onclick="V.asgId='${a.id}';render()">
           <div class="row between"><b class="trunc">${esc(a.title)}</b>
             <span class="row" style="flex:none">${fileLinkHTML(a)}
-            ${ro ? '' : `<span class="del" role="button" tabindex="0" onclick="event.stopPropagation();askDelAsg('${a.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();askDelAsg('${a.id}')}" aria-label="ลบใบงาน">${ic('trash', 16)}</span>`}</span></div>
+            ${ro ? '' : `<span class="del" style="color:var(--ink2)" role="button" tabindex="0" onclick="event.stopPropagation();openEditAsg('${a.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();openEditAsg('${a.id}')}" aria-label="แก้ไขใบงาน">${ic('edit', 16)}</span><span class="del" role="button" tabindex="0" onclick="event.stopPropagation();askDelAsg('${a.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();askDelAsg('${a.id}')}" aria-label="ลบใบงาน">${ic('trash', 16)}</span>`}</span></div>
           <div class="row between wrapx xs muted" style="margin-top:2px"><span id="apt-${a.id}">ส่งแล้ว ${p.done}/${p.total} คน</span><span>เต็ม ${a.max} · กำหนดส่ง ${fmtDate(a.due)}${late ? ' <b style="color:var(--a)">(เลยกำหนด)</b>' : ''}</span></div>
           <div class="bar"><i id="apb-${a.id}" style="width:${p.pct}%"></i></div></button>`;
       }).join('') : `<div class="empty">${ic('clip', 28)}<div>ยังไม่มีใบงานในวิชานี้ เทอม ${V.term}</div></div>`}</div>
@@ -971,7 +2133,7 @@ function openAddAsg() {
     <p class="sm muted" style="margin-bottom:12px">วิชา ${esc(subj().name)} · เทอม ${V.term} · ห้อง ${esc(room().name)}</p>
     <div class="field"><label class="lbl" for="na-file">แนบไฟล์ใบงาน (ถ้ามี)</label>
       <input type="file" id="na-file" onchange="onPickFile(this)">
-      <p class="xs muted" id="na-fileinfo" style="margin-top:4px">รองรับ PDF รูปภาพ และไฟล์ข้อความ ขนาดไม่เกิน 20 MB ชื่อใบงานจะเติมจากชื่อไฟล์ให้เอง</p></div>
+      <p class="xs muted" id="na-fileinfo" style="margin-top:4px">รองรับ PDF รูปภาพ และไฟล์ข้อความ ขนาดไม่เกิน 650 KB (ไฟล์ใหญ่กว่านี้ใช้ลิงก์ Google Drive แทน) ชื่อใบงานจะเติมจากชื่อไฟล์ให้เอง</p></div>
     <div class="field"><label class="lbl" for="na-title">ชื่อใบงาน</label><input type="text" id="na-title" placeholder="เช่น ใบงานที่ 3 แบบฝึกหัดบทที่ 2" maxlength="120"></div>
     <div class="row wrapx" style="align-items:flex-start;margin-top:12px">
       <div class="field grow" style="min-width:120px;margin:0"><label class="lbl" for="na-max">คะแนนเต็ม</label><input type="number" id="na-max" value="10" min="1" inputmode="decimal"></div>
@@ -984,20 +2146,20 @@ function openAddAsg() {
 
 /* ---- ไฟล์แนบ (ที่เก็บไฟล์ของแอพ) ---- */
 const FILE_TYPES = { pdf: 'application/pdf', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml', txt: 'text/plain', csv: 'text/csv', md: 'text/markdown', json: 'application/json', mp4: 'video/mp4', webm: 'video/webm' };
-const MAX_FILE = 20 * 1024 * 1024;
+const MAX_FILE = 650 * 1024;
 const fileKind = (f) => FILE_TYPES[(f.name.split('.').pop() || '').toLowerCase()] || null;
 function baseName(n) { return n.replace(/\.[^.]+$/, '').replace(/[_]+/g, ' ').trim(); }
 function fmtSize(b) { return b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
 function fileProblem(f) {
   if (!fileKind(f)) return 'แนบได้เฉพาะ PDF รูปภาพ และไฟล์ข้อความ (ไฟล์ Word หรือ PowerPoint ให้บันทึกเป็น PDF ก่อน)';
-  if (f.size > MAX_FILE) return 'ไฟล์ใหญ่เกิน 20 MB';
+  if (f.size > MAX_FILE) return 'ไฟล์ใหญ่เกิน 650 KB ให้ย่อไฟล์ หรือใช้ช่อง "ลิงก์" วางลิงก์ Google Drive แทน';
   if (!f.size) return 'ไฟล์ว่างเปล่า';
   return '';
 }
 async function uploadFile(f) {
   let as = null;
   try { as = await window.claude.use('assets'); } catch (e) { /* ignore */ }
-  if (!as) throw { code: 'none', message: 'บัญชีนี้แนบไฟล์ไม่ได้ ต้องเป็นผู้ดูแล หรือเจ้าของแอพเปิดสิทธิ์อัปโหลดให้ครู' };
+  if (!as) throw { code: 'none', message: 'บัญชีนี้แนบไฟล์ไม่ได้ ต้องเป็นผู้ดูแลหรือครูผู้สอน' };
   const r = await as.upload(f, { type: fileKind(f) });
   return { id: r.id, name: f.name, size: f.size, type: r.contentType };
 }
@@ -1067,8 +2229,9 @@ function wsKind(f) {
   if (/^video\//.test(t) || ['mp4', 'webm'].indexOf(e) >= 0) return 'video';
   return 'text';
 }
-function openWs(aid) {
+async function openWs(aid) {
   const a = S.assignments.find((x) => x.id === aid); if (!a || !a.file) return;
+  try { await FB.ensure(a.file.id); } catch (e) { toast('เปิดไฟล์ไม่สำเร็จ ตรวจอินเทอร์เน็ตแล้วลองใหม่'); return; }
   WS.aid = aid; WS.zoom = 1;
   let o = document.getElementById('wsview');
   if (!o) { o = document.createElement('div'); o.id = 'wsview'; document.body.appendChild(o); }
@@ -1132,7 +2295,7 @@ function wsPrint() {
 }
 async function wsDownload() {
   const a = S.assignments.find((x) => x.id === WS.aid); if (!a) return;
-  try { const r = await fetch(blobUrl(a.file.id)); if (!r.ok) throw new Error('fetch'); await saveFile(a.file.name, await r.blob()); }
+  try { await FB.ensure(a.file.id); const r = await fetch(blobUrl(a.file.id)); if (!r.ok) throw new Error('fetch'); await saveFile(a.file.name, await r.blob()); }
   catch (e) { toast('ดาวน์โหลดไม่สำเร็จ ลองกด "เปิดแท็บใหม่" แล้วบันทึกจากแท็บนั้น'); }
 }
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeWs(); });
@@ -1155,6 +2318,7 @@ function delAsg(id) {
 /* ============ view: scores (คะแนนเก็บ + สอบปลายภาค) ============ */
 function vScores() {
   if (!S.rooms.length || !S.subjects.length) return noSetup();
+  if (!visSubjects().length) return noMine();
   const sj = subj(), rid = room().id, st = roomStudents(), ro = !canTeach(sj.id);
   const items = S.scoreItems.filter((x) => x.roomId === rid && x.subjectId === sj.id && x.term === V.term).sort((a, b) => (a.kind === 'exam') - (b.kind === 'exam') || a.id.localeCompare(b.id)).reverse();
   if (!items.find((x) => x.id === V.scId)) V.scId = items[0] ? items[0].id : null;
@@ -1163,13 +2327,14 @@ function vScores() {
   if (V.scMode === 'sum') panel = scoreSummaryHTML();
   else if (cur) {
     panel = `<div class="card"><h3 class="h3">กรอกคะแนน: ${esc(cur.title)}${cur.kind === 'exam' ? ' <span class="pill v">สอบ</span>' : ''}</h3><p class="xs muted" style="margin-bottom:8px">คะแนนเต็ม ${cur.max} · เว้นว่างไว้ถ้ายังไม่สอบ</p>
-      ${st.length ? st.map((s) => {
+      ${st.length ? stuSearchBox('sc') : ''}<div data-sf="sc">${st.length ? st.map((s) => {
         const v = S.sc[cur.id] && S.sc[cur.id][s.id];
-        return `<div class="srow"><div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div><div class="grow"><div class="name trunc">${esc(s.name)}</div><div class="xs muted">${esc(s.code)}</div></div>
+        return `<div class="srow" data-q="${qOf(s)}"><div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div><div class="grow"><div class="name trunc">${esc(s.name)}</div><div class="xs muted">${esc(s.code)}</div></div>
           <span class="scorebox"><input type="number" inputmode="decimal" min="0" max="${cur.max}" step="0.5" ${ro ? 'disabled' : ''} value="${num(v) ? v : ''}" placeholder="–" aria-label="คะแนนของ ${esc(s.name)}" onchange="setScore('${cur.id}','${s.id}',this.value,${cur.max})"><span class="xs muted">/ ${cur.max}</span></span></div></div>`;
-      }).join('') : `<div class="empty">ยังไม่มีนักเรียนในห้องนี้</div>`}</div>`;
+      }).join('') : `<div class="empty">ยังไม่มีนักเรียนในห้องนี้</div>`}</div></div>`;
   }
   return `${subjectChips()}${termChips()}
+    ${cdW() > 0 ? `<p class="xs muted" style="margin:0 2px 8px">คะแนนเก็บรวมจิตพิสัย ${cdN(Math.min(cdW(), sj.collectW))} คะแนน (หักมาสาย/ขาดอัตโนมัติ) ใช้เกณฑ์เดียวกันทุกวิชา</p>` : ''}
     <div class="card sect">
       <div class="row between wrapx"><div><h2 class="h3">คะแนนวิชา ${esc(sj.name)} เทอม ${V.term}</h2><p class="xs muted">ห้อง ${esc(room().name)} · คะแนนเก็บ ${sj.collectW} + สอบ ${sj.examW}</p></div>
         ${ro ? '' : `<button class="btn soft s" onclick="openAddScore()">${ic('plus', 16)} เพิ่มรายการ</button>`}</div>
@@ -1179,7 +2344,7 @@ function vScores() {
         const avg = vals.length ? round2(vals.reduce((p, c) => p + c, 0) / vals.length) : null;
         return `<button class="item" aria-pressed="${x.id === V.scId && V.scMode === 'enter'}" onclick="V.scId='${x.id}';V.scMode='enter';render()">
           <div class="row between"><b class="trunc">${esc(x.title)}${x.kind === 'exam' ? ' <span class="pill v">สอบ</span>' : ''}</b>
-          ${ro ? '' : `<span class="del" role="button" tabindex="0" onclick="event.stopPropagation();askDelScore('${x.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();askDelScore('${x.id}')}" aria-label="ลบรายการ">${ic('trash', 16)}</span>`}</div>
+          ${ro ? '' : `<span class="del" style="color:var(--ink2)" role="button" tabindex="0" onclick="event.stopPropagation();openEditScore('${x.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();openEditScore('${x.id}')}" aria-label="แก้ไขรายการ">${ic('edit', 16)}</span><span class="del" role="button" tabindex="0" onclick="event.stopPropagation();askDelScore('${x.id}')" onkeydown="if(event.key==='Enter'){event.stopPropagation();askDelScore('${x.id}')}" aria-label="ลบรายการ">${ic('trash', 16)}</span>`}</div>
           <div class="xs muted">เต็ม ${x.max} · กรอกแล้ว ${vals.length}/${st.length} คน${avg == null ? '' : ' · เฉลี่ย ' + avg}</div></button>`;
       }).join('') : `<div class="empty">${ic('award', 28)}<div>ยังไม่มีรายการคะแนนในวิชานี้ เทอม ${V.term}<br>เพิ่มคะแนนเก็บ และเพิ่ม "สอบปลายภาค" เพื่อให้ตัดเกรดได้</div></div>`}</div>
       <div class="chips" style="margin-top:8px" role="group" aria-label="โหมดแสดงผล">
@@ -1200,8 +2365,8 @@ function scoreSummaryHTML() {
     ${st.map((s) => {
       const r = calcStudent(ctx, s.id);
       const tds = all.map((c) => { const v = markVal(c, s.id); return `<td>${num(v) ? v : '–'}</td>`; }).join('');
-      return `<tr><td class="l">${esc(nm(s))}</td>${tds}<td>${r.collScore == null ? '–' : r.collScore}</td><td>${r.examScore == null ? '–' : r.examScore}</td><td><b>${r.total == null ? '–' : r.total}</b></td><td><b>${fmtG(r.grade)}</b></td></tr>`;
-    }).join('')}</tbody></table></div></div>`;
+      return `<tr><td class="l">${esc(nm(s))}</td>${tds}<td>${r.collScore == null ? '–' : r.collScore}</td><td>${r.examScore == null ? '–' : r.examScore}</td><td><b>${r.total == null ? '–' : r.total}</b></td><td><b>${fmtG(r.grade)}</b>${owedTag(owedN(rid, s.id, sj.id, term), r.grade)}</td></tr>`;
+    }).join('')}</tbody></table></div><p class="xs muted" style="margin-top:8px">*ค้าง = ยังมีงานที่ไม่ได้ส่ง (เกรดยังคำนวณตามคะแนนที่มี)</p></div>`;
 }
 function setScore(id, sid, raw, max) {
   const x = S.scoreItems.find((i) => i.id === id); if (!x || !guard(x.subjectId)) return;
@@ -1213,6 +2378,38 @@ function setScore(id, sid, raw, max) {
     const inp = document.activeElement; if (inp && inp.tagName === 'INPUT') inp.value = m[sid];
   }
   commit();
+}
+function openEditAsg(id) {
+  const a = S.assignments.find((x) => x.id === id); if (!a || !guard(a.subjectId)) return;
+  modal(`<div class="mh"><h3 class="h3">แก้ไขใบงาน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <div class="field"><label class="lbl" for="ea-title">ชื่อใบงาน</label><input type="text" id="ea-title" value="${esc(a.title)}" maxlength="120"></div>
+    <div class="row wrapx" style="align-items:flex-start;margin-top:12px">
+      <div class="field grow" style="min-width:120px;margin:0"><label class="lbl" for="ea-max">คะแนนเต็ม</label><input type="number" id="ea-max" value="${a.max}" min="1" inputmode="decimal"></div>
+      <div class="field grow" style="min-width:160px;margin:0"><label class="lbl" for="ea-due">กำหนดส่ง</label><input type="date" id="ea-due" value="${esc(a.due || '')}"></div></div>
+    <p class="err" id="ea-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveEditAsg('${id}')">บันทึก</button></div>`, 'ea-title');
+}
+function saveEditAsg(id) {
+  const a = S.assignments.find((x) => x.id === id); if (!a || !guard(a.subjectId)) return;
+  const t = $('#ea-title').value.trim(), mx = parseFloat($('#ea-max').value);
+  if (!t) { $('#ea-err').textContent = 'กรุณาใส่ชื่อใบงาน'; return; }
+  a.title = t; if (mx > 0) a.max = mx; a.due = $('#ea-due').value || '';
+  commit(); closeModal(); render(); toast('แก้ไขใบงานแล้ว');
+}
+function openEditScore(id) {
+  const x = S.scoreItems.find((i) => i.id === id); if (!x || !guard(x.subjectId)) return;
+  modal(`<div class="mh"><h3 class="h3">แก้ไขรายการคะแนน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <div class="field"><label class="lbl" for="es-title">ชื่อรายการ</label><input type="text" id="es-title" value="${esc(x.title)}" maxlength="120"></div>
+    <div class="field"><label class="lbl" for="es-max">คะแนนเต็ม</label><input type="number" id="es-max" value="${x.max}" min="1" inputmode="decimal"></div>
+    <p class="err" id="es-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveEditScore('${id}')">บันทึก</button></div>`, 'es-title');
+}
+function saveEditScore(id) {
+  const x = S.scoreItems.find((i) => i.id === id); if (!x || !guard(x.subjectId)) return;
+  const t = $('#es-title').value.trim(), mx = parseFloat($('#es-max').value);
+  if (!t) { $('#es-err').textContent = 'กรุณาใส่ชื่อรายการ'; return; }
+  x.title = t; if (mx > 0) x.max = mx;
+  commit(); closeModal(); render(); toast('แก้ไขรายการแล้ว');
 }
 function openAddScore() {
   if (!guard(subj().id)) return;
@@ -1256,7 +2453,7 @@ function vAttendance() {
   const rows = st.map((s) => {
     const cur = S.att[date] && S.att[date][s.id];
     const a = attOf(s.id);
-    return `<div class="srow">
+    return `<div class="srow" data-q="${qOf(s)}">
       <div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div>
         <div class="grow"><div class="name trunc">${esc(nm(s))}</div>
         <div class="xs muted">${cur ? 'วันนี้: <b class="' + cur + '">' + ATT[cur].full + '</b>' : 'ยังไม่ได้เช็ค'}</div></div>
@@ -1285,7 +2482,7 @@ function vAttendance() {
         <div class="row"><button class="btn soft s" onclick="markAll('p')">${ic('check', 16)} มาเรียนทั้งหมด</button>
         ${rec ? `<button class="btn s" onclick="askClearDay('${date}')">ล้างวันนี้</button>` : ''}</div>
       </div>
-      ${rows}
+      ${stuSearchBox('att')}<div data-sf="att">${rows}</div>
     </div>` : `<div class="card empty">${ic('users', 28)}<div>ยังไม่มีนักเรียนในห้องนี้</div><div class="btnrow" style="justify-content:center"><button class="btn primary" style="flex:none" onclick="openAddStudents()">เพิ่มนักเรียน</button></div></div>`}`;
 }
 function shiftDay(n) { V.attDate = addDays(V.attDate, n); render(); }
@@ -1304,6 +2501,116 @@ function openHistory() {
 function askClearDay(d) { askConfirm('ล้างการเช็คชื่อวันที่ ' + fmtDate(d), 'ข้อมูลเช็คชื่อของห้อง ' + room().name + ' ในวันนี้จะถูกลบ', "clearDay('" + d + "')"); }
 
 /* ============ view: stats ============ */
+/* ============ จิตพิสัย: เพิ่ม/หักคะแนนความประพฤติ ============ */
+const CD_ADD = [['ช่วยเหลือครูและเพื่อน', 0.5], ['รับผิดชอบหน้าที่ที่ได้รับมอบหมาย', 0.5], ['เก็บของได้และส่งคืนเจ้าของ', 1], ['เข้าร่วมกิจกรรมของโรงเรียน', 1], ['มีน้ำใจ เสียสละ', 0.5], ['มีส่วนร่วมในชั้นเรียน', 0.5], ['ได้รับรางวัลหรือเกียรติบัตร', 1]];
+const CD_SUB = [['แต่งกายไม่เรียบร้อย', 0.5], ['ไม่นำอุปกรณ์การเรียนมา', 0.5], ['รบกวนผู้อื่นขณะเรียน', 0.5], ['พูดจาไม่สุภาพ', 1], ['ใช้โทรศัพท์ในชั้นเรียน', 0.5], ['ออกนอกบริเวณโรงเรียน', 2], ['ทะเลาะวิวาท', 3]]; // มาสาย/ขาด หักอัตโนมัติจากหน้าเช็คชื่อ
+const cdN = (x) => String(Math.round(x * 100) / 100);
+const cdW = () => { const b = parseFloat(S.settings.conductW); return isFinite(b) && b >= 0 ? b : 10; };
+const cdBase = cdW;
+const lateN = () => { const n = parseInt(S.settings.lateN, 10); return n >= 1 ? n : 3; };
+const absentPts = () => { const n = parseFloat(S.settings.absentPts); return isFinite(n) && n >= 0 ? n : 1; };
+/* วันที่เช็คชื่อ -> เทอมไหน (ถ้าไม่ได้ตั้งวันเริ่มเทอม 2 นับทุกวันเป็นเทอมปัจจุบัน) */
+function attTerm(d) { const t2 = S.settings.term2Start; return t2 ? (d >= t2 ? 2 : 1) : (S.settings.term || 1); }
+function attCounts(sid, term) {
+  let l = 0, a = 0;
+  for (const d in S.att) { if (attTerm(d) !== term) continue; const x = S.att[d][sid]; if (x === 'l') l++; else if (x === 'a') a++; }
+  return { l, a };
+}
+const cdRecs = (sid, term) => (S.conduct[sid] || []).filter((r) => r.t === term);
+function cdTotal(sid, term) {
+  let add = 0, sub = 0; const rs = cdRecs(sid, term), ac = attCounts(sid, term);
+  rs.forEach((r) => { if (r.p >= 0) add += r.p; else sub += -r.p; });
+  const att = Math.floor(ac.l / lateN()) + ac.a * absentPts(), base = cdW();
+  return { add, sub, att, late: ac.l, absent: ac.a, n: rs.length, total: Math.round(Math.min(base, Math.max(0, base + add - sub - att)) * 100) / 100 };
+}
+function cdLevel(total) { const b = cdBase(); if (!b) return 'n'; const p = total / b * 100; return p >= 80 ? 'p' : p >= 60 ? 'l' : 'a'; }
+function vConduct() {
+  const st = roomStudents(), term = V.term, base = cdBase();
+  const rows = st.map((s) => {
+    const c = cdTotal(s.id, term);
+    return `<div class="srow" data-q="${qOf(s)}">
+      <div class="row"><div class="avatar sm2">${avatarSVG(s.avatar)}</div>
+        <div class="grow"><div class="name trunc">${esc(nm(s))}</div><div class="xs muted">${c.n ? c.n + ' รายการ' : 'ยังไม่มีรายการ'}</div></div>
+        <span class="pill ${cdLevel(c.total)}" style="font-size:15px;min-height:30px;font-variant-numeric:tabular-nums">${cdN(c.total)}</span></div>
+      <div class="mini"><span>เพิ่ม <b class="p">+${cdN(c.add)}</b></span><span>หัก <b class="a">−${cdN(c.sub)}</b></span><span>เช็คชื่อ <b class="a">−${cdN(c.att)}</b> <span class="xs">(สาย ${c.late} ขาด ${c.absent})</span></span></div>
+      <div class="seg" style="grid-template-columns:repeat(${CAN_WRITE ? 3 : 1},minmax(0,1fr))">
+        ${CAN_WRITE ? `<button style="color:var(--p)" onclick="openCd('${s.id}','add')">+ เพิ่ม</button><button style="color:var(--a)" onclick="openCd('${s.id}','sub')">− หัก</button>` : ''}
+        <button onclick="openCdHist('${s.id}')">${ic('history', 15)} ประวัติ</button></div>
+    </div>`;
+  }).join('');
+  return `<div class="pagehead"><div><h2 class="h2">จิตพิสัย</h2><p class="sm muted">ห้อง ${esc(room().name)} · เต็ม ${cdN(base)} คะแนน นับรวมในคะแนนเก็บทุกวิชา<br>หักอัตโนมัติจากเช็คชื่อ: สาย ${lateN()} ครั้ง = −1 · ขาด 1 ครั้ง = −${cdN(absentPts())}</p></div>
+      ${CAN_WRITE && st.length ? `<button class="btn soft s" onclick="openCd(null,'sub')">${ic('users', 16)} บันทึกหลายคน</button>` : ''}</div>
+    ${termChips()}
+    ${st.length ? `<div class="card">${stuSearchBox('cd')}<div data-sf="cd">${rows}</div></div>` : `<div class="card empty">${ic('users', 28)}<div>ยังไม่มีนักเรียนในห้องนี้</div><div class="btnrow" style="justify-content:center"><button class="btn primary" style="flex:none" onclick="openAddStudents()">เพิ่มนักเรียน</button></div></div>`}
+    ${CAN_WRITE ? '' : `<p class="xs muted" style="margin-top:8px">บัญชีนี้ดูข้อมูลได้อย่างเดียว</p>`}`;
+}
+let _cd = { kind: 'sub' };
+function cdPresetHTML() {
+  const list = _cd.kind === 'add' ? CD_ADD : CD_SUB;
+  return list.map((x, i) => `<button type="button" class="chip" style="min-height:34px;font-size:13px" onclick="cdPick(${i})">${esc(x[0])} <b>${_cd.kind === 'add' ? '+' : '−'}${x[1]}</b></button>`).join('');
+}
+function cdKind(k) { _cd.kind = k; const el = $('#cd-presets'); if (el) el.innerHTML = cdPresetHTML(); const t = $('#cd-title'); if (t) t.textContent = k === 'add' ? 'เพิ่มคะแนนจิตพิสัย' : 'หักคะแนนจิตพิสัย'; }
+function cdPick(i) { const x = (_cd.kind === 'add' ? CD_ADD : CD_SUB)[i]; $('#cd-reason').value = x[0]; $('#cd-pts').value = x[1]; }
+function cdAll(on) { document.querySelectorAll('input[name=cd-stu]').forEach((e) => { e.checked = on; }); }
+function openCd(sid, kind) {
+  if (!CAN_WRITE) { toast('บัญชีนี้ดูข้อมูลได้อย่างเดียว'); return; }
+  _cd = { kind: kind || 'sub' }; V.fq.cdm = '';
+  const st = roomStudents();
+  modal(`<div class="mh"><h3 class="h3" id="cd-title">${_cd.kind === 'add' ? 'เพิ่มคะแนนจิตพิสัย' : 'หักคะแนนจิตพิสัย'}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">ห้อง ${esc(room().name)} · เทอม ${V.term}</p>
+    <div class="chips" style="flex-wrap:wrap" role="radiogroup" aria-label="ประเภท">
+      <label class="chip" style="cursor:pointer"><input type="radio" name="cd-kind" value="add" ${_cd.kind === 'add' ? 'checked' : ''} onchange="cdKind('add')"> เพิ่มคะแนน</label>
+      <label class="chip" style="cursor:pointer"><input type="radio" name="cd-kind" value="sub" ${_cd.kind === 'sub' ? 'checked' : ''} onchange="cdKind('sub')"> หักคะแนน</label></div>
+    <div class="field"><span class="lbl">เลือกจากรายการที่พบบ่อย</span><div class="chips" id="cd-presets" style="flex-wrap:wrap">${cdPresetHTML()}</div></div>
+    <div class="field"><label class="lbl" for="cd-reason">เหตุผล</label><input type="text" id="cd-reason" maxlength="120" placeholder="เช่น มาสาย"></div>
+    <div class="row wrapx" style="align-items:flex-start"><div class="field grow" style="min-width:120px;margin:0"><label class="lbl" for="cd-pts">จำนวนคะแนน</label><input type="number" id="cd-pts" min="0.1" step="0.1" inputmode="decimal" placeholder="เช่น 0.5"></div>
+      <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="cd-date">วันที่</label><input type="date" id="cd-date" value="${today()}"></div></div>
+    <div class="field"><div class="row between"><span class="lbl">นักเรียน</span><span class="row" style="gap:6px"><button type="button" class="linkbtn" onclick="cdAll(true)">เลือกทั้งหมด</button><button type="button" class="linkbtn" onclick="cdAll(false)">ล้าง</button></span></div>
+      <div class="search" style="margin:6px 0">${ic('search', 18)}<input type="text" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="V.fq.cdm=this.value;stuFilter('cdm',this.value)" aria-label="ค้นหานักเรียน"></div>
+      <div data-sf="cdm" style="max-height:34vh;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:4px 10px">${st.map((s) => `<label class="row" data-q="${qOf(s)}" style="min-height:40px;cursor:pointer"><input type="checkbox" name="cd-stu" value="${s.id}" ${s.id === sid ? 'checked' : ''} style="width:20px;height:20px"> <span class="trunc">${esc(nm(s))}</span></label>`).join('')}</div></div>
+    <p class="err" id="cd-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveCd()">บันทึก</button></div>`, 'cd-reason');
+}
+function saveCd() {
+  if (!CAN_WRITE) return;
+  const why = $('#cd-reason').value.trim(), pts = parseFloat($('#cd-pts').value), d = $('#cd-date').value || today();
+  const ids = Array.prototype.map.call(document.querySelectorAll('input[name=cd-stu]:checked'), (e) => e.value);
+  if (!why) { $('#cd-err').textContent = 'กรุณาใส่เหตุผล'; return; }
+  if (!(pts > 0)) { $('#cd-err').textContent = 'กรุณาใส่จำนวนคะแนนมากกว่า 0'; return; }
+  if (!ids.length) { $('#cd-err').textContent = 'กรุณาเลือกนักเรียนอย่างน้อย 1 คน'; return; }
+  const p = _cd.kind === 'sub' ? -pts : pts;
+  ids.forEach((sid) => { (S.conduct[sid] = S.conduct[sid] || []).push({ id: uid('c'), d, p, t: V.term, by: MEID, why }); });
+  commit(); closeModal(); render();
+  toast((p < 0 ? 'หัก ' : 'เพิ่ม ') + cdN(pts) + ' คะแนน ' + ids.length + ' คนแล้ว');
+}
+function openCdHist(sid) {
+  const s = stuById(sid); if (!s) return;
+  const rs = cdRecs(sid, V.term).slice().sort((a, b) => (b.d || '').localeCompare(a.d || '') || b.id.localeCompare(a.id)), c = cdTotal(sid, V.term);
+  modal(`<div class="mh"><h3 class="h3">${esc(nm(s))}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">จิตพิสัย เทอม ${V.term} · คะแนนรวม <b>${cdN(c.total)}</b> จาก ${cdN(cdBase())} (เพิ่ม ${cdN(c.add)}, หัก ${cdN(c.sub)}, หักจากเช็คชื่อ ${cdN(c.att)}: สาย ${c.late} ครั้ง ขาด ${c.absent} ครั้ง)</p>
+    ${rs.length ? rs.map((r) => `<div class="srow"><div class="row between"><div class="grow" style="min-width:0"><div class="name">${esc(r.why || '-')}</div><div class="xs muted">${fmtDate(r.d)} · โดย ${esc(profileName(r.by))}</div></div>
+        <b style="color:var(--${r.p < 0 ? 'a' : 'p'});font-size:16px">${r.p < 0 ? '−' : '+'}${cdN(Math.abs(r.p))}</b>
+        ${CAN_WRITE && (isAdmin() || r.by === MEID) ? `<button class="del" onclick="askDelCd('${sid}:${r.id}')" aria-label="ลบรายการ">${ic('trash', 16)}</button>` : ''}</div></div>`).join('') : '<div class="empty">ยังไม่มีรายการในเทอมนี้</div>'}
+    <div class="btnrow"><button class="btn" onclick="closeModal()">ปิด</button></div>`);
+}
+function askDelCd(key) { askConfirm('ลบรายการจิตพิสัย', 'คะแนนของนักเรียนจะคำนวณใหม่', "delCd('" + key + "')"); }
+function delCd(key) {
+  const [sid, rid] = String(key).split(':');
+  const r = (S.conduct[sid] || []).find((x) => x.id === rid);
+  if (!r || !CAN_WRITE || !(isAdmin() || r.by === MEID)) { closeModal(); return; }
+  S.conduct[sid] = S.conduct[sid].filter((x) => x.id !== rid);
+  if (!S.conduct[sid].length) delete S.conduct[sid];
+  commit(); closeModal(); render(); toast('ลบรายการแล้ว');
+}
+function conductSheet(term) {
+  return roomStudents().map((s, i) => { const c = cdTotal(s.id, term); return { 'ลำดับ': i + 1, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name, 'คะแนนเต็ม': cdBase(), 'เพิ่ม': c.add, 'หัก': c.sub, 'มาสาย(ครั้ง)': c.late, 'ขาด(ครั้ง)': c.absent, 'หักจากเช็คชื่อ': c.att, 'คะแนนรวม': c.total }; });
+}
+function conductLog() {
+  const rows = [];
+  roomStudents().forEach((s) => (S.conduct[s.id] || []).forEach((r) => rows.push({ 'วันที่': r.d, 'เทอม': r.t, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name, 'เหตุผล': r.why, 'คะแนน': r.p, 'ผู้บันทึก': profileName(r.by) })));
+  return rows.sort((a, b) => String(a['วันที่']).localeCompare(String(b['วันที่'])));
+}
+
 function vStats() {
   const st = roomStudents(), rid = room().id;
   const att = st.map((s) => ({ s, a: attOf(s.id) }));
@@ -1314,7 +2621,7 @@ function vStats() {
   }).filter((x) => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 5);
   const low = att.filter((x) => x.a.rate != null && x.a.rate < 80).sort((a, b) => a.a.rate - b.a.rate).slice(0, 5);
 
-  const subjRows = S.subjects.map((sj) => {
+  const subjRows = roomSubs(rid).map((sj) => {
     const asgs = S.assignments.filter((a) => a.roomId === rid && a.subjectId === sj.id);
     const slots = asgs.length * st.length;
     let sub = 0;
@@ -1355,6 +2662,11 @@ function gradeOfPct(p) {
   for (const r of sc) if (p >= r[0]) return r[1];
   return 0;
 }
+/* งานที่ยังค้าง (ไม่ติ๊กส่ง) ของนักเรียนในวิชา/เทอม — ใช้เตือนข้างเกรด ไม่เปลี่ยนเกรด */
+function owedN(rid, sid, subId, term) {
+  return S.assignments.filter((a) => a.roomId === rid && a.subjectId === subId && (term == null || a.term === term) && !(S.asg[a.id] && S.asg[a.id][sid] && S.asg[a.id][sid].d)).length;
+}
+const owedTag = (n, g) => (n && g != null ? `<sup style="color:#c0392b;font-weight:700;white-space:nowrap"> *ค้าง ${n}</sup>` : '');
 const fmtG = (g) => (g == null ? '–' : String(Math.round(g * 10) / 10));
 /* รายการคะแนนเก็บที่ "มีผลแล้ว" (มีนักเรียนอย่างน้อย 1 คนมีคะแนน) ช่องว่างของรายการนั้นนับเป็น 0 */
 function termCtx(rid, sid, term) {
@@ -1363,22 +2675,25 @@ function termCtx(rid, sid, term) {
   const items = collectItems(rid, sid, term).filter((it) => stu.some((s) => num(markVal(it, s.id))));
   const ex = examItem(rid, sid, term);
   const exGraded = ex && stu.some((s) => num(S.sc[ex.id] && S.sc[ex.id][s.id]));
-  return { sub, items, collMax: items.reduce((p, c) => p + c.max, 0), ex: exGraded ? ex : null };
+  return { sub, term, items, collMax: items.reduce((p, c) => p + c.max, 0), ex: exGraded ? ex : null };
 }
 function ctxOf(rid, sid, term) { const k = rid + '|' + sid + '|' + term; return CTX[k] || (CTX[k] = termCtx(rid, sid, term)); }
 function calcStudent(ctx, stuId) {
   const w1 = ctx.sub.collectW, w2 = ctx.sub.examW;
+  const cwE = Math.min(cdW(), w1), wWork = w1 - cwE; // คะแนนเก็บ = งาน (w1 − จิตพิสัย) + จิตพิสัย (เกณฑ์เดียวกันทุกวิชา)
   let got = 0;
   ctx.items.forEach((it) => { const v = markVal(it, stuId); if (num(v)) got += v; });
   const collPct = ctx.collMax ? got / ctx.collMax : null;
   let examPct = null;
   if (ctx.ex) { const v = S.sc[ctx.ex.id] && S.sc[ctx.ex.id][stuId]; examPct = ctx.ex.max ? (num(v) ? v : 0) / ctx.ex.max : null; }
-  const collScore = collPct == null ? null : round2(collPct * w1);
+  const workScore = collPct == null ? null : round2(collPct * wWork);
+  const conductScore = cwE > 0 && cdW() > 0 ? round2(cdTotal(stuId, ctx.term).total / cdW() * cwE) : 0;
+  const collScore = workScore == null ? null : round2(workScore + conductScore);
   const examScore = examPct == null ? null : round2(examPct * w2);
   let total = null, status = '';
   if (collScore == null) status = 'ยังไม่มีคะแนนเก็บ'; else if (examScore == null) status = 'รอผลสอบ'; else total = round2(collScore + examScore);
   const pct = total == null || !(w1 + w2) ? null : round2((total / (w1 + w2)) * 100);
-  return { collScore, examScore, total, pct, grade: pct == null ? null : gradeOfPct(pct), status };
+  return { collScore, workScore, conductScore, examScore, total, pct, grade: pct == null ? null : gradeOfPct(pct), status };
 }
 const termResult = (rid, sub, stuId, term) => calcStudent(ctxOf(rid, sub.id, term), stuId);
 function yearResult(rid, sub, stuId) {
@@ -1425,15 +2740,27 @@ function scaleNote() {
   return sc.map((r, i) => (i === sc.length - 1 ? 'ต่ำกว่า ' + sc[i - 1][0] + '% = ' + fmtG(r[1]) : r[0] + '% ขึ้นไป = ' + fmtG(r[1]))).join(' · ');
 }
 function sheetHTML(stu, file) {
-  const rid = stu.roomId, g = S.settings, l1 = [], l2 = [], ly = [];
-  const cells = (r) => `<td>${r.collScore == null ? '–' : r.collScore}</td><td>${r.examScore == null ? '–' : r.examScore}</td><td>${r.total == null ? '–' : r.total}</td><td><b>${fmtG(r.grade)}</b></td>`;
-  const rows = S.subjects.map((sub) => {
-    const y = yearResult(rid, sub, stu.id);
+  const g = S.settings, l1 = [], l2 = [], ly = [];
+  /* นักเรียน 1 คนอยู่หลายห้อง: ใบเกรดรวมทุกวิชาที่เรียนในทุกห้อง (วิชาที่ห้องนั้นมีใบงาน/คะแนนแล้ว) */
+  const recs = S.students.filter((s) => pidOf(s) === pidOf(stu) && roomNameOf(s.roomId));
+  if (!recs.some((s) => s.id === stu.id)) recs.unshift(stu);
+  const many = recs.length > 1;
+  const hasData = (rid, sid) => S.assignments.some((a) => a.roomId === rid && a.subjectId === sid) || S.scoreItems.some((x) => x.roomId === rid && x.subjectId === sid);
+  let pairs = [];
+  S.subjects.forEach((sub) => recs.forEach((r) => {
+    const rm = S.rooms.find((x) => x.id === r.roomId);
+    if (rm && Array.isArray(rm.subjects) ? rm.subjects.indexOf(sub.id) >= 0 : hasData(r.roomId, sub.id)) pairs.push([sub, r]);
+  }));
+  if (!pairs.length) pairs = roomSubs(stu.roomId).map((sub) => [sub, stu]);
+  const cells = (r, n) => `<td>${r.collScore == null ? '–' : r.collScore}</td><td>${r.examScore == null ? '–' : r.examScore}</td><td>${r.total == null ? '–' : r.total}</td><td><b>${fmtG(r.grade)}</b>${owedTag(n, r.grade)}</td>`;
+  const rows = pairs.map(([sub, r]) => {
+    const y = yearResult(r.roomId, sub, r.id);
     l1.push({ grade: y.a.grade, credit: sub.credit }); l2.push({ grade: y.b.grade, credit: sub.credit }); ly.push({ grade: y.grade, credit: sub.credit });
-    return `<tr><td class="l">${esc(sub.name)}<span class="sub">เก็บ ${sub.collectW} · สอบ ${sub.examW}</span></td><td>${sub.credit}</td>${cells(y.a)}${cells(y.b)}<td>${y.pct == null ? '–' : y.pct}</td><td><b>${fmtG(y.grade)}</b></td></tr>`;
+    return `<tr><td class="l">${esc(sub.name)}<span class="sub">${many ? 'ห้อง ' + esc(roomNameOf(r.roomId)) + ' · ' : ''}เก็บ ${sub.collectW} · สอบ ${sub.examW}</span></td><td>${sub.credit}</td>${cells(y.a, owedN(r.roomId, r.id, sub.id, 1))}${cells(y.b, owedN(r.roomId, r.id, sub.id, 2))}<td>${y.pct == null ? '–' : y.pct}</td><td><b>${fmtG(y.grade)}</b></td></tr>`;
   }).join('');
-  const credits = S.subjects.reduce((p, x) => p + x.credit, 0), a = attOf(stu.id);
-  const roomName = (S.rooms.find((r) => r.id === stu.roomId) || {}).name || '';
+  const credits = pairs.reduce((p, x) => p + x[0].credit, 0);
+  const attLines = recs.map((r) => { const a = attOf(r.id); return `<div class="att"><b>การเข้าเรียน${many ? ' ห้อง ' + esc(roomNameOf(r.roomId)) : ''}</b> เช็คชื่อ ${a.days} วัน · มา ${a.p} · สาย ${a.l} · ลา ${a.v} · ขาด ${a.a}${a.rate == null ? '' : ' · ร้อยละ ' + a.rate}</div>`; }).join('');
+  const roomName = recs.map((r) => roomNameOf(r.roomId)).filter(Boolean).join(', ');
   return `<div class="a4"><div class="hd"><div class="lg">${g.logo ? `<img src="${g.logo}" alt="">` : ''}</div>
     <div class="t"><div class="sch">${esc(g.school || 'ชื่อโรงเรียน')}</div><div class="ttl">ใบแสดงผลการเรียน${g.year ? ' ปีการศึกษา ' + esc(g.year) : ''}</div></div><div class="lg"></div></div>
     <div class="info"><span><b>ชื่อ-นามสกุล</b> ${esc(stu.name)}</span><span><b>รหัสนักเรียน</b> ${esc(stu.code || '-')}</span><span><b>ชั้น</b> ${esc(roomName)}</span></div>
@@ -1441,14 +2768,36 @@ function sheetHTML(stu, file) {
       <tr><th>เก็บ</th><th>สอบ</th><th>รวม</th><th>เกรด</th><th>เก็บ</th><th>สอบ</th><th>รวม</th><th>เกรด</th><th>เฉลี่ย %</th><th>เกรด</th></tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr><td class="l">เกรดเฉลี่ย (GPA)</td><td>${credits}</td><td colspan="4">${fmtGpa(gpaOf(l1))}</td><td colspan="4">${fmtGpa(gpaOf(l2))}</td><td colspan="2">${fmtGpa(gpaOf(ly))}</td></tr></tfoot></table>
-    <div class="att"><b>การเข้าเรียน</b> เช็คชื่อ ${a.days} วัน · มา ${a.p} · สาย ${a.l} · ลา ${a.v} · ขาด ${a.a}${a.rate == null ? '' : ' · ร้อยละ ' + a.rate}</div>
-    <div class="note">เกณฑ์เกรด (จากคะแนนรวมร้อยละ): ${scaleNote()}<br>เกรดตัดอัตโนมัติจากคะแนนที่ครูผู้สอนบันทึก · GPA ถ่วงน้ำหนักตามหน่วยกิต · "–" คือยังไม่มีข้อมูลพอสำหรับตัดเกรด</div>
+    ${attLines}
+    <div class="note">เกณฑ์เกรด (จากคะแนนรวมร้อยละ): ${scaleNote()}<br>เกรดตัดอัตโนมัติจากคะแนนที่ครูผู้สอนบันทึก · GPA ถ่วงน้ำหนักตามหน่วยกิต · "–" คือยังไม่มีข้อมูลพอสำหรับตัดเกรด · "*ค้าง n" คือยังมีงานที่ไม่ได้ส่ง n ชิ้นในเทอมนั้น</div>
+    <div class="att" style="display:block"><b>ความคิดเห็นของครู</b><div style="border:1px solid #9a9a9a;border-radius:6px;min-height:52px;padding:6px 8px;margin-top:4px;white-space:pre-wrap;font-size:12.5px">${esc(stu.cm || '')}</div></div>
     <div class="sign">${signBlockHTML(file)}</div></div>`;
 }
 function reportDoc(list, title) {
   return '<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(title) + '</title>'
     + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap"><style>body{margin:0;background:#d9dcd8}.a4{margin:12px auto;box-shadow:0 1px 6px rgba(0,0,0,.25)}' + A4_CSS
     + '@media print{body{background:#fff}.a4{margin:0;box-shadow:none}}</style></head><body>' + list.map((x) => sheetHTML(x, true)).join('') + '</body></html>';
+}
+/* พิมพ์ใบเกรด A4 โดยตรง (หน้าต่างพิมพ์ของเบราว์เซอร์: เลือกเครื่องพิมพ์หรือบันทึกเป็น PDF) */
+async function printReport(one, id) {
+  const list = one ? [stuById(id || V.gStu)].filter(Boolean) : roomStudents();
+  if (!list.length) { toast('ยังไม่มีนักเรียนในห้องนี้'); return; }
+  toast('กำลังเตรียมใบเกรด…');
+  try { await signData(); } catch (e) { /* พิมพ์ต่อโดยไม่มีลายเซ็น */ }
+  const old = document.getElementById('printfr'); if (old) old.remove();
+  const fr = document.createElement('iframe');
+  fr.id = 'printfr'; fr.setAttribute('aria-hidden', 'true'); fr.title = 'ใบเกรดสำหรับพิมพ์';
+  fr.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1123px;border:0;visibility:hidden';
+  fr.onload = async () => {
+    try {
+      const w = fr.contentWindow;
+      if (w.document.fonts && w.document.fonts.ready) await Promise.race([w.document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]);
+      await new Promise((r) => setTimeout(r, 200));
+      w.focus(); w.print();
+    } catch (e) { toast('พิมพ์ตรงไม่ได้ ให้กดดาวน์โหลดแล้วเปิดไฟล์เพื่อพิมพ์'); }
+  };
+  fr.srcdoc = reportDoc(list, 'ใบเกรด');
+  document.body.appendChild(fr);
 }
 async function downloadReport(one) {
   const list = one ? [stuById(V.gStu)].filter(Boolean) : roomStudents();
@@ -1495,6 +2844,7 @@ function drawPreview() {
       <span style="font-size:13px;flex:1;min-width:90px;text-align:center">${esc(nm(stu))} (${i + 1}/${st.length})</span>
       <button style="${bs}" ${i >= st.length - 1 ? 'disabled' : ''} onclick="pvGo(${i + 1})" aria-label="คนถัดไป">▶</button>
       <button style="${bs}" onclick="PV.z=PV.z==='fit'?'full':'fit';applyPv()">🔍 ขยาย/พอดีจอ</button>
+      <button style="${bs}" onclick="printReport(true,'${stu.id}')">🖨 พิมพ์</button>
       <button style="${bs}" onclick="PV.hide=true;drawPreview()">📷 ซ่อนแถบเพื่อแคป</button></div>
     <div id="pvbody" style="flex:1;overflow:auto;padding:10px;display:block" onclick="if(PV.hide){PV.hide=false;drawPreview()}">${sheetBox(stu)}</div>
     ${PV.hide ? '<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;font-size:11px;color:#5E6B63">แตะหน้าจอเพื่อเรียกแถบกลับ</div>' : ''}`;
@@ -1512,13 +2862,13 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePrevi
 
 function classGradesHTML() {
   const rid = room().id, st = roomStudents(), gt = V.gTerm;
-  const head = S.subjects.map((x) => `<th>${esc(x.name)}</th>`).join('');
+  const head = roomSubs(rid).map((x) => `<th>${esc(x.name)}</th>`).join('');
   const rows = st.map((s) => {
     const list = [];
-    const tds = S.subjects.map((sub) => {
+    const tds = roomSubs(rid).map((sub) => {
       const g = gt === 'y' ? yearResult(rid, sub, s.id) : termResult(rid, sub, s.id, +gt);
       list.push({ grade: g.grade, credit: sub.credit });
-      return `<td>${fmtG(g.grade)}</td>`;
+      return `<td>${fmtG(g.grade)}${owedTag(owedN(rid, s.id, sub.id, gt === 'y' ? null : +gt), g.grade)}</td>`;
     }).join('');
     return `<tr><td class="l"><a href="#" onclick="V.gMode='one';V.gStu='${s.id}';render();return false" style="color:inherit">${esc(nm(s))}</a></td>${tds}<td><b>${fmtGpa(gpaOf(list))}</b></td></tr>`;
   }).join('');
@@ -1532,15 +2882,30 @@ function vGrades() {
   const chips = (arr, key, fn) => `<div class="chips">${arr.map((a) => `<button class="chip" style="min-height:36px" aria-pressed="${V[key] === a[0]}" onclick="${fn}('${a[0]}')">${a[1]}</button>`).join('')}</div>`;
   return `<div class="pagehead"><div><h2 class="h2">ใบเกรด</h2><p class="sm muted">ห้อง ${esc(room().name)} · รวมทุกวิชา เทอม 1-2 และทั้งปี ครูทุกคนดูคะแนนทุกวิชาได้</p></div>
       <div class="row wrapx">${one && stu ? `<button class="btn primary s" onclick="openPreview()">${ic('check', 16)} ดูตัวอย่างเต็มจอ</button>` : ''}<button class="btn s" onclick="exportXlsx()">${ic('download', 16)} Excel</button>
-      <button class="btn primary s" onclick="downloadReport(${one})">${ic('download', 16)} ${one ? 'ดาวน์โหลดใบเกรด A4' : 'ใบเกรด A4 ทั้งห้อง'}</button></div></div>
+      <button class="btn primary s" onclick="printReport(${one})">${ic('print', 16)} ${one ? 'พิมพ์ใบเกรด' : 'พิมพ์ทั้งห้อง'}</button>
+      <button class="btn s" onclick="downloadReport(${one})">${ic('download', 16)} ${one ? 'ดาวน์โหลด A4' : 'ดาวน์โหลดทั้งห้อง'}</button></div></div>
     ${chips([['one', 'ใบเกรดรายบุคคล'], ['class', 'สรุปทั้งห้อง']], 'gMode', 'setGMode')}
     ${!st.length ? `<div class="card empty">ยังไม่มีนักเรียนในห้องนี้</div>` : one ? `
+    <div class="search" style="margin:6px 0 8px">${ic('search', 18)}<input type="text" id="g-q" value="${esc(V.gq || '')}" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="gSearch(this.value)" aria-label="ค้นหานักเรียน"></div>
     <div class="field" style="margin:6px 0 12px"><label class="lbl" for="g-stu">เลือกนักเรียน</label>
-      <select id="g-stu" onchange="V.gStu=this.value;render()">${st.map((s) => `<option value="${s.id}" ${s.id === V.gStu ? 'selected' : ''}>${esc(nm(s))}</option>`).join('')}</select></div>
+      <select id="g-stu" onchange="V.gStu=this.value;render()">${st.filter((s) => !V.gq || ckMatch(s, V.gq) || s.id === V.gStu).map((s) => `<option value="${s.id}" ${s.id === V.gStu ? 'selected' : ''}>${esc(nm(s))}</option>`).join('')}</select></div>
+    ${stu && CAN_WRITE ? `<div class="field" style="margin:0 0 10px"><label class="lbl" for="g-cm">ความคิดเห็นของครู (พิมพ์ลงในใบเกรด)</label><textarea id="g-cm" rows="2" maxlength="300" placeholder="เช่น ตั้งใจเรียนดี ควรส่งงานให้ตรงเวลา" onchange="saveCmt('${stu.id}',this.value)">${esc(stu.cm || '')}</textarea></div>` : ''}
     <div class="a4wrap" onclick="openPreview()" style="cursor:zoom-in">${stu ? sheetBox(stu) : ''}</div>
     <p class="xs muted" style="margin-top:8px">แตะที่ใบเกรดหรือกด "ดูตัวอย่างเต็มจอ" เพื่อดูเต็มหน้าและแคปหน้าจอได้เลย ส่วนไฟล์ที่ดาวน์โหลดเป็นหน้ากระดาษ A4 เปิดไฟล์ในเบราว์เซอร์ กดพิมพ์ แล้วเลือก "บันทึกเป็น PDF" หรือสั่งพิมพ์ออกเครื่องพิมพ์ได้เลย</p>`
     : `${chips([['1', 'เทอม 1'], ['2', 'เทอม 2'], ['y', 'ทั้งปี']], 'gTerm', 'setG')}<div class="card" style="margin-top:6px">${classGradesHTML()}</div>
-    <p class="xs muted" style="margin-top:8px">ปุ่ม "ใบเกรด A4 ทั้งห้อง" รวมใบเกรดของนักเรียนทุกคน คนละ 1 หน้า</p>`}`;
+    <p class="xs muted" style="margin-top:8px">ปุ่ม "พิมพ์ทั้งห้อง" รวมใบเกรดของนักเรียนทุกคน คนละ 1 หน้า ในหน้าต่างพิมพ์เลือกขนาด A4 และปิด "หัวกระดาษ/ท้ายกระดาษ" ถ้ามี</p>`}`;
+}
+V.gq = '';
+function saveCmt(id, v) {
+  const s = stuById(id); if (!s || !CAN_WRITE) return; const t = v.trim().slice(0, 300);
+  S.students.forEach((x) => { if (pidOf(x) === pidOf(s)) x.cm = t; });
+  commit(); const w = document.querySelector('.a4wrap'); if (w) { w.innerHTML = sheetBox(s); fitA4(); } toast('บันทึกความคิดเห็นแล้ว');
+}
+function gSearch(v) {
+  V.gq = v; const st = roomStudents().filter((s) => !v.trim() || ckMatch(s, v)); if (!st.length) return;
+  if (!st.some((s) => s.id === V.gStu)) V.gStu = st[0].id;
+  const sel = $('#g-stu'); if (sel) sel.innerHTML = st.map((s) => `<option value="${s.id}" ${s.id === V.gStu ? 'selected' : ''}>${esc(nm(s))}</option>`).join('');
+  const w = document.querySelector('.a4wrap'), stu = stuById(V.gStu); if (w && stu) { w.innerHTML = sheetBox(stu); fitA4(); }
 }
 function setG(v) { V.gTerm = v; render(); }
 function setGMode(v) { V.gMode = v; render(); }
@@ -1621,7 +2986,7 @@ function clearLogo() { S.settings.logo = ''; commit(); render(); }
 /* ---- ผู้ลงนามท้ายใบเกรด + ลายเซ็น ---- */
 const SIGN_TITLES = ['ครูประจำชั้น', 'ผู้อำนวยการ', 'รองผู้อำนวยการ', 'หัวหน้าฝ่ายวิชาการ', 'หัวหน้าระดับชั้น', 'นายทะเบียน'];
 const SIGN_CACHE = {};
-const blobUrl = (id) => '/_blob/' + encodeURIComponent(id);
+const blobUrl = (id) => FB.assetUrl(id);
 function signSlot(i) { const d = [{ t: 'ครูประจำชั้น' }, { t: 'ผู้อำนวยการ' }][i], z = (S.settings.sign || [])[i] || {}; return { t: z.t != null ? z.t : d.t, n: z.n || '', img: z.img || '' }; }
 function signBlockHTML(file) {
   return [0, 1].map((i) => {
@@ -1633,7 +2998,7 @@ async function signData() {
   for (const i of [0, 1]) {
     const id = signSlot(i).img; if (!id || SIGN_CACHE[id]) continue;
     try {
-      const r = await fetch(blobUrl(id)); if (!r.ok) continue;
+      await FB.ensure(id); const r = await fetch(blobUrl(id)); if (!r.ok) continue;
       const b = await r.blob();
       SIGN_CACHE[id] = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); });
     } catch (e) { /* ข้ามลายเซ็นที่โหลดไม่ได้ */ }
@@ -1714,7 +3079,7 @@ async function pickSign(i, inp) {
     const blob = await new Promise((r) => o.toBlob(r, 'image/png'));
     if (!blob) throw new Error('blob');
     const as = await window.claude.use('assets');
-    if (!as) { toast('บัญชีนี้อัปโหลดรูปไม่ได้ (ต้องเป็นผู้ดูแลแอพ)'); return; }
+    if (!as) { toast('บัญชีนี้อัปโหลดรูปไม่ได้ (ต้องเป็นผู้ดูแลหรือครูผู้สอน)'); return; }
     const r = await as.upload(new File([blob], 'signature.png', { type: 'image/png' }), { type: 'image/png' });
     const old = S.settings.sign[i].img;
     S.settings.sign[i].img = r.id; commit(); render();
@@ -1740,7 +3105,8 @@ function vSettings() {
   const account = `<div class="card"><h3 class="h3" style="margin-bottom:6px">บัญชีของฉัน</h3>
       <p class="sm muted"><b>${esc((S.me && S.me.name) || 'คุณครู')}</b> · ${roleTxt}${admin ? '' : '<br>วิชาที่สอน: ' + esc(mySubs)}</p>
       <p class="sm muted" id="sync-text" style="margin-top:8px">${esc(syncText())}</p>
-      <p class="xs muted" style="margin-top:6px">ข้อมูลทั้งหมด (ห้อง นักเรียน คะแนน ใบเกรด) เป็นชุดเดียวกัน ครูทุกคนเห็นเหมือนกัน แก้ไขได้เฉพาะวิชาที่ได้รับมอบหมาย</p></div>`;
+      <p class="xs muted" style="margin-top:6px">ข้อมูลทั้งหมด (ห้อง นักเรียน คะแนน ใบเกรด) เป็นชุดเดียวกัน ครูทุกคนเห็นเหมือนกัน แก้ไขได้เฉพาะวิชาที่ได้รับมอบหมาย</p>
+      <div class="btnrow"><button class="btn soft s" onclick="openName('${MEID}')">${ic('edit', 16)} แก้ไขชื่อ</button><button class="btn soft s" onclick="fbSignOut()">ออกจากระบบ</button></div></div>`;
   if (!admin) {
     return `<div class="pagehead"><div><h2 class="h2">ตั้งค่า</h2><p class="sm muted">บัญชีและการส่งออกข้อมูล</p></div></div>${account}
       <div class="card"><h3 class="h3">ข้อมูลโรงเรียน (ใช้ร่วมกันทุกคน)</h3>
@@ -1761,17 +3127,25 @@ function vSettings() {
       <div class="row wrapx" style="align-items:flex-start;margin-top:12px">
         <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="sg-year">ปีการศึกษา</label><input type="text" id="sg-year" value="${esc(g.year)}" placeholder="เช่น 2569" maxlength="10"></div>
         <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="sg-term">เทอมปัจจุบัน</label><select id="sg-term">${TERMS.map((t) => `<option value="${t}" ${g.term === t ? 'selected' : ''}>เทอม ${t}</option>`).join('')}</select></div></div>
+      <div class="field"><span class="lbl">จิตพิสัยและเช็คชื่อ (เกณฑ์เดียวกันทุกวิชา)</span>
+        <div class="row wrapx" style="align-items:flex-start">
+          <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="sg-cw">คะแนนจิตพิสัยในคะแนนเก็บ</label><input type="number" id="sg-cw" value="${esc(String(cdW()))}" min="0" inputmode="decimal"></div>
+          <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="sg-late">มาสายกี่ครั้งหัก 1 คะแนน</label><input type="number" id="sg-late" value="${lateN()}" min="1" step="1" inputmode="numeric"></div>
+          <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="sg-abs">ขาด 1 ครั้งหักกี่คะแนน</label><input type="number" id="sg-abs" value="${esc(String(absentPts()))}" min="0" step="0.5" inputmode="decimal"></div>
+          <div class="field grow" style="min-width:160px;margin:0"><label class="lbl" for="sg-bh">เข้าบัญชีดำเมื่อมีพฤติกรรมกี่ครั้ง</label><input type="number" id="sg-bh" value="${bhN()}" min="1" step="1" inputmode="numeric"></div>
+          <div class="field grow" style="min-width:160px;margin:0"><label class="lbl" for="sg-t2">วันเริ่มเทอม 2</label><input type="date" id="sg-t2" value="${esc(g.term2Start || '')}"></div></div>
+        <p class="xs muted" style="margin-top:4px">คะแนนเก็บของทุกวิชา = คะแนนงาน + คะแนนจิตพิสัย เช่น เก็บ 70 มีจิตพิสัย 10 งานจะเป็น 60 มาสาย/ขาดจากหน้าเช็คชื่อถูกหักจากจิตพิสัยอัตโนมัติ วันเริ่มเทอม 2 ใช้แยกว่าเช็คชื่อวันไหนเป็นของเทอมไหน (ไม่ตั้ง = นับทั้งหมดเป็นเทอมปัจจุบัน)</p></div>
       <div class="field"><span class="lbl">ช่วงคะแนนรวม (%) ต่อเกรด</span>
         <div class="row wrapx">${g.scale.slice().sort((a, b) => b[0] - a[0]).map((r, i) => `<label class="scorebox" style="gap:4px"><b>${fmtG(r[1])}</b><span class="xs muted">≥</span><input type="number" min="0" max="100" step="0.5" value="${r[0]}" id="sg-s${i}" ${i === g.scale.length - 1 ? 'disabled' : ''} style="width:50px"></label>`).join('')}</div>
         <p class="xs muted" style="margin-top:4px">ตั้งต้นตามเกณฑ์ 8 ระดับ (80=4, 75=3.5, … 50=1, ต่ำกว่า=0) สัดส่วนคะแนนเก็บ/สอบตั้งแยกรายวิชาได้ในรายการวิชาด้านล่าง</p></div>
       <p class="err" id="sg-err"></p>
       <button class="btn primary" onclick="saveGrading()">บันทึกการตั้งค่า</button></div>
     ${signCardHTML()}
-    <div class="card"><h3 class="h3">ครูที่เปิดแอพแล้ว</h3>
-      <p class="xs muted" style="margin:4px 0 8px">แชร์แอพให้ครูในระดับ Contributor ผ่านเมนู Share ของแอพ ครูจะขึ้นรายชื่อที่นี่หลังเปิดแอพครั้งแรก แล้วกำหนดวิชาที่สอนในรายการวิชาด้านล่าง</p>
-      ${S.profiles.length ? S.profiles.map((p) => { const subs = S.subjects.filter((x) => (S.subjectTeachers[x.id] || []).indexOf(p.id) >= 0).map((x) => x.name).join(', '); return `<div class="srow"><div class="name trunc">${esc(p.name || 'ครูที่ไม่ระบุชื่อ')}${p.id === MEID ? ' (ฉัน)' : ''}</div><div class="xs muted">${subs ? 'สอน: ' + esc(subs) : 'ยังไม่ได้กำหนดวิชา'}</div></div>`; }).join('') : '<div class="empty">ยังไม่มีครูท่านอื่นเปิดแอพ</div>'}</div>
+    ${notifCardHTML()}
+    ${memberCardHTML()}
     <div class="card"><div class="row between"><h3 class="h3">ห้องเรียน</h3><button class="btn soft s" onclick="openAddRoom()">${ic('plus', 16)} เพิ่มห้อง</button></div>
       <div style="margin-top:10px">${S.rooms.length ? S.rooms.map((r) => `<div class="srow row between"><span class="grow trunc"><b>ชั้น ${esc(r.name)}</b> <span class="xs muted">${S.students.filter((s) => s.roomId === r.id).length} คน</span></span>
+        <button class="btn s" style="flex:none" onclick="openRoomSubjects('${r.id}')">วิชาที่เรียน ${roomSubs(r.id).length}/${S.subjects.length}</button>
         <button class="del" style="color:var(--ink2)" onclick="openRenameRoom('${r.id}')" aria-label="แก้ชื่อห้อง ${esc(r.name)}">${ic('edit', 16)}</button>
         ${S.rooms.length > 1 ? `<button class="del" onclick="askDelRoom('${r.id}')" aria-label="ลบห้อง ${esc(r.name)}">${ic('trash', 16)}</button>` : ''}</div>`).join('') : '<div class="empty">ยังไม่มีห้อง</div>'}</div></div>
     <div class="card"><div class="row between"><h3 class="h3">รายวิชาและครูผู้สอน</h3><button class="btn soft s" onclick="openSubject(null)">${ic('plus', 16)} เพิ่มวิชา</button></div>
@@ -1791,7 +3165,11 @@ function saveGrading() {
     if (isNaN(scale[i][0]) || scale[i][0] < 0 || scale[i][0] > 100) { $('#sg-err').textContent = 'ช่วงคะแนนต้องเป็นตัวเลข 0-100'; return; }
     if (i > 0 && scale[i][0] >= scale[i - 1][0]) { $('#sg-err').textContent = 'ช่วงคะแนนต้องลดลงเรื่อยๆ จากเกรดสูงไปต่ำ'; return; }
   }
-  S.settings = { sign: S.settings.sign, school: $('#sg-school').value.trim(), logo: S.settings.logo || '', year: $('#sg-year').value.trim(), term: parseInt($('#sg-term').value, 10) || 1, scale };
+  const cw = parseFloat($('#sg-cw').value), ln = parseInt($('#sg-late').value, 10), ap = parseFloat($('#sg-abs').value);
+  if (!(cw >= 0)) { $('#sg-err').textContent = 'คะแนนจิตพิสัยต้องเป็นตัวเลข 0 ขึ้นไป'; return; }
+  if (!(ln >= 1)) { $('#sg-err').textContent = 'จำนวนครั้งที่มาสายต้องเป็น 1 ขึ้นไป'; return; }
+  if (!(ap >= 0)) { $('#sg-err').textContent = 'คะแนนที่หักเมื่อขาดต้องเป็นตัวเลข 0 ขึ้นไป'; return; }
+  S.settings = { bhN: Math.max(1, parseInt($('#sg-bh').value, 10) || 3), conductW: cw, lateN: ln, absentPts: ap, term2Start: $('#sg-t2').value || '', sign: S.settings.sign, school: $('#sg-school').value.trim(), logo: S.settings.logo || '', year: $('#sg-year').value.trim(), term: parseInt($('#sg-term').value, 10) || 1, scale };
   commit(); render(); toast('บันทึกการตั้งค่าแล้ว');
 }
 /* ---- ห้อง ---- */
@@ -1806,6 +3184,21 @@ function saveRoom() {
   if (!n) { $('#nr-err').textContent = 'กรุณาใส่ชื่อห้อง'; return; }
   const r = { id: uid('r'), name: n }; S.rooms.push(r); V.roomId = r.id; saveUI();
   commit(); closeModal(); render();
+}
+function openRoomSubjects(id) {
+  const r = S.rooms.find((x) => x.id === id); if (!r || !isAdmin()) { toast('เฉพาะผู้ดูแลระบบกำหนดวิชาของชั้นได้'); return; }
+  const on = new Set(roomSubs(id).map((x) => x.id));
+  modal(`<div class="mh"><h3 class="h3">วิชาที่ชั้น ${esc(r.name)} เรียน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:8px">ติ๊กเฉพาะวิชาที่ชั้นนี้เรียน ใบเกรดของนักเรียนในชั้นนี้จะแสดงเฉพาะวิชาเหล่านี้ (ข้อมูลคะแนนของวิชาที่เอาออกไม่หาย ติ๊กกลับมาได้)</p>
+    ${S.subjects.map((x) => `<label class="row" style="min-height:44px;cursor:pointer"><input type="checkbox" name="rs-sub" value="${x.id}" ${on.has(x.id) ? 'checked' : ''} style="width:20px;height:20px;flex:none"><span class="sico c-${x.color}">${ic(x.icon, 14)}</span><span class="grow">${esc(x.name)}</span></label>`).join('')}
+    <p class="err" id="rs-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveRoomSubjects('${id}')">บันทึก</button></div>`);
+}
+function saveRoomSubjects(id) {
+  const r = S.rooms.find((x) => x.id === id); if (!r || !isAdmin()) return;
+  const ids = Array.prototype.map.call(document.querySelectorAll('input[name=rs-sub]:checked'), (e) => e.value);
+  if (!ids.length) { $('#rs-err').textContent = 'ต้องเลือกอย่างน้อย 1 วิชา'; return; }
+  r.subjects = ids; commit(); closeModal(); render(); toast('บันทึกวิชาของชั้น ' + r.name + ' แล้ว');
 }
 function openRenameRoom(id) {
   const r = S.rooms.find((x) => x.id === id); if (!r) return;
@@ -1870,7 +3263,7 @@ function saveSubject(id) {
   else {
     const chk = document.querySelector('input[name=sj-ic]:checked');
     x = { id: uid('j'), name: n, icon: chk ? chk.value : 'book', color: SUBJECT_COLORS[S.subjects.length % SUBJECT_COLORS.length], credit, collectW: cw, examW: ew };
-    S.subjects.push(x);
+    S.subjects.push(x); S.rooms.forEach((r) => { if (Array.isArray(r.subjects)) r.subjects.push(x.id); });
   }
   S.subjectTeachers[x.id] = tids;
   if (!tids.length) delete S.subjectTeachers[x.id];
@@ -1886,13 +3279,13 @@ function delSubject(id) {
   S.scoreItems.filter((x) => x.subjectId === id).forEach((x) => delete S.sc[x.id]);
   S.assignments = S.assignments.filter((a) => a.subjectId !== id);
   S.scoreItems = S.scoreItems.filter((x) => x.subjectId !== id);
-  S.subjects = S.subjects.filter((x) => x.id !== id); delete S.subjectTeachers[id];
+  S.subjects = S.subjects.filter((x) => x.id !== id); delete S.subjectTeachers[id]; S.rooms.forEach((r) => { if (Array.isArray(r.subjects)) r.subjects = r.subjects.filter((z) => z !== id); });
   if (V.subjectId === id) V.subjectId = S.subjects[0].id;
   saveUI(); commit(); closeModal(); render();
 }
 function askResetAll() { askConfirm('ล้างข้อมูลทั้งหมด', 'นักเรียน เช็คชื่อ ใบงาน และคะแนนทุกห้อง ทุกวิชา ทุกเทอม จะถูกลบจากฐานข้อมูลกลาง ครูทุกคนจะเห็นว่าหายไป (ห้อง วิชา และบัญชีครูยังอยู่) ควรกดสำรองข้อมูลไว้ก่อน', 'resetAll()'); }
 function resetAll() {
-  S.students = []; S.assignments = []; S.scoreItems = []; S.asg = {}; S.sc = {}; S.att = {};
+  S.students = []; S.assignments = []; S.scoreItems = []; S.asg = {}; S.sc = {}; S.att = {}; S.conduct = {}; S.trips = {}; S.incidents = {};
   commit(); closeModal(); render(); toast('ล้างข้อมูลแล้ว');
 }
 
@@ -1900,7 +3293,7 @@ function resetAll() {
 async function saveFile(name, data) {
   let dl = null;
   try { dl = await window.claude.use('downloads'); } catch (e) { /* ignore */ }
-  if (!dl) { toast('มุมมองนี้ดาวน์โหลดไฟล์ไม่ได้ ลองเปิดแอพนี้ใน Claude โดยตรง'); return false; }
+  if (!dl) { toast('ดาวน์โหลดไฟล์ไม่ได้ ลองใหม่อีกครั้ง'); return false; }
   try { await dl.save({ filename: name, data }); return true; }
   catch (e) { if (!(e && e.code === 'declined')) toast('บันทึกไฟล์ไม่สำเร็จ'); return false; }
 }
@@ -1915,7 +3308,7 @@ function gradeSheet(gt) {
   const rid = room().id;
   return roomStudents().map((s, i) => {
     const r = { 'ลำดับ': i + 1, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name }, list = [];
-    S.subjects.forEach((sub) => {
+    roomSubs(rid).forEach((sub) => {
       if (gt === 'y') {
         const y = yearResult(rid, sub, s.id); list.push({ grade: y.grade, credit: sub.credit });
         r[sub.name + ' เทอม1'] = y.a.total == null ? '' : y.a.total; r[sub.name + ' เทอม2'] = y.b.total == null ? '' : y.b.total;
@@ -1938,13 +3331,16 @@ async function exportXlsx() {
     const rname = room().name, rid = room().id, used = new Set(), wb = XLSX.utils.book_new();
     const add = (rows, name) => XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), sheetName(name, used));
     add(gradeSheet(1), 'ใบเกรดเทอม1'); add(gradeSheet(2), 'ใบเกรดเทอม2'); add(gradeSheet('y'), 'ใบเกรดทั้งปี');
+    add(conductSheet(1), 'จิตพิสัยเทอม1'); add(conductSheet(2), 'จิตพิสัยเทอม2');
+    if (conductLog().length) add(conductLog(), 'บันทึกจิตพิสัย');
+    if (bhLog().length) add(bhLog(), 'สมุดพฤติกรรม');
     add(st.map((s, i) => { const a = attOf(s.id); return { 'ลำดับ': i + 1, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name, 'ชั้น': rname, 'จำนวนวันที่เช็คชื่อ': a.days, 'มาเรียน': a.p, 'มาสาย': a.l, 'ลา': a.v, 'ขาดเรียน': a.a, 'อัตราการเข้าเรียน (%)': a.rate == null ? '' : a.rate }; }), 'สรุปการเข้าเรียน');
     const dates = roomDates().slice().reverse();
     if (dates.length) {
       const code = { p: 'ม', l: 'ส', v: 'ล', a: 'ข' };
       add(st.map((s, i) => { const r = { 'ลำดับ': i + 1, 'รหัสนักเรียน': s.code, 'ชื่อ-นามสกุล': s.name }; dates.forEach((d) => { r[fmtDate(d)] = (S.att[d] && S.att[d][s.id]) ? code[S.att[d][s.id]] : ''; }); return r; }), 'เช็คชื่อรายวัน (ม ส ล ข)');
     }
-    S.subjects.forEach((sj) => TERMS.forEach((term) => {
+    roomSubs(rid).forEach((sj) => TERMS.forEach((term) => {
       const cols = collectItems(rid, sj.id, term), ex = examItem(rid, sj.id, term);
       const all = cols.concat(ex ? [{ k: 's', id: ex.id, title: ex.title + ' (สอบ)', max: ex.max }] : []);
       if (!all.length) return;
@@ -1959,7 +3355,7 @@ async function exportXlsx() {
   } catch (e) { console.warn(e); toast('ส่งออกไม่สำเร็จ ลองอีกครั้งนะคะ'); }
 }
 async function exportBackup() {
-  const o = { v: 6, rooms: S.rooms, subjects: S.subjects, subjectTeachers: S.subjectTeachers, students: S.students, assignments: S.assignments, scoreItems: S.scoreItems, asg: S.asg, sc: S.sc, att: S.att, settings: S.settings };
+  const o = { v: 6, rooms: S.rooms, subjects: S.subjects, subjectTeachers: S.subjectTeachers, students: S.students, assignments: S.assignments, scoreItems: S.scoreItems, asg: S.asg, sc: S.sc, att: S.att, conduct: S.conduct, trips: S.trips, incidents: S.incidents, settings: S.settings };
   if (await saveFile('abdia-backup-' + today() + '.json', JSON.stringify(o))) toast('บันทึกไฟล์สำรองแล้ว');
 }
 function importBackup(input) {
@@ -1986,7 +3382,7 @@ function doRestore() {
   n.students = (o.students || []).map((s) => Object.assign({ code: '', avatar: 'girl' }, s));
   n.assignments = (o.assignments || []).map((a) => Object.assign({ term: 1, link: '', due: '' }, a));
   n.scoreItems = (o.scoreItems || []).map((x) => Object.assign({ term: 1, kind: 'item' }, x));
-  n.asg = o.asg || {}; n.sc = o.sc || {}; n.att = o.att || {};
+  n.asg = o.asg || {}; n.sc = o.sc || {}; n.att = o.att || {}; n.conduct = o.conduct || {}; n.trips = o.trips || {}; n.incidents = o.incidents || {};
   n.settings = Object.assign(n.settings, o.settings || {});
   S = n; V.roomId = null; V.subjectId = null;
   commit(); closeModal(); render(); toast('นำเข้าข้อมูลแล้ว กำลังบันทึกขึ้นฐานข้อมูล');
@@ -2033,10 +3429,10 @@ function render() {
   $('#nav-settings').innerHTML = ic('gear', 18);
   $('#nav-settings').setAttribute('aria-current', V.tab === 'settings' ? 'page' : 'false');
   $('#nav').innerHTML = TABS.map((t) => `<button onclick="go('${t[0]}')" ${V.tab === t[0] ? 'aria-current="page"' : ''}>${ic(t[2], 22)}<span>${t[1]}</span></button>`).join('');
-  const fn = { home: vHome, students: vStudents, attendance: vAttendance, check: vCheck, scores: vScores, grades: vGrades, stats: vStats, settings: vSettings }[V.tab] || vHome;
+  const fn = { home: vHome, students: vStudents, attendance: vAttendance, check: vCheck, scores: vScores, grades: vGrades, conduct: vConduct, wc: vWc, bh: vBh, roster: vRoster, stats: vStats, settings: vSettings }[V.tab] || vHome;
   $('#view').innerHTML = fn();
   setSync(C.state);
-  fitA4();
+  fitA4(); applyStuFilters();
 }
 
 /* ============ หน้าต้อนรับ (ขึ้นทุกครั้งที่เปิดแอพ) ============ */
@@ -2082,6 +3478,17 @@ function closeWelcome(tab) {
 }
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.getElementById('welcome')) closeWelcome(); });
 /* ============ boot ============ */
+/* หน้าต้อนรับ: แสดงทุกครั้งที่เปิดแอพ รวมถึงตอนกลับมาเปิดจากหน้าจอโฮม/พื้นหลัง (หลังพักไว้เกิน 1 นาที) */
+let _hiddenAt = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { _hiddenAt = Date.now(); return; }
+  if (!C.ready || !_hiddenAt) return;
+  const away = Date.now() - _hiddenAt; _hiddenAt = 0;
+  try { navigator.serviceWorker && navigator.serviceWorker.getRegistration().then((r) => r && r.update()); } catch (e) { /* ignore */ }
+  if (away > 5000) notifFresh(); else setTimeout(notifTick, 500);
+  if (away > 60000 && !document.getElementById('welcome')) showWelcome();
+});
+window.addEventListener('pageshow', (e) => { if (e.persisted && C.ready) { notifFresh(); if (!document.getElementById('welcome')) showWelcome(); } });
 init();
 </script>
 
