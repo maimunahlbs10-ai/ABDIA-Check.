@@ -52,7 +52,7 @@ self.addEventListener('periodicsync', (e) => { if (e.tag === 'abdia-att') e.wait
 self.addEventListener('push', (e) => {
   let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data ? e.data.text() : '' }; }
   e.waitUntil(self.registration.showNotification(d.title || 'เช็คงาน ABDIA', {
-    body: d.body || '', tag: d.tag || ('p' + Date.now()), renotify: true, icon: 'icon-192.png', badge: 'icon-192.png',
+    body: d.body || '', tag: d.tag || ('p' + Date.now()), renotify: false, icon: 'icon-192.png', badge: 'icon-192.png',
     vibrate: [200, 100, 200], data: d.data || {},
   }));
 });

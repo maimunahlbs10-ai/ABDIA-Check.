@@ -634,6 +634,7 @@ function freshState() {
     att: {},   // att['YYYY-MM-DD'][studentId] = 'p'|'l'|'v'|'a'
     incidents: {}, // incidents[sid] = [{id,d,t,k:'i'|'b'|'c',cat,sev,by,note}] รายงานประพฤติ/บัญชีดำ
     trips: {}, // trips['YYYY-MM-DD'][id] = {sid,s,e} ไปห้องน้ำ (s/e = เวลาเริ่ม/กลับ ms, e=0 คือยังไม่กลับ)
+    slides: {}, // slides['ห้อง~วิชา'] = [{id,t,d,title,url,note,by,at,ok,okBy,okAt}] สไลด์การสอน (ลิงก์ Canva)
     conduct: {}, // conduct[studentId] = [{id,d,p,t,by,why}]  p เป็นบวก=เพิ่ม ลบ=หัก
     settings: { conductW: 10, lateN: 3, bhN: 3, absentPts: 1, term2Start: '', school: '', logo: '', year: '', term: 1, scale: DEFAULT_SCALE.map((r) => r.slice()), sign: [{ t: 'ครูประจำชั้น', n: '', img: '' }, { t: 'ผู้อำนวยการ', n: '', img: '' }] }
   };
@@ -653,7 +654,7 @@ function loadUI() {
 function saveUI() {
   try { localStorage.setItem('abdia_ui', JSON.stringify({ roomId: V.roomId, subjectId: V.subjectId, term: V.term })); } catch (e) { /* ignore */ }
 }
-function commit() { CTX = {}; queueSync(); if (typeof playPop === 'function') playPop(); }
+function commit() { CTX = {}; queueSync(); if (typeof playPop === 'function') playPop(); if (typeof syncSoon === 'function') syncSoon(); }
 
 const NO_ROOM = { id: '', name: '-' };
 const NO_SUBJ = { id: '', name: '-', icon: 'book', color: 'green', credit: 1, collectW: 70, examW: 30 };
@@ -725,6 +726,7 @@ function toDocs() {
     D.conduct[sid] = { r };
   }
   for (const sid in S.incidents) { if (!stuIds.has(sid) || !S.incidents[sid].length) continue; const r = {}; S.incidents[sid].forEach((x) => { r[x.id] = [x.d, x.t, x.k, encodeURIComponent(x.cat || ''), x.sev, x.by, encodeURIComponent(x.note || '')].join('|'); }); D.conduct['bh_' + sid] = { r }; }
+  for (const k in S.slides) { const l = S.slides[k]; if (!l || !l.length) continue; const r = {}; l.forEach((x) => { r[x.id] = [x.t, x.d, encodeURIComponent(x.title || ''), encodeURIComponent(x.url || ''), x.by || '', x.at || 0, x.ok ? 1 : 0, x.okBy || '', x.okAt || 0, encodeURIComponent(x.note || ''), encodeURIComponent(x.rc || ''), x.rcBy || '', x.rcAt || 0].join('|'); }); D.conduct['sl_' + k] = { r }; }
   for (const d in S.trips) { const r = {}; for (const id in S.trips[d]) { const t = S.trips[d][id]; if (stuIds.has(t.sid)) r[id] = [t.sid, t.s, t.e || 0].join('|'); } if (Object.keys(r).length) D.conduct['wc_' + d] = { r }; }
   return D;
 }
@@ -776,6 +778,12 @@ function buildS() {
       if (!stuSet.has(id0)) continue;
       for (const id in r) { if (r[id] == null) continue; const p = String(r[id]).split('|'), dec = (x) => { try { return decodeURIComponent(x || ''); } catch (e) { return x || ''; } }; out.push({ id, d: p[0], t: parseInt(p[1], 10) || 1, k: p[2] || 'i', cat: dec(p[3]), sev: parseInt(p[4], 10) || 1, by: p[5] || '', note: dec(p[6]) }); }
       if (out.length) n.incidents[id0] = out;
+      continue;
+    }
+    if (sid.indexOf('sl_') === 0) {
+      const key = sid.slice(3), r = (R.conduct[sid] && R.conduct[sid].r) || {}, out = [], dec = (x) => { try { return decodeURIComponent(x || ''); } catch (e) { return x || ''; } };
+      for (const id in r) { if (r[id] == null) continue; const p = String(r[id]).split('|'); out.push({ id, t: parseInt(p[0], 10) || 1, d: p[1] || '', title: dec(p[2]), url: dec(p[3]), by: p[4] || '', at: +p[5] || 0, ok: p[6] === '1', okBy: p[7] || '', okAt: +p[8] || 0, note: dec(p[9]), rc: dec(p[10]), rcBy: p[11] || '', rcAt: +p[12] || 0 }); }
+      if (out.length) n.slides[key] = out;
       continue;
     }
     if (sid.indexOf('wc_') === 0) {
@@ -964,6 +972,7 @@ function fbResetCfg() {
 function fbSignOut() { FB.signOut().then(() => location.reload(), () => location.reload()); }
 function showPending() {
   const u = FB.user();
+  try { if (typeof pushEvent === 'function') setTimeout(() => pushEvent('reg', {}), 1500); } catch (e) { /* ignore */ }
   showAuth(`<div class="authform"><span class="pill l">รออนุมัติ</span>
     <h2 class="h3" style="margin:8px 0 6px">สมัครแล้ว รอผู้ดูแลอนุมัติ</h2>
     <p class="sm muted">บัญชี ${esc((u && u.email) || '')} สมัครเรียบร้อย ให้ผู้ดูแลระบบเปิดสิทธิ์ให้ในหน้า ตั้งค่า → สมาชิกและสิทธิ์ เมื่ออนุมัติแล้วหน้านี้จะเข้าแอพให้เอง</p>
@@ -1172,6 +1181,7 @@ function vHome() {
       <button class="tile t-mint" onclick="go('attendance')"><span class="tico">${ic('cal', 22)}</span><b>เช็คชื่อ</b><span class="d">บันทึกและดูประวัติ</span></button>
       <button class="tile t-rose" onclick="go('check')"><span class="tico">${ic('clip', 22)}</span><b>เช็คงาน</b><span class="d">ตรวจงานและใส่คะแนน</span></button>
       <button class="tile t-butter" onclick="go('scores')"><span class="tico">${ic('award', 22)}</span><b>คะแนนและสอบ</b><span class="d">คะแนนเก็บและสอบปลายภาค</span></button>
+      <button class="tile t-butter" onclick="go('slides')"><span class="tico" style="font-size:20px">🎞️</span><b>สไลด์การสอน</b><span class="d">ลิงก์ Canva แยกชั้นและวิชา</span></button>
       <button class="tile t-sky" onclick="go('grades')"><span class="tico">${ic('star', 22)}</span><b>ใบเกรด</b><span class="d">ตัดเกรดอัตโนมัติ เทอม 1-2</span></button>
       <button class="tile t-rose" onclick="go('conduct')"><span class="tico">${ic('heart', 22)}</span><b>จิตพิสัย</b><span class="d">เพิ่มและหักคะแนนความประพฤติ</span></button>
       <button class="tile t-rose" onclick="go('bh')"><span class="tico" style="font-size:20px">🚩</span><b>สมุดพฤติกรรม</b><span class="d">บันทึก สถิติรายเทอม และบัญชีดำ</span></button>
@@ -1417,7 +1427,7 @@ function setBhR(v) { V.bhR = v; render(); }
 const NC_KEY = 'abdia_notif';
 function notifCfg() {
   let c = {}; try { c = JSON.parse(localStorage.getItem(NC_KEY) || '{}'); } catch (e) { c = {}; }
-  return Object.assign({ on: false, sound: true, popOn: true, popSnd: 'pop', noteSnd: 'chime', vol: 1, loud: false, attSched: {}, attOn: true, attHour: 8, wcMin: 5, mwN: 3, wcOn: true, mwOn: true, regOn: true }, c);
+  return Object.assign({ on: false, sound: true, popOn: true, popSnd: 'pop', noteSnd: 'chime', vol: 1, loud: false, attSched: {}, attOn: true, attHour: 8, wcMin: 5, mwN: 3, wcOn: true, mwOn: true, regOn: true, slOn: true, slOkOn: true }, c);
 }
 function notifSave(c) { try { localStorage.setItem(NC_KEY, JSON.stringify(c)); } catch (e) { /* ignore */ } }
 /* ===== เสียง: สร้างไฟล์เสียง WAV เองแล้วเล่นผ่าน <audio> (ดังชัด และเล่นได้แม้ iPhone เปิดโหมดเงียบ) ===== */
@@ -1541,7 +1551,7 @@ async function pushNote(title, body, tag, data) {
   }
 }
 /* ส่งข้อมูลให้ Service Worker เก็บไว้ เพื่อให้เตือนเช็คชื่อได้แม้ไม่ได้เปิดแอพ (Android/Chrome ที่ติดตั้งแอพแล้ว) */
-async function syncSnapshot() {
+async function syncSnapshot(force) {
   try {
     if (!C.ready || !('serviceWorker' in navigator)) return;
     const c = notifCfg(), t1 = today(), rooms = attRoomsForMe().map((r) => {
@@ -1551,7 +1561,7 @@ async function syncSnapshot() {
     const reg = await navigator.serviceWorker.ready;
     const snap = { t: Date.now(), date: t1, on: !!(c.attOn && CAN_WRITE), attHour: c.attHour, rooms };
     if (reg.active) reg.active.postMessage({ abdiaSnap: snap });
-    pushRegister(reg, snap);
+    pushRegister(reg, snap, force);
     if (reg.periodicSync && Notification.permission === 'granted' && !syncSnapshot._ps) {
       syncSnapshot._ps = 1;
       try { await reg.periodicSync.register('abdia-att', { minInterval: 15 * 60 * 1000 }); } catch (e) { /* ไม่รองรับ */ }
@@ -1560,25 +1570,53 @@ async function syncSnapshot() {
 }
 /* ===== แจ้งเตือนจากเซิร์ฟเวอร์ (Web Push): ทำให้เตือนได้แม้ปิดแอพ ===== */
 const VAPID_PUBLIC_KEY = 'BOxzCG1zk5Al9I8CYCLbiiXJ3tpV-K0tBrJpLG7PMDApp9rHzAVFRFWksOzC15k-v4Gf04PAxAyVSjwi7DDMm6g';
-let _pushSent = { j: '', t: 0 };
+let _pushSent = { j: '', t: 0 }, _tripsPushed = {};
+function openTripsNow() {
+  const o = {};
+  for (const d in S.trips) for (const id in S.trips[d]) { const t = S.trips[d][id]; if (t.e) continue; const st = stuById(t.sid); if (!st) continue; o[id] = { name: nm(st), room: roomNameOf(st.roomId), s: t.s }; }
+  return o;
+}
+function mwCompute(c) {
+  const t0 = today(), term = S.settings.term || 1, res = [];
+  S.students.filter((s) => roomNameOf(s.roomId)).forEach((s) => {
+    const n = S.assignments.filter((a) => a.roomId === s.roomId && a.term === term && a.due && a.due < t0 && canTeach(a.subjectId) && !(S.asg[a.id] && S.asg[a.id][s.id] && S.asg[a.id][s.id].d)).length;
+    if (n >= c.mwN) res.push({ s, n });
+  });
+  return res.sort((a, b) => b.n - a.n);
+}
 function b64u(k) { const p = '='.repeat((4 - k.length % 4) % 4), r = atob((k + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, (ch) => ch.charCodeAt(0)); }
-async function pushRegister(reg, snap) {
+async function pushRegister(reg, snap, force) {
   try {
     if (!VAPID_PUBLIC_KEY || !reg.pushManager || !('Notification' in window) || Notification.permission !== 'granted') return;
     const u = window.firebase && firebase.auth && firebase.auth().currentUser; if (!u) return;
-    const j = JSON.stringify({ o: snap.on, d: snap.date, h: snap.attHour, r: snap.rooms }), now = Date.now();
-    if (j === _pushSent.j && now - _pushSent.t < 120000) return;
+    const c = notifCfg(), open = openTripsNow(), mwr = CAN_WRITE ? mwCompute(c) : [];
+    const mw = mwr.length ? { n: mwr.length, text: mwr.length + ' คนค้างงานตั้งแต่ ' + c.mwN + ' ชิ้น (เลยกำหนดแล้ว): ' + mwr.slice(0, 3).map((x) => nm(x.s) + ' ' + x.n).join(', ') + (mwr.length > 3 ? ' …' : '') } : null;
+    const cfg = { attOn: !!c.attOn, wcOn: !!c.wcOn, wcMin: c.wcMin, mwOn: !!c.mwOn, mwN: c.mwN, slOn: !!c.slOn, slOkOn: !!c.slOkOn, regOn: !!c.regOn };
+    const j = JSON.stringify({ o: snap.on, d: snap.date, h: snap.attHour, r: snap.rooms, t: Object.keys(open), m: mw && mw.n, c: cfg }), now = Date.now();
+    if (!force && j === _pushSent.j && now - _pushSent.t < 120000) return;
     _pushSent = { j, t: now };
+    const remove = Object.keys(_tripsPushed).filter((id) => !open[id]);
     let sub = await reg.pushManager.getSubscription();
     if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID_PUBLIC_KEY) });
     const idToken = await u.getIdToken();
-    await fetch('/.netlify/functions/push-sync', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, sub: sub.toJSON(), snap }), keepalive: true });
+    const r = await fetch('/.netlify/functions/push-sync', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, sub: sub.toJSON(), snap, cfg, mw, trips: { upsert: open, remove } }), keepalive: true });
+    if (r.ok) { remove.forEach((id) => delete _tripsPushed[id]); Object.keys(open).forEach((id) => { _tripsPushed[id] = 1; }); }
   } catch (e) { /* ไม่รองรับ/ออฟไลน์ ข้ามไป */ }
 }
+/* ส่งเหตุการณ์ให้เซิร์ฟเวอร์แจ้งเตือนคนอื่นทันที (แม้เขาปิดแอพอยู่) */
+async function pushEvent(type, data) {
+  try {
+    const u = window.firebase && firebase.auth && firebase.auth().currentUser; if (!u) return;
+    const idToken = await u.getIdToken();
+    await fetch('/.netlify/functions/push-notify', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ idToken, type, data }), keepalive: true });
+  } catch (e) { /* ไม่มีเซิร์ฟเวอร์ ข้ามไป */ }
+}
+let _syncT = null;
+function syncSoon() { clearTimeout(_syncT); _syncT = setTimeout(() => { syncSnapshot(true); }, 3000); }
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { /* ignore */ }
 if ('serviceWorker' in navigator) {
   try { navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) { /* ignore */ }
-  navigator.serviceWorker.addEventListener('message', (e) => { const d = e.data && e.data.abdiaOpen; if (d && C.ready) { if (d.mode) V.ckMode = d.mode; if (d.roomId && S.rooms.some((r) => r.id === d.roomId)) V.roomId = d.roomId; go(d.tab || 'home'); } });
+  navigator.serviceWorker.addEventListener('message', (e) => { const d = e.data && e.data.abdiaOpen; if (d && C.ready) { if (d.mode) V.ckMode = d.mode; if (d.slTab) V.slTab = d.slTab; if (d.roomId && S.rooms.some((r) => r.id === d.roomId)) V.roomId = d.roomId; go(d.tab || 'home'); } });
 }
 async function notifEnable() {
   if (!('Notification' in window)) { toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน (บน iPhone ต้องเพิ่มแอพไว้หน้าจอโฮมก่อน)'); return; }
@@ -1595,7 +1633,7 @@ function notifCardHTML() {
   return `<div class="card"><h3 class="h3" style="margin-bottom:4px">🔔 การแจ้งเตือน</h3>
     <p class="xs muted" style="margin-bottom:8px">ตั้งค่านี้ใช้เฉพาะเครื่องนี้ แจ้งเตือนทุกครั้งที่เปิดแอพ และเมื่อแอพอยู่เบื้องหลัง · Android (Chrome ที่ติดตั้งแอพแล้ว) เตือนเช็คชื่อได้แม้ไม่ได้เปิดแอพ · iPhone ต้องกด "เพิ่มไปยังหน้าจอโฮม" ก่อน และต้องเปิดแอพค้างไว้เบื้องหลังจึงจะเตือน</p>
     ${perm === 'granted' && c.on ? '<span class="pill p">เปิดการแจ้งเตือนของเครื่องแล้ว</span>' : `<button class="btn primary s" onclick="notifEnable()">เปิดการแจ้งเตือน</button>${perm === 'denied' ? '<p class="xs muted" style="margin-top:6px">เบราว์เซอร์บล็อกไว้ ต้องไปอนุญาตที่การตั้งค่าของเว็บไซต์</p>' : ''}`}
-    <div style="margin-top:8px">${tg('sound', 'เสียงแจ้งเตือนในแอพ 🔊')}<div class="row" style="gap:10px;min-height:44px"><span class="sm" style="flex:none">🔊 ความดัง</span><input type="range" min="20" max="100" step="10" value="${Math.round((c.vol || 1) * 100)}" onchange="setVol(this.value);playChime()" style="flex:1;min-width:0" aria-label="ความดังเสียง"></div><div class="sm" style="margin:4px 0 2px">เสียงแจ้งเตือน</div><div class="row wrapx" style="gap:6px;margin-bottom:6px">${Object.keys(POP_SOUNDS).filter((k) => POP_SOUNDS[k].k === 'n').map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${(c.noteSnd || 'chime') === k}" onclick="pickNote('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>${tg('loud', 'เล่นเสียงแม้เปิดโหมดเงียบ (iPhone จะขึ้นสัญลักษณ์เสียงที่ Dynamic Island)')}${tg('popOn', 'เสียงตอนกดบันทึก 🫘')}${c.popOn ? `<div class="row wrapx" style="gap:6px;margin:0 0 6px 28px">${Object.keys(POP_SOUNDS).filter((k) => !POP_SOUNDS[k].k).map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${c.popSnd === k}" onclick="pickSnd('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>` : ''}${tg('attOn', 'เตือนเมื่อวันนี้ยังไม่เช็คชื่อ')}${tg('wcOn', 'นักเรียนไปห้องน้ำนานเกินกำหนด')}${tg('mwOn', 'นักเรียนค้างงานหลายชิ้น')}${tg('regOn', 'มีครูสมัครใหม่รออนุมัติ (ผู้ดูแล)')}</div>
+    <div style="margin-top:8px">${tg('sound', 'เสียงแจ้งเตือนในแอพ 🔊')}<div class="row" style="gap:10px;min-height:44px"><span class="sm" style="flex:none">🔊 ความดัง</span><input type="range" min="20" max="100" step="10" value="${Math.round((c.vol || 1) * 100)}" onchange="setVol(this.value);playChime()" style="flex:1;min-width:0" aria-label="ความดังเสียง"></div><div class="sm" style="margin:4px 0 2px">เสียงแจ้งเตือน</div><div class="row wrapx" style="gap:6px;margin-bottom:6px">${Object.keys(POP_SOUNDS).filter((k) => POP_SOUNDS[k].k === 'n').map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${(c.noteSnd || 'chime') === k}" onclick="pickNote('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>${tg('loud', 'เล่นเสียงแม้เปิดโหมดเงียบ (iPhone จะขึ้นสัญลักษณ์เสียงที่ Dynamic Island)')}${tg('popOn', 'เสียงตอนกดบันทึก 🫘')}${c.popOn ? `<div class="row wrapx" style="gap:6px;margin:0 0 6px 28px">${Object.keys(POP_SOUNDS).filter((k) => !POP_SOUNDS[k].k).map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${c.popSnd === k}" onclick="pickSnd('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>` : ''}${tg('attOn', 'เตือนเมื่อวันนี้ยังไม่เช็คชื่อ')}${tg('wcOn', 'นักเรียนไปห้องน้ำนานเกินกำหนด')}${tg('mwOn', 'นักเรียนค้างงานหลายชิ้น')}${tg('regOn', 'มีครูสมัครใหม่รออนุมัติ (ผู้ดูแล)')}${tg('slOn', 'มีครูส่งสไลด์ใหม่รอตรวจ (ผู้ดูแล)')}${tg('slOkOn', 'สไลด์ที่ฉันส่งถูกตรวจแล้ว')}</div>
     <div class="row wrapx" style="align-items:flex-start;margin-top:6px">
       <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="nc-ah">เตือนเช็คชื่อตั้งแต่กี่โมง</label><input type="number" id="nc-ah" value="${c.attHour}" min="0" max="16" inputmode="numeric" onchange="notifNum('attHour',this.value,0)"></div>
       <div class="field grow" style="min-width:140px;margin:0"><label class="lbl" for="nc-wc">ห้องน้ำเกินกี่นาที</label><input type="number" id="nc-wc" value="${c.wcMin}" min="1" inputmode="numeric" onchange="notifNum('wcMin',this.value,1)"></div>
@@ -1604,6 +1642,21 @@ function notifCardHTML() {
     <p class="xs muted" style="margin-top:8px">${BUILD}</p>
     <p class="xs muted" style="margin-top:8px">ถ้าไม่ได้ยินเสียง: iPhone ให้ปิดโหมดเงียบ (สวิตช์ข้างเครื่อง) และเพิ่มเสียงด้วยปุ่มข้างเครื่อง แล้วกด "ทดสอบเสียง" · ถ้าใช้ในโหมด Focus/ห้ามรบกวน เสียงแจ้งเตือนของเครื่องจะถูกปิด</p>
     <div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="playSnd(notifCfg().noteSnd || 'chime',true)">🔊 ทดสอบเสียง</button><button class="btn s" onclick="pushNote('🔔 ทดสอบ','ถ้าได้ยินเสียงและเห็นแจ้งเตือนแปลว่าใช้งานได้','test')">ทดสอบเสียงและการแจ้งเตือน</button></div></div>`;
+}
+/* การ์ดตั้งค่าเสียงแจ้งเตือนสำหรับครูทุกคน (เฉพาะเสียงแจ้งเตือน เก็บในเครื่องของแต่ละคน) */
+function notifSoundCardHTML() {
+  const c = notifCfg();
+  const tg = (k, label) => `<label class="row" style="min-height:40px;cursor:pointer"><input type="checkbox" ${c[k] ? 'checked' : ''} onchange="notifSet('${k}',this.checked)" style="width:20px;height:20px;flex:none"> <span class="grow">${label}</span></label>`;
+  return `<div class="card"><h3 class="h3" style="margin-bottom:4px">🔔 เสียงแจ้งเตือนและเสียงกดบันทึก</h3>
+    <p class="xs muted" style="margin-bottom:8px">เลือกเสียงของตัวเองได้ ตั้งค่านี้ใช้เฉพาะเครื่องนี้ ไม่กระทบครูท่านอื่น</p>
+    ${tg('sound', 'เปิดเสียงแจ้งเตือนในแอพ 🔊')}
+    <div class="row" style="gap:10px;min-height:44px"><span class="sm" style="flex:none">🔊 ความดัง</span><input type="range" min="20" max="100" step="10" value="${Math.round((c.vol || 1) * 100)}" onchange="setVol(this.value);playChime()" style="flex:1;min-width:0" aria-label="ความดังเสียง"></div>
+    <div class="sm" style="margin:4px 0 2px">เลือกเสียงแจ้งเตือน</div>
+    <div class="row wrapx" style="gap:6px;margin-bottom:6px">${Object.keys(POP_SOUNDS).filter((k) => POP_SOUNDS[k].k === 'n').map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${(c.noteSnd || 'chime') === k}" onclick="pickNote('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>
+    ${tg('loud', 'เล่นเสียงแม้เปิดโหมดเงียบ (iPhone จะขึ้นสัญลักษณ์เสียงที่ Dynamic Island)')}
+    ${tg('slOkOn', 'แจ้งเตือนเมื่อสไลด์ที่ฉันส่งถูกตรวจแล้ว')}
+    ${tg('popOn', 'เสียงตอนกดบันทึก 🫘')}${c.popOn ? `<div class="row wrapx" style="gap:6px;margin:0 0 6px 28px">${Object.keys(POP_SOUNDS).filter((k) => !POP_SOUNDS[k].k).map((k) => `<button class="chip" style="min-height:34px" aria-pressed="${c.popSnd === k}" onclick="pickSnd('${k}')">${POP_SOUNDS[k].n}</button>`).join('')}</div>` : ''}
+    <div class="btnrow" style="margin-top:8px"><button class="btn s" onclick="playSnd(notifCfg().noteSnd || 'chime',true)">🔊 ทดสอบเสียง</button>${('Notification' in window && Notification.permission === 'granted') ? '' : '<button class="btn primary s" onclick="notifEnable()">เปิดการแจ้งเตือนของเครื่อง</button>'}</div></div>`;
 }
 /* ===== เวลาเตือนเช็คชื่อรายห้อง (หลายเวลา/หลายวัน) ===== */
 const DAYN = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
@@ -1677,10 +1730,54 @@ function notifTick() {
       pushNote('📚 นักเรียนค้างงาน', res.length + ' คนค้างงานตั้งแต่ ' + c.mwN + ' ชิ้น (เลยกำหนดแล้ว): ' + res.slice(0, 3).map((x) => nm(x.s) + ' ' + x.n).join(', ') + (res.length > 3 ? ' …' : ''), 'mw', { tab: 'check', mode: 'summary', roomId: res[0].s.roomId });
     }
   }
+  try { slWatch(c, fresh); } catch (e) { /* ไม่ให้กระทบการแจ้งเตือนอื่น */ }
   /* เปิดแอพทุกครั้งต้องมีแจ้งเตือนเสมอ: ถ้าไม่มีเรื่องเร่งด่วน ให้ส่งข้อความทักทาย/สรุปแทน */
   if (fresh && _fired === _f0) {
     const hr = new Date().getHours();
     pushNote('👋 เปิดเช็คงาน ABDIA แล้ว', (hr < 12 ? 'สวัสดีตอนเช้า' : hr < 17 ? 'สวัสดีตอนบ่าย' : 'สวัสดีตอนเย็น') + ' ตอนนี้ไม่มีเรื่องที่ต้องรีบทำ', 'open', { tab: 'home' });
+  }
+}
+/* ===== แจ้งเตือนสไลด์: ผู้ดูแลได้รับเมื่อมีสไลด์ใหม่รอตรวจ / ครูได้รับเมื่อสไลด์ของตัวเองถูกตรวจแล้ว ===== */
+function slSeen(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
+function slSave(k, a) { try { localStorage.setItem(k, JSON.stringify(a.slice(-2000))); } catch (e) { /* ignore */ } }
+function slWatch(c, fresh) {
+  const all = []; for (const key in S.slides) { const kk = key.split('~'); (S.slides[key] || []).forEach((x) => all.push({ rid: kk[0], sid: kk[1], x })); }
+  const lab = (q) => 'ชั้น ' + roomNameOf(q.rid) + ' · ' + ((S.subjects.find((v) => v.id === q.sid) || {}).name || '');
+  let told = false;
+  /* ผู้ดูแล: มีสไลด์ใหม่ (รวมที่ผู้ดูแลอัปโหลดเองด้วย) */
+  if (c.slOn && isAdmin()) {
+    let seen = slSeen('abdia_slnew'); const base = seen === null; seen = seen || [];
+    const nw = all.filter((q) => seen.indexOf(q.x.id) < 0);
+    if (nw.length) {
+      slSave('abdia_slnew', seen.concat(nw.map((q) => q.x.id)));
+      const mine = base ? [] : nw;
+      if (mine.length === 1) { const q = mine[0]; told = true; pushNote('📎 มีสไลด์มาส่งจ้าาาา !(:', (q.x.by === MEID ? 'คุณส่ง ' : profileName(q.x.by) + ' ส่ง ') + lab(q) + ' · ' + q.x.title + ' แตะเพื่อไปตรวจน้า', 'slnew', { tab: 'slides', slTab: 'review', roomId: q.rid }); }
+      else if (mine.length > 1) { told = true; pushNote('📎 มีสไลด์มาส่งตั้ง ' + mine.length + ' รายการจ้าาาา !(:', mine.slice(0, 3).map((q) => profileName(q.x.by) + ' ' + lab(q)).join(', ') + (mine.length > 3 ? ' …' : ''), 'slnew', { tab: 'slides', slTab: 'review' }); }
+    }
+    if (fresh && !told) {
+      const pend = all.filter((q) => !q.x.ok);
+      if (pend.length) { told = true; pushNote('📎 ยังมีสไลด์รอตรวจอยู่ ' + pend.length + ' รายการน้าา !(:', 'แตะเพื่อเปิดหน้าตรวจสอบสไลด์', 'slnew', { tab: 'slides', slTab: 'review' }); }
+    }
+  }
+  /* ครูผู้ส่ง: ตรวจแล้ว และ/หรือมีหมายเหตุจากผู้ตรวจ (รวมกรณีผู้ดูแลอัปโหลดเอง) */
+  if (c.slOkOn) {
+    let seen = slSeen('abdia_slok'); const base = seen === null; seen = seen || [];
+    const evs = [];
+    all.forEach((q) => {
+      if (q.x.by !== MEID) return;
+      const kOk = q.x.id + '|ok|' + q.x.okAt, kCm = q.x.id + '|rc|' + q.x.rcAt;
+      const okN = q.x.ok && seen.indexOf(kOk) < 0, cmN = !!q.x.rc && seen.indexOf(kCm) < 0;
+      if (okN) seen.push(kOk); if (cmN) seen.push(kCm);
+      if (okN || cmN) evs.push({ q, okN, cmN });
+    });
+    if (evs.length) {
+      slSave('abdia_slok', seen);
+      if (!base) {
+        const line = (e) => lab(e.q) + ' · ' + e.q.x.title + (e.okN ? ' (โดย ' + profileName(e.q.x.okBy) + ')' : '') + (e.q.x.rc ? ' 💬 ' + e.q.x.rc : '');
+        const anyOk = evs.some((e) => e.okN);
+        pushNote(anyOk ? '✓ ตรวจเรียบร้อยแล้วน้าา !(:' : '💬 มีหมายเหตุสไลด์มาจ้าา !(:', evs.slice(0, 3).map(line).join(' / ') + (evs.length > 3 ? ' …' : ''), 'slok', { tab: 'slides', slTab: 'list', roomId: evs[0].q.rid });
+      }
+    }
   }
 }
 setInterval(notifTick, 15000); setTimeout(notifTick, 2500);
@@ -2379,6 +2476,13 @@ function setScore(id, sid, raw, max) {
   }
   commit();
 }
+/* ตัวเลือก "ย้ายไปวิชา" สำหรับรายการที่ลงผิดวิชา (ย้ายได้เฉพาะวิชาที่ตัวเองสอน) */
+function moveSubjField(idp, cur, rid) {
+  const opts = S.subjects.filter((x) => canTeach(x.id) && (roomSubs(rid).some((r) => r.id === x.id) || x.id === cur));
+  if (opts.length < 2) return '';
+  return `<div class="field"><label class="lbl" for="${idp}-sj">ย้ายไปวิชา (ถ้าลงผิดวิชา)</label><select id="${idp}-sj">${opts.map((x) => `<option value="${x.id}" ${x.id === cur ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>
+    <div class="xs muted" style="margin-top:4px">ย้ายแล้วคะแนนที่กรอกไว้ทั้งหมดจะย้ายตามไปด้วย</div></div>`;
+}
 function openEditAsg(id) {
   const a = S.assignments.find((x) => x.id === id); if (!a || !guard(a.subjectId)) return;
   modal(`<div class="mh"><h3 class="h3">แก้ไขใบงาน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
@@ -2386,6 +2490,7 @@ function openEditAsg(id) {
     <div class="row wrapx" style="align-items:flex-start;margin-top:12px">
       <div class="field grow" style="min-width:120px;margin:0"><label class="lbl" for="ea-max">คะแนนเต็ม</label><input type="number" id="ea-max" value="${a.max}" min="1" inputmode="decimal"></div>
       <div class="field grow" style="min-width:160px;margin:0"><label class="lbl" for="ea-due">กำหนดส่ง</label><input type="date" id="ea-due" value="${esc(a.due || '')}"></div></div>
+    ${moveSubjField('ea', a.subjectId, a.roomId)}
     <p class="err" id="ea-err"></p>
     <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveEditAsg('${id}')">บันทึก</button></div>`, 'ea-title');
 }
@@ -2393,14 +2498,17 @@ function saveEditAsg(id) {
   const a = S.assignments.find((x) => x.id === id); if (!a || !guard(a.subjectId)) return;
   const t = $('#ea-title').value.trim(), mx = parseFloat($('#ea-max').value);
   if (!t) { $('#ea-err').textContent = 'กรุณาใส่ชื่อใบงาน'; return; }
+  const ns = $('#ea-sj') ? $('#ea-sj').value : a.subjectId, moved = ns !== a.subjectId;
+  if (moved) { if (!guard(ns)) return; a.subjectId = ns; V.subjectId = ns; }
   a.title = t; if (mx > 0) a.max = mx; a.due = $('#ea-due').value || '';
-  commit(); closeModal(); render(); toast('แก้ไขใบงานแล้ว');
+  commit(); closeModal(); render(); toast(moved ? 'ย้ายใบงานไปวิชา ' + ((S.subjects.find((z) => z.id === ns) || {}).name || '') + ' แล้ว' : 'แก้ไขใบงานแล้ว');
 }
 function openEditScore(id) {
   const x = S.scoreItems.find((i) => i.id === id); if (!x || !guard(x.subjectId)) return;
   modal(`<div class="mh"><h3 class="h3">แก้ไขรายการคะแนน</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
     <div class="field"><label class="lbl" for="es-title">ชื่อรายการ</label><input type="text" id="es-title" value="${esc(x.title)}" maxlength="120"></div>
     <div class="field"><label class="lbl" for="es-max">คะแนนเต็ม</label><input type="number" id="es-max" value="${x.max}" min="1" inputmode="decimal"></div>
+    ${moveSubjField('es', x.subjectId, x.roomId)}
     <p class="err" id="es-err"></p>
     <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveEditScore('${id}')">บันทึก</button></div>`, 'es-title');
 }
@@ -2408,8 +2516,14 @@ function saveEditScore(id) {
   const x = S.scoreItems.find((i) => i.id === id); if (!x || !guard(x.subjectId)) return;
   const t = $('#es-title').value.trim(), mx = parseFloat($('#es-max').value);
   if (!t) { $('#es-err').textContent = 'กรุณาใส่ชื่อรายการ'; return; }
+  const ns = $('#es-sj') ? $('#es-sj').value : x.subjectId, moved = ns !== x.subjectId;
+  if (moved) {
+    if (!guard(ns)) return;
+    if (x.kind === 'exam' && examItem(x.roomId, ns, x.term)) { $('#es-err').textContent = 'วิชาปลายทางมีรายการสอบปลายภาคเทอมนี้แล้ว'; return; }
+    x.subjectId = ns; V.subjectId = ns;
+  }
   x.title = t; if (mx > 0) x.max = mx;
-  commit(); closeModal(); render(); toast('แก้ไขรายการแล้ว');
+  commit(); closeModal(); render(); toast(moved ? 'ย้ายรายการไปวิชา ' + ((S.subjects.find((z) => z.id === ns) || {}).name || '') + ' แล้ว' : 'แก้ไขรายการแล้ว');
 }
 function openAddScore() {
   if (!guard(subj().id)) return;
@@ -2731,6 +2845,14 @@ const A4_CSS = `.a4{width:794px;min-height:1123px;box-sizing:border-box;backgrou
 .a4 .sgi img{max-height:58px;max-width:190px;object-fit:contain}
 .a4 .sgl{line-height:1;margin-top:-3px}
 .a4 .sign div{text-align:center;flex:1}
+.a4 .bhs{display:flex;gap:8px;margin:12px 0 4px}
+.a4 .bhs div{flex:1;border:1px solid #9aa59d;border-radius:8px;padding:7px 4px;text-align:center;background:#f7faf8}
+.a4 .bhs b{display:block;font-size:20px;line-height:1.2}
+.a4 .bhs span{font-size:10.5px;color:#5E6B63}
+.a4 h4{margin:14px 0 5px;font-size:13px}
+.a4 .sev3{color:#b3261e;font-weight:700}.a4 .sev2{color:#a15c00;font-weight:700}
+.a4 tr{page-break-inside:avoid}
+.a4host .a4+.a4{margin-top:12px}
 @page{size:A4;margin:0}
 @media print{.a4{width:210mm;min-height:297mm;padding:14mm;page-break-after:always;zoom:1 !important}}`;
 
@@ -2773,10 +2895,46 @@ function sheetHTML(stu, file) {
     <div class="att" style="display:block"><b>ความคิดเห็นของครู</b><div style="border:1px solid #9a9a9a;border-radius:6px;min-height:52px;padding:6px 8px;margin-top:4px;white-space:pre-wrap;font-size:12.5px">${esc(stu.cm || '')}</div></div>
     <div class="sign">${signBlockHTML(file)}</div></div>`;
 }
+/* ===== สมุดพฤติกรรม: หน้าถัดจากใบเกรด สำหรับส่งผู้ปกครอง (แคปหน้าจอหรือพิมพ์) ===== */
+V.gPg = 'both';
+const BH_MAX = 16, CD_MAX = 8;
+function bhSheetHTML(stu, file) {
+  const g = S.settings, recs = S.students.filter((x) => pidOf(x) === pidOf(stu) && roomNameOf(x.roomId)), ids = (recs.length ? recs : [stu]).map((x) => x.id);
+  const inc = []; ids.forEach((id) => bhRecs(id).forEach((r) => { if (r.k === 'i') inc.push(r); }));
+  inc.sort((a, b) => String(a.d).localeCompare(String(b.d)) || a.id.localeCompare(b.id));
+  const cnt = (t) => inc.filter((r) => r.t === t).length, sev3 = inc.filter((r) => r.sev === 3).length;
+  const cd = []; ids.forEach((id) => (S.conduct[id] || []).forEach((r) => cd.push(r)));
+  cd.sort((a, b) => String(a.d).localeCompare(String(b.d)));
+  const minus = cd.filter((r) => r.p < 0).reduce((t, r) => t + r.p, 0), plus = cd.filter((r) => r.p > 0).reduce((t, r) => t + r.p, 0);
+  const fmtP = (n) => (Math.round(n * 100) / 100).toString();
+  const shown = inc.slice(-BH_MAX), cdShown = cd.slice(-CD_MAX);
+  const watch = ids.map(bhState).some((x) => x.black);
+  const roomName = (recs.length ? recs : [stu]).map((r) => roomNameOf(r.roomId)).filter(Boolean).join(', ');
+  const incRows = shown.map((r) => `<tr><td>${esc(fmtDate(r.d))}</td><td>${r.t}</td><td class="l">${esc(r.cat)}</td><td class="sev${r.sev}">${BH_SEV[r.sev]}</td><td class="l">${esc(r.note || '-')}</td><td class="l">${esc(profileName(r.by))}</td></tr>`).join('');
+  const cdRows = cdShown.map((r) => `<tr><td>${esc(fmtDate(r.d))}</td><td>${r.t}</td><td class="l">${esc(r.why || '-')}</td><td><b>${r.p > 0 ? '+' : ''}${fmtP(r.p)}</b></td></tr>`).join('');
+  return `<div class="a4"><div class="hd"><div class="lg">${g.logo ? `<img src="${g.logo}" alt="">` : ''}</div>
+    <div class="t"><div class="sch">${esc(g.school || 'ชื่อโรงเรียน')}</div><div class="ttl">สมุดบันทึกพฤติกรรมนักเรียน (รายงานถึงผู้ปกครอง)${g.year ? ' ปีการศึกษา ' + esc(g.year) : ''}</div></div><div class="lg"></div></div>
+    <div class="info"><span><b>ชื่อ-นามสกุล</b> ${esc(stu.name)}</span><span><b>รหัสนักเรียน</b> ${esc(stu.code || '-')}</span><span><b>ชั้น</b> ${esc(roomName)}</span></div>
+    <div class="bhs"><div><b>${cnt(1)}</b><span>เทอม 1 (ครั้ง)</span></div><div><b>${cnt(2)}</b><span>เทอม 2 (ครั้ง)</span></div><div><b>${inc.length}</b><span>รวมทั้งปี (ครั้ง)</span></div><div><b class="${sev3 ? 'sev3' : ''}">${sev3}</b><span>เหตุร้ายแรง</span></div>
+      <div><b>${fmtP(plus)}</b><span>คะแนนความดี</span></div><div><b class="${minus < 0 ? 'sev3' : ''}">${fmtP(minus)}</b><span>คะแนนที่ถูกหัก</span></div></div>
+    <div class="att"><b>สถานะการติดตามพฤติกรรม</b> ${watch ? '<span class="sev3">ต้องติดตามเป็นพิเศษ ขอความร่วมมือผู้ปกครองช่วยดูแลร่วมกับครู</span>' : 'ปกติ'}</div>
+    <h4>บันทึกพฤติกรรมที่ควรปรับปรุง</h4>
+    ${inc.length ? `<table><thead><tr><th style="width:78px">วันที่</th><th style="width:34px">เทอม</th><th class="l">เรื่อง</th><th style="width:62px">ระดับ</th><th class="l">รายละเอียด</th><th class="l" style="width:104px">ครูผู้บันทึก</th></tr></thead><tbody>${incRows}</tbody></table>
+      ${inc.length > shown.length ? `<div class="note">แสดง ${shown.length} รายการล่าสุด จากทั้งหมด ${inc.length} รายการ</div>` : ''}`
+      : '<div class="att" style="border:1px dashed #9aa59d;border-radius:8px;padding:12px;text-align:center">ไม่มีบันทึกพฤติกรรมที่ควรปรับปรุง 🎉 ขอชื่นชมนักเรียน</div>'}
+    ${cd.length ? `<h4>คะแนนจิตพิสัย (ความดี / ถูกหัก)</h4><table><thead><tr><th style="width:78px">วันที่</th><th style="width:34px">เทอม</th><th class="l">เรื่อง</th><th style="width:70px">คะแนน</th></tr></thead><tbody>${cdRows}</tbody></table>
+      ${cd.length > cdShown.length ? `<div class="note">แสดง ${cdShown.length} รายการล่าสุด จากทั้งหมด ${cd.length} รายการ</div>` : ''}` : ''}
+    <div class="att" style="display:block"><b>ข้อเสนอแนะ / แนวทางที่ครูและผู้ปกครองตกลงร่วมกัน</b><div style="border:1px solid #9a9a9a;border-radius:6px;min-height:64px;padding:6px 8px;margin-top:4px"></div></div>
+    <div class="note">ระดับพฤติกรรม: เล็กน้อย / ปานกลาง / ร้ายแรง · บันทึกโดยครูผู้สอนในแอพเช็คงาน ABDIA</div>
+    <div class="sign">${signBlockHTML(file)}<div><div class="sgi"></div><div class="sgl">........................................</div><div>ผู้ปกครองรับทราบ</div><div>วันที่ ........ / ........ / ........</div></div></div></div>`;
+}
+const pagesHTML = (stu, file) => { const m = V.gPg || 'both'; return (m !== 'bh' ? sheetHTML(stu, file) : '') + (m !== 'grade' ? bhSheetHTML(stu, file) : ''); };
+function setPg(v) { V.gPg = v; render(); }
+function cyclePg() { V.gPg = { both: 'grade', grade: 'bh', bh: 'both' }[V.gPg || 'both']; drawPreview(); }
 function reportDoc(list, title) {
   return '<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(title) + '</title>'
     + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap"><style>body{margin:0;background:#d9dcd8}.a4{margin:12px auto;box-shadow:0 1px 6px rgba(0,0,0,.25)}' + A4_CSS
-    + '@media print{body{background:#fff}.a4{margin:0;box-shadow:none}}</style></head><body>' + list.map((x) => sheetHTML(x, true)).join('') + '</body></html>';
+    + '@media print{body{background:#fff}.a4{margin:0;box-shadow:none}}</style></head><body>' + list.map((x) => pagesHTML(x, true)).join('') + '</body></html>';
 }
 /* พิมพ์ใบเกรด A4 โดยตรง (หน้าต่างพิมพ์ของเบราว์เซอร์: เลือกเครื่องพิมพ์หรือบันทึกเป็น PDF) */
 async function printReport(one, id) {
@@ -2806,7 +2964,7 @@ async function downloadReport(one) {
   await signData();
   if (await saveFile(name, new Blob([reportDoc(list, 'ใบเกรด')], { type: 'text/html' }))) toast('บันทึกไฟล์แล้ว เปิดไฟล์แล้วสั่งพิมพ์ เลือกขนาด A4');
 }
-function sheetBox(stu) { return '<div class="a4sz" style="position:relative;margin:0 auto;overflow:hidden"><div class="a4host" style="position:absolute;left:0;top:0;width:794px;transform-origin:0 0">' + sheetHTML(stu) + '</div></div>'; }
+function sheetBox(stu) { return '<div class="a4sz" style="position:relative;margin:0 auto;overflow:hidden"><div class="a4host" style="position:absolute;left:0;top:0;width:794px;transform-origin:0 0">' + pagesHTML(stu) + '</div></div>'; }
 function fitBox(box, maxW, maxH, cap) {
   const sz = box.querySelector('.a4sz'); if (!sz) return;
   const host = sz.firstElementChild, H = Math.max(1123, host.scrollHeight);
@@ -2843,6 +3001,7 @@ function drawPreview() {
       <button style="${bs}" ${i <= 0 ? 'disabled' : ''} onclick="pvGo(${i - 1})" aria-label="คนก่อนหน้า">◀</button>
       <span style="font-size:13px;flex:1;min-width:90px;text-align:center">${esc(nm(stu))} (${i + 1}/${st.length})</span>
       <button style="${bs}" ${i >= st.length - 1 ? 'disabled' : ''} onclick="pvGo(${i + 1})" aria-label="คนถัดไป">▶</button>
+      <button style="${bs}" onclick="cyclePg()">📄 ${({ both: 'ใบเกรด+พฤติกรรม', grade: 'เฉพาะใบเกรด', bh: 'เฉพาะพฤติกรรม' })[V.gPg || 'both']}</button>
       <button style="${bs}" onclick="PV.z=PV.z==='fit'?'full':'fit';applyPv()">🔍 ขยาย/พอดีจอ</button>
       <button style="${bs}" onclick="printReport(true,'${stu.id}')">🖨 พิมพ์</button>
       <button style="${bs}" onclick="PV.hide=true;drawPreview()">📷 ซ่อนแถบเพื่อแคป</button></div>
@@ -2855,7 +3014,7 @@ function applyPv() {
   const b = document.getElementById('pvbody'); if (!b) return;
   const cs = getComputedStyle(b), pw = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight), ph = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
   const w = b.clientWidth - pw, h = b.clientHeight - ph;
-  if (PV.z === 'fit') fitBox(b, w, h, 2.2); else fitBox(b, 794, 0, 1);
+  if (PV.z === 'fit') fitBox(b, w, (V.gPg || 'both') === 'both' ? 0 : h, 2.2); else fitBox(b, 794, 0, 1);
   const sz = b.querySelector('.a4sz'); if (sz) sz.style.margin = (sz.offsetWidth < w ? '0 auto' : '0');
 }
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePreview(); });
@@ -2885,6 +3044,8 @@ function vGrades() {
       <button class="btn primary s" onclick="printReport(${one})">${ic('print', 16)} ${one ? 'พิมพ์ใบเกรด' : 'พิมพ์ทั้งห้อง'}</button>
       <button class="btn s" onclick="downloadReport(${one})">${ic('download', 16)} ${one ? 'ดาวน์โหลด A4' : 'ดาวน์โหลดทั้งห้อง'}</button></div></div>
     ${chips([['one', 'ใบเกรดรายบุคคล'], ['class', 'สรุปทั้งห้อง']], 'gMode', 'setGMode')}
+    <div class="xs muted" style="margin:8px 0 2px">หน้าที่แสดง/พิมพ์/ดาวน์โหลด (สมุดพฤติกรรมต่อจากใบเกรดเป็นหน้าถัดไป)</div>
+    ${chips([['both', '📄 ใบเกรด + 📓 สมุดพฤติกรรม'], ['grade', 'เฉพาะใบเกรด'], ['bh', 'เฉพาะสมุดพฤติกรรม']], 'gPg', 'setPg')}
     ${!st.length ? `<div class="card empty">ยังไม่มีนักเรียนในห้องนี้</div>` : one ? `
     <div class="search" style="margin:6px 0 8px">${ic('search', 18)}<input type="text" id="g-q" value="${esc(V.gq || '')}" placeholder="ค้นหารหัสหรือชื่อนักเรียน" oninput="gSearch(this.value)" aria-label="ค้นหานักเรียน"></div>
     <div class="field" style="margin:6px 0 12px"><label class="lbl" for="g-stu">เลือกนักเรียน</label>
@@ -2893,7 +3054,7 @@ function vGrades() {
     <div class="a4wrap" onclick="openPreview()" style="cursor:zoom-in">${stu ? sheetBox(stu) : ''}</div>
     <p class="xs muted" style="margin-top:8px">แตะที่ใบเกรดหรือกด "ดูตัวอย่างเต็มจอ" เพื่อดูเต็มหน้าและแคปหน้าจอได้เลย ส่วนไฟล์ที่ดาวน์โหลดเป็นหน้ากระดาษ A4 เปิดไฟล์ในเบราว์เซอร์ กดพิมพ์ แล้วเลือก "บันทึกเป็น PDF" หรือสั่งพิมพ์ออกเครื่องพิมพ์ได้เลย</p>`
     : `${chips([['1', 'เทอม 1'], ['2', 'เทอม 2'], ['y', 'ทั้งปี']], 'gTerm', 'setG')}<div class="card" style="margin-top:6px">${classGradesHTML()}</div>
-    <p class="xs muted" style="margin-top:8px">ปุ่ม "พิมพ์ทั้งห้อง" รวมใบเกรดของนักเรียนทุกคน คนละ 1 หน้า ในหน้าต่างพิมพ์เลือกขนาด A4 และปิด "หัวกระดาษ/ท้ายกระดาษ" ถ้ามี</p>`}`;
+    <p class="xs muted" style="margin-top:8px">ปุ่ม "พิมพ์ทั้งห้อง" รวมใบเกรด (และสมุดพฤติกรรมตามที่เลือกด้านบน) ของนักเรียนทุกคน คนละ 1-2 หน้า ในหน้าต่างพิมพ์เลือกขนาด A4 และปิด "หัวกระดาษ/ท้ายกระดาษ" ถ้ามี</p>`}`;
 }
 V.gq = '';
 function saveCmt(id, v) {
@@ -3109,6 +3270,7 @@ function vSettings() {
       <div class="btnrow"><button class="btn soft s" onclick="openName('${MEID}')">${ic('edit', 16)} แก้ไขชื่อ</button><button class="btn soft s" onclick="fbSignOut()">ออกจากระบบ</button></div></div>`;
   if (!admin) {
     return `<div class="pagehead"><div><h2 class="h2">ตั้งค่า</h2><p class="sm muted">บัญชีและการส่งออกข้อมูล</p></div></div>${account}
+      ${notifSoundCardHTML()}
       <div class="card"><h3 class="h3">ข้อมูลโรงเรียน (ใช้ร่วมกันทุกคน)</h3>
         <p class="sm muted" style="margin-top:6px">${esc(S.settings.school || 'ยังไม่ได้ตั้งชื่อโรงเรียน')}${S.settings.year ? ' · ปีการศึกษา ' + esc(S.settings.year) : ''}</p>
         <p class="sm muted" style="margin-top:4px">ผู้ลงนามท้ายใบเกรด: ${[0, 1].map((i) => { const z = signSlot(i); return esc(z.t + (z.n ? ' ' + z.n : '')) + (z.img ? ' (มีลายเซ็น)' : ''); }).join(' · ')}</p>
@@ -3418,6 +3580,133 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#mod
 $('#modal').addEventListener('mousedown', (e) => { if (e.target.id === 'modal') closeModal(); });
 
 /* ============ shell + render ============ */
+/* ============ สไลด์การสอน (ลิงก์ Canva แยกชั้น/วิชา ให้ผู้ดูแลติ๊กตรวจสอบ) ============ */
+V.slTab = 'list'; V.slPend = false;
+const slKey = (rid, sid) => rid + '~' + sid;
+const slList = (rid, sid) => (S.slides[slKey(rid, sid)] || []).slice().sort((a, b) => String(b.d).localeCompare(String(a.d)) || (b.at || 0) - (a.at || 0));
+function normUrl(u) {
+  u = String(u || '').trim(); if (!u) return '';
+  if (/^https?:\/\//i.test(u)) return u;
+  if (/^[\w-]+(\.[\w-]+)+(\/|$)/.test(u)) return 'https://' + u;
+  return '';
+}
+const slEntry = (key, id) => (S.slides[key] || []).find((x) => x.id === id);
+function slOpenBtn(x) { return `<a class="btn primary s" href="${esc(x.url)}" target="_blank" rel="noopener" style="text-decoration:none">${ic('link', 16)} เปิดสไลด์ใน Canva</a>`; }
+function slStatus(x) { return x.ok ? `<span class="pill p">✓ ตรวจแล้ว</span>` : `<span class="pill l">รอตรวจ</span>`; }
+function slCard(rid, sid, x, edit) {
+  const key = slKey(rid, sid), isOwnerEdit = edit && canTeach(sid);
+  return `<div class="srow"><div class="row between wrapx" style="gap:8px"><div class="grow" style="min-width:0"><div class="name">${esc(x.title)}</div>
+      <div class="xs muted">สอนวันที่ ${esc(fmtDate(x.d))} · เทอม ${x.t} · ส่งโดย ${esc(profileName(x.by))}${x.at ? ' · ' + esc(fmtDate(new Date(x.at).toISOString().slice(0, 10))) : ''}</div>
+      ${x.note ? `<div class="xs" style="margin-top:2px">${esc(x.note)}</div>` : ''}
+      ${x.ok ? `<div class="xs muted">ตรวจโดย ${esc(profileName(x.okBy))}${x.okAt ? ' · ' + esc(fmtDate(new Date(x.okAt).toISOString().slice(0, 10))) : ''}</div>` : ''}
+      ${x.rc ? `<div class="sm" style="margin-top:6px;padding:8px 10px;border-radius:10px;background:#fff6dc;border:1px solid #f0d98a"><b>💬 หมายเหตุจากผู้ตรวจ</b> <span class="xs muted">(${esc(profileName(x.rcBy))})</span><div style="white-space:pre-wrap;margin-top:2px">${esc(x.rc)}</div></div>` : ''}</div>${slStatus(x)}</div>
+    <div class="row wrapx" style="gap:8px;margin-top:8px">${slOpenBtn(x)}<button class="btn s" onclick="copyText('${esc(x.url).replace(/'/g, '')}','คัดลอกลิงก์แล้ว')">คัดลอกลิงก์</button>
+      ${isAdmin() ? `<label class="row" style="cursor:pointer;gap:6px;min-height:40px"><input type="checkbox" ${x.ok ? 'checked' : ''} onchange="slCheck('${key}','${x.id}',this.checked)" style="width:20px;height:20px"> <b class="sm">ตรวจสอบแล้ว</b></label><button class="btn s" onclick="openSlComment('${key}','${x.id}')">💬 ${x.rc ? 'แก้หมายเหตุ' : 'ใส่หมายเหตุ'}</button>` : ''}
+      ${isOwnerEdit ? `<button class="del" style="color:var(--ink2)" onclick="openSlide('${key}','${x.id}')" aria-label="แก้ไข">${ic('edit', 16)}</button><button class="del" onclick="askDelSlide('${key}~${x.id}')" aria-label="ลบ">${ic('trash', 16)}</button>` : ''}</div></div>`;
+}
+function vSlides() {
+  if (!S.rooms.length || !S.subjects.length) return noSetup();
+  const tabs = `<div class="chips">${[['list', '🎞️ สไลด์ของวิชา'], ['review', '✅ ภาพรวมตรวจสอบ']].map((c) => `<button class="chip" aria-pressed="${V.slTab === c[0]}" onclick="V.slTab='${c[0]}';render()">${c[1]}</button>`).join('')}</div>`;
+  const head = `<div class="pagehead"><div><h2 class="h2">สไลด์การสอน</h2><p class="sm muted">เพิ่มลิงก์สไลด์จาก Canva แยกตามชั้นและวิชา แตะเพื่อเปิดใน Canva</p></div></div>`;
+  return head + tabs + (V.slTab === 'review' ? slReviewHTML() : slListHTML());
+}
+function slListHTML() {
+  const subs = visSubjects(); if (!subs.length) return noMine();
+  const sj = subj(), rid = room().id, list = slList(rid, sj.id).filter((x) => x.t === V.term), can = canTeach(sj.id);
+  const done = list.filter((x) => x.ok).length;
+  return `${subjectChips()}${termChips()}
+    <div class="card" style="margin-top:8px"><div class="row between wrapx"><div><h3 class="h3">ชั้น ${esc(room().name)} · ${esc(sj.name)}</h3>
+      <div class="xs muted">เทอม ${V.term} · ส่งแล้ว ${list.length} คาบ · ตรวจแล้ว ${done} · รอตรวจ ${list.length - done}</div></div>
+      ${can ? `<button class="btn primary s" onclick="openSlide('${slKey(rid, sj.id)}','')">${ic('plus', 16)} เพิ่มลิงก์สไลด์</button>` : ''}</div>
+      ${!can ? roBanner() : ''}
+      <div style="margin-top:8px">${list.length ? list.map((x) => slCard(rid, sj.id, x, true)).join('') : `<div class="empty">${ic('link', 28)}<div>ยังไม่มีสไลด์ของวิชานี้ เทอม ${V.term}${can ? '<br>กด "เพิ่มลิงก์สไลด์" แล้ววางลิงก์จาก Canva' : ''}</div></div>`}</div></div>
+    ${can ? `<p class="xs muted" style="margin-top:8px">วิธีเอาลิงก์จาก Canva: เปิดสไลด์ใน Canva → กด "แชร์" → "คัดลอกลิงก์" (ตั้งสิทธิ์ให้คนที่มีลิงก์ดูได้) แล้วมาวางที่นี่ ถ้าติดตั้งแอพ Canva ไว้ การแตะลิงก์จะเด้งเข้าแอพ Canva ให้</p>` : ''}`;
+}
+function slReviewHTML() {
+  const t0 = today(), term = V.term;
+  const rows = [];
+  S.rooms.forEach((r) => roomSubs(r.id).forEach((sj) => {
+    const l = slList(r.id, sj.id).filter((x) => x.t === term);
+    rows.push({ r, sj, n: l.length, ok: l.filter((x) => x.ok).length, today: l.some((x) => x.d === t0), last: l[0] ? l[0].d : '' });
+  }));
+  const pending = []; S.rooms.forEach((r) => roomSubs(r.id).forEach((sj) => slList(r.id, sj.id).filter((x) => x.t === term && !x.ok).forEach((x) => pending.push({ r, sj, x }))));
+  const tot = rows.reduce((p, x) => p + x.n, 0), okN = rows.reduce((p, x) => p + x.ok, 0), none = rows.filter((x) => !x.n).length;
+  const byRoom = S.rooms.map((r) => {
+    const rs = rows.filter((x) => x.r.id === r.id && (!V.slPend || x.n - x.ok > 0));
+    if (!rs.length) return '';
+    return `<div class="card" style="margin-top:8px"><h3 class="h3" style="margin-bottom:6px">ชั้น ${esc(r.name)}</h3>${rs.map((x) => `<button class="srow" style="width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 2px;cursor:pointer" onclick="V.roomId='${r.id}';V.subjectId='${x.sj.id}';V.slTab='list';saveUI();render()">
+        <div class="row between wrapx" style="gap:8px"><div class="grow" style="min-width:0"><b>${esc(x.sj.name)}</b><div class="xs muted">ส่ง ${x.n} คาบ · ตรวจแล้ว ${x.ok} · ${x.last ? 'ล่าสุดสอนวันที่ ' + esc(fmtDate(x.last)) : 'ยังไม่เคยส่ง'}</div></div>
+        <div class="row" style="gap:6px;flex:none">${x.today ? '<span class="pill p">วันนี้ส่งแล้ว</span>' : ''}${!x.n ? '<span class="pill a">ยังไม่ส่งสไลด์</span>' : x.n - x.ok > 0 ? `<span class="pill l">รอตรวจ ${x.n - x.ok}</span>` : '<span class="pill p">ตรวจครบ</span>'}</div></div></button>`).join('')}</div>`;
+  }).join('');
+  return `${termChips()}
+    <div class="card" style="margin-top:8px"><div class="row between wrapx" style="text-align:center;gap:8px">
+      <div class="grow"><div style="font-size:26px;font-weight:800">${tot}</div><div class="xs muted">สไลด์ที่ส่ง</div></div>
+      <div class="grow"><div style="font-size:26px;font-weight:800;color:var(--sage-d)">${okN}</div><div class="xs muted">ตรวจแล้ว</div></div>
+      <div class="grow"><div style="font-size:26px;font-weight:800">${tot - okN}</div><div class="xs muted">รอตรวจ</div></div>
+      <div class="grow"><div style="font-size:26px;font-weight:800;color:var(--a)">${none}</div><div class="xs muted">วิชา/ชั้นที่ยังไม่ส่ง</div></div></div>
+      ${isAdmin() ? '' : '<p class="xs muted" style="margin-top:8px">เฉพาะผู้ดูแลระบบ (หัวหน้าฝ่ายวิชาการ) ที่ติ๊ก "ตรวจสอบแล้ว" ได้</p>'}</div>
+    <div class="chips" style="margin-top:8px"><button class="chip" aria-pressed="${V.slPend}" onclick="V.slPend=!V.slPend;render()">แสดงเฉพาะที่รอตรวจ</button></div>
+    ${pending.length ? `<div class="card" style="margin-top:8px"><h3 class="h3" style="margin-bottom:6px">รอตรวจ ${pending.length} รายการ</h3>${pending.slice(0, 30).map((q) => `<div class="srow"><div class="xs muted" style="margin-bottom:2px">ชั้น ${esc(q.r.name)} · ${esc(q.sj.name)}</div>${slCard(q.r.id, q.sj.id, q.x, false)}</div>`).join('')}${pending.length > 30 ? '<div class="xs muted">แสดง 30 รายการแรก ที่เหลือดูได้ในแต่ละวิชา</div>' : ''}</div>` : ''}
+    <div class="sm" style="margin:10px 0 2px"><b>แยกตามชั้นและวิชา</b> <span class="xs muted">(แตะเพื่อเข้าไปดูรายการ)</span></div>${byRoom || '<div class="card empty">ไม่มีรายการ</div>'}`;
+}
+function openSlide(key, id) {
+  const [rid, sid] = key.split('~'); if (!guard(sid)) return;
+  const x = id ? slEntry(key, id) : null, sj = S.subjects.find((v) => v.id === sid), rm = S.rooms.find((v) => v.id === rid);
+  modal(`<div class="mh"><h3 class="h3">${x ? 'แก้ไขลิงก์สไลด์' : 'เพิ่มลิงก์สไลด์'}</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:10px">ชั้น ${esc(rm ? rm.name : '')} · วิชา ${esc(sj ? sj.name : '')}</p>
+    <div class="field"><label class="lbl" for="sl-title">คาบ / หัวข้อ</label><input type="text" id="sl-title" maxlength="120" placeholder="เช่น คาบที่ 3 บทที่ 2 การบวกเศษส่วน" value="${x ? esc(x.title) : ''}"></div>
+    <div class="field"><label class="lbl" for="sl-url">ลิงก์สไลด์จาก Canva</label><input type="url" id="sl-url" inputmode="url" placeholder="https://www.canva.com/design/..." value="${x ? esc(x.url) : ''}"></div>
+    <div class="field"><label class="lbl" for="sl-d">วันที่สอน</label><input type="date" id="sl-d" value="${x ? esc(x.d) : today()}"></div>
+    <div class="field"><label class="lbl" for="sl-note">หมายเหตุ (ถ้ามี)</label><input type="text" id="sl-note" maxlength="200" value="${x ? esc(x.note || '') : ''}"></div>
+    ${x && x.ok ? '<p class="xs muted">หมายเหตุ: แก้ไขแล้วสถานะ "ตรวจแล้ว" จะถูกรีเซ็ต ให้ผู้ดูแลตรวจใหม่</p>' : ''}
+    <p class="err" id="sl-err"></p>
+    <div class="btnrow" style="margin-top:4px"><button class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" onclick="saveSlide('${key}','${id || ''}')">บันทึก</button></div>`, 'sl-title');
+}
+function saveSlide(key, id) {
+  const [rid, sid] = key.split('~'); if (!guard(sid)) return;
+  const title = $('#sl-title').value.trim(), url = normUrl($('#sl-url').value), d = $('#sl-d').value || today(), note = $('#sl-note').value.trim();
+  if (!title) { $('#sl-err').textContent = 'กรุณาใส่คาบหรือหัวข้อ'; return; }
+  if (!url) { $('#sl-err').textContent = 'กรุณาวางลิงก์ให้ถูกต้อง (ขึ้นต้นด้วย https://)'; return; }
+  const l = S.slides[key] = S.slides[key] || [], x = id ? l.find((v) => v.id === id) : null;
+  if (x) { const chg = x.url !== url || x.title !== title || x.d !== d; Object.assign(x, { title, url, d, t: attTerm(d), note }); if (chg) { x.ok = false; x.okBy = ''; x.okAt = 0; } }
+  else l.push({ id: uid('l'), t: attTerm(d), d, title, url, note, by: MEID, at: Date.now(), ok: false, okBy: '', okAt: 0 });
+  if (!x) pushEvent('slide-new', { room: roomNameOf(rid), subject: ((S.subjects.find((v) => v.id === sid) || {}).name || ''), title });
+  commit(); closeModal(); render(); toast('บันทึกลิงก์สไลด์แล้ว');
+}
+function slCheck(key, id, on) {
+  if (!isAdmin()) { toast('เฉพาะผู้ดูแลระบบที่ติ๊กตรวจสอบได้'); render(); return; }
+  const x = slEntry(key, id); if (!x) return;
+  x.ok = !!on; x.okBy = on ? MEID : ''; x.okAt = on ? Date.now() : 0;
+  if (on) { const kk = key.split('~'); pushEvent('slide-ok', { to: x.by, room: roomNameOf(kk[0]), subject: ((S.subjects.find((v) => v.id === kk[1]) || {}).name || ''), title: x.title, rc: x.rc || '' }); }
+  commit(); render(); toast(on ? 'ติ๊กตรวจสอบแล้ว' : 'ยกเลิกการตรวจสอบแล้ว');
+}
+function openSlComment(key, id) {
+  if (!isAdmin()) { toast('เฉพาะผู้ดูแลระบบที่ใส่หมายเหตุได้'); return; }
+  const x = slEntry(key, id); if (!x) return;
+  modal(`<div class="mh"><h3 class="h3">💬 หมายเหตุถึงครูผู้ส่ง</h3><button class="iconbtn" onclick="closeModal()" aria-label="ปิด">${ic('x', 18)}</button></div>
+    <p class="sm muted" style="margin-bottom:8px">${esc(x.title)} · ผู้ส่ง ${esc(profileName(x.by))}</p>
+    <div class="field"><label class="lbl" for="slc-t">อยากให้ปรับหรือแก้ตรงไหน (ไม่ต้องใส่ก็ได้ ถ้าไม่มีคอมเมนต์)</label><textarea id="slc-t" rows="4" maxlength="300" placeholder="เช่น สไลด์หน้า 5 ตัวหนังสือเล็กไป ช่วยปรับขนาดให้ใหญ่ขึ้นหน่อยน้า">${esc(x.rc || '')}</textarea></div>
+    <div class="btnrow" style="margin-top:4px">${x.rc ? `<button class="btn" style="color:var(--a)" onclick="saveSlComment('${key}','${id}',true)">ล้างหมายเหตุ</button>` : '<button class="btn" onclick="closeModal()">ยกเลิก</button>'}<button class="btn primary" onclick="saveSlComment('${key}','${id}',false)">บันทึกหมายเหตุ</button></div>`, 'slc-t');
+}
+function saveSlComment(key, id, clear) {
+  if (!isAdmin()) return; const x = slEntry(key, id); if (!x) return;
+  const v = clear ? '' : $('#slc-t').value.trim();
+  if (v !== (x.rc || '')) {
+    x.rc = v; x.rcBy = v ? MEID : ''; x.rcAt = v ? Date.now() : 0;
+    if (v) { const kk = key.split('~'); pushEvent('slide-cm', { to: x.by, room: roomNameOf(kk[0]), subject: ((S.subjects.find((z) => z.id === kk[1]) || {}).name || ''), title: x.title, rc: v }); }
+    commit();
+  }
+  closeModal(); render(); toast(v ? 'บันทึกหมายเหตุแล้ว' : 'ล้างหมายเหตุแล้ว');
+}
+function askDelSlide(arg) {
+  const [rid, sid, id] = arg.split('~'), x = slEntry(slKey(rid, sid), id);
+  askConfirm('ลบลิงก์สไลด์ "' + (x ? x.title : '') + '"', 'ลบแค่ลิงก์ในแอพ ไม่กระทบสไลด์ใน Canva', "delSlide('" + arg + "')");
+}
+function delSlide(arg) {
+  const [rid, sid, id] = arg.split('~'), key = slKey(rid, sid); if (!guard(sid)) return;
+  S.slides[key] = (S.slides[key] || []).filter((v) => v.id !== id); if (!S.slides[key].length) delete S.slides[key];
+  commit(); closeModal(); render();
+}
 const TABS = [['home', 'หน้าหลัก', 'home'], ['students', 'นักเรียน', 'users'], ['attendance', 'เช็คชื่อ', 'cal'], ['check', 'เช็คงาน', 'clip'], ['scores', 'คะแนน', 'award'], ['grades', 'ใบเกรด', 'star']];
 function go(tab) { V.tab = tab; render(); window.scrollTo(0, 0); }
 function render() {
@@ -3429,7 +3718,7 @@ function render() {
   $('#nav-settings').innerHTML = ic('gear', 18);
   $('#nav-settings').setAttribute('aria-current', V.tab === 'settings' ? 'page' : 'false');
   $('#nav').innerHTML = TABS.map((t) => `<button onclick="go('${t[0]}')" ${V.tab === t[0] ? 'aria-current="page"' : ''}>${ic(t[2], 22)}<span>${t[1]}</span></button>`).join('');
-  const fn = { home: vHome, students: vStudents, attendance: vAttendance, check: vCheck, scores: vScores, grades: vGrades, conduct: vConduct, wc: vWc, bh: vBh, roster: vRoster, stats: vStats, settings: vSettings }[V.tab] || vHome;
+  const fn = { home: vHome, students: vStudents, attendance: vAttendance, check: vCheck, scores: vScores, grades: vGrades, conduct: vConduct, slides: vSlides, wc: vWc, bh: vBh, roster: vRoster, stats: vStats, settings: vSettings }[V.tab] || vHome;
   $('#view').innerHTML = fn();
   setSync(C.state);
   fitA4(); applyStuFilters();
